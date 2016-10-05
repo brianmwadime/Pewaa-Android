@@ -241,7 +241,7 @@
                                 app:srcCompat="@drawable/ic_photo_camera_gray_24dp" />
                         </LinearLayout>
 
-                        <com.sourcecanyon.whatsClone.ui.FrameLayoutFixed
+                        <com.fortunekidew.pewaa.ui.FrameLayoutFixed
                             android:id="@+id/record_panel"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
@@ -301,7 +301,7 @@
                                     android:textColor="#4d4c4b"
                                     android:textSize="20sp" />
                             </LinearLayout>
-                        </com.sourcecanyon.whatsClone.ui.FrameLayoutFixed>
+                        </com.fortunekidew.pewaa.ui.FrameLayoutFixed>
 
 
                     </FrameLayout>

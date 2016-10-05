@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sourcecanyon.whatsClone">
+    package="com.fortunekidew.pewaa">
 
 
     <!-- permissions for Network -->
@@ -53,14 +53,14 @@
         android:smallScreens="true" />
 
     <application
-        android:name="com.sourcecanyon.whatsClone.app.WhatsCloneApplication"
+        android:name="com.fortunekidew.pewaa.app.PewaaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.main.WelcomeActivity"
+            android:name="com.fortunekidew.pewaa.activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:noHistory="true"
@@ -73,7 +73,7 @@
         </activity>
         <!-- MainActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.main.MainActivity"
+            android:name="com.fortunekidew.pewaa.activities.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
 
@@ -89,26 +89,26 @@
 
         <!--    MessagesActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.messages.MessagesActivity"
+            android:name="com.fortunekidew.pewaa.activities.messages.MessagesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activities.main.MainActivity"
+            android:parentActivityName="com.fortunekidew.pewaa.activities.main.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.main.MainActivity" />
+                android:value="com.fortunekidew.pewaa.activities.main.MainActivity" />
         </activity>
 
         <!--  CreateGroupActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.groups.CreateGroupActivity"
+            android:name="com.fortunekidew.pewaa.activities.groups.CreateGroupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize" />
 
         <!--  AddMembersToGroupActivity -->
-        <activity android:name="com.sourcecanyon.whatsClone.activities.groups.AddMembersToGroupActivity" />
+        <activity android:name="com.fortunekidew.pewaa.activities.groups.AddMembersToGroupActivity" />
 
         <!--  AddNewMembersToGroupActivity -->
-        <activity android:name="com.sourcecanyon.whatsClone.activities.groups.AddNewMembersToGroupActivity">
+        <activity android:name="com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -118,43 +118,41 @@
         </activity>
 
         <!--  TransferMessageContactsActivity -->
-        <activity android:name="com.sourcecanyon.whatsClone.activities.messages.TransferMessageContactsActivity" />
+        <activity android:name="com.fortunekidew.pewaa.activities.messages.TransferMessageContactsActivity" />
 
-        <!--  ChatsSettingsActivity -->
-        <activity android:name="com.sourcecanyon.whatsClone.activities.settings.ChatsSettingsActivity" />
         <!--  NotificationsSettingsActivity -->
-        <activity android:name="com.sourcecanyon.whatsClone.activities.settings.NotificationsSettingsActivity" />
+        <activity android:name="com.fortunekidew.pewaa.activities.settings.NotificationsSettingsActivity" />
         <!--  AccountSettingsActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.settings.AccountSettingsActivity"
+            android:name="com.fortunekidew.pewaa.activities.settings.AccountSettingsActivity"
             android:label="@string/title_activity_account_settings"
             android:theme="@style/AppTheme" />
         <!--  DeleteAccountActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.settings.DeleteAccountActivity"
+            android:name="com.fortunekidew.pewaa.activities.settings.DeleteAccountActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_delete_account"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <!--  ChangeNumberActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.settings.ChangeNumberActivity"
+            android:name="com.fortunekidew.pewaa.activities.settings.ChangeNumberActivity"
             android:label="@string/title_activity_change_number"
             android:theme="@style/AppTheme" />
 
         <!--  ChangeNumberActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.settings.AboutActivity"
+            android:name="com.fortunekidew.pewaa.activities.settings.AboutActivity"
             android:theme="@style/AppTheme" />
         <!-- ProfilePreviewActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.profile.ProfilePreviewActivity"
+            android:name="com.fortunekidew.pewaa.activities.profile.ProfilePreviewActivity"
             android:theme="@style/Dialog"
             android:windowActionBar="false" />
-        <activity android:name="com.sourcecanyon.whatsClone.activities.profile.ProfileActivity" />
+        <activity android:name="com.fortunekidew.pewaa.activities.profile.ProfileActivity" />
 
         <!-- SMS Receiver -->
-        <receiver android:name="com.sourcecanyon.whatsClone.receivers.SmsReceiverBroadCast">
+        <receiver android:name="com.fortunekidew.pewaa.receivers.SmsReceiverBroadCast">
             <intent-filter android:priority="99999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -162,11 +160,11 @@
 
         <!-- Intent service for OTP -->
         <service
-            android:name="com.sourcecanyon.whatsClone.services.SMSVerificationService"
+            android:name="com.fortunekidew.pewaa.services.SMSVerificationService"
             android:exported="false" />
         <!-- AuthenticationService -->
         <service
-            android:name="com.sourcecanyon.whatsClone.sync.AuthenticatorService"
+            android:name="com.fortunekidew.pewaa.sync.AuthenticatorService"
             android:exported="true"
             android:process=":auth">
             <intent-filter>
@@ -179,7 +177,7 @@
         </service>
         <!-- SyncService for SyncAdapter -->
         <service
-            android:name="com.sourcecanyon.whatsClone.sync.SyncService"
+            android:name="com.fortunekidew.pewaa.sync.SyncService"
             android:exported="true"
             android:process=":sync">
             <intent-filter>
@@ -189,51 +187,51 @@
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_adapter" />
-            <!--
-                        <meta-data
-                            android:name="android.provider.CONTACTS_STRUCTURE"
-                            android:resource="@xml/sync_contacts" />
-            -->
+
+                <meta-data
+                    android:name="android.provider.CONTACTS_STRUCTURE"
+                    android:resource="@xml/sync_contacts" />
+
         </service>
 
         <!-- SettingsActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.settings.SettingsActivity"
+            android:name="com.fortunekidew.pewaa.activities.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
 
 
         <!-- SearchConversationsActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.search.SearchConversationsActivity"
+            android:name="com.fortunekidew.pewaa.activities.search.SearchConversationsActivity"
             android:label="@string/title_activity_settings" />
 
         <!-- SearchContactsActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.search.SearchContactsActivity"
+            android:name="com.fortunekidew.pewaa.activities.search.SearchContactsActivity"
             android:label="@string/title_activity_settings" />
 
 
         <!-- EditProfileActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.profile.EditProfileActivity"
+            android:name="com.fortunekidew.pewaa.activities.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <!-- StatusActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.status.StatusActivity"
+            android:name="com.fortunekidew.pewaa.activities.status.StatusActivity"
             android:label="@string/title_activity_status"
             android:theme="@style/AppTheme" />
         <!-- StatusDelete -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.popups.StatusDelete"
+            android:name="com.fortunekidew.pewaa.activities.popups.StatusDelete"
             android:theme="@style/Dialog"
             android:windowActionBar="false" />
         <!-- EditStatusActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.status.EditStatusActivity"
+            android:name="com.fortunekidew.pewaa.activities.status.EditStatusActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_edit_status"
             android:theme="@style/AppTheme"
@@ -241,7 +239,7 @@
 
         <!-- EditUsernameActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.profile.EditUsernameActivity"
+            android:name="com.fortunekidew.pewaa.activities.profile.EditUsernameActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_edit_name"
             android:theme="@style/AppTheme"
@@ -250,7 +248,7 @@
 
         <!-- EditGroupActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.groups.EditGroupActivity"
+            android:name="com.fortunekidew.pewaa.activities.groups.EditGroupActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_edit_group_name"
             android:theme="@style/AppTheme"
@@ -258,7 +256,7 @@
 
         <!-- NewContactsActivity -->
         <activity
-            android:name="com.sourcecanyon.whatsClone.activities.NewContactsActivity"
+            android:name="com.fortunekidew.pewaa.activities.NewContactsActivity"
             android:label="@string/title_select_contacts"
             android:theme="@style/AppTheme" />
 
@@ -266,13 +264,13 @@
         <!-- Restart service when the user kill processor -->
 
         <service
-            android:name=".services.BootService"
+            android:name="com.fortunekidew.pewaa.services.BootService"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_service_name"
             android:process=":remote" />
 
 
-        <receiver android:name="com.sourcecanyon.whatsClone.receivers.NetworkChangeListener">
+        <receiver android:name="com.fortunekidew.pewaa.receivers.NetworkChangeListener">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -280,15 +278,15 @@
 
         <!-- the main service  -->
         <service
-            android:name=".services.MainService"
+            android:name="com.fortunekidew.pewaa.services.MainService"
             android:enabled="true"
             android:exported="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_service_name">
-            <!--<intent-filter>-->
-                <!--<action android:name="new_user_message_notification" />-->
+            <intent-filter>
+                <action android:name="new_wishlist_notification" />
                 <!--<action android:name="new_group_message_notification" />-->
-            <!--</intent-filter>-->
+            </intent-filter>
         </service>
     </application>
 

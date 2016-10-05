@@ -34,7 +34,7 @@
         android:layout_height="2dp"
         android:background="@drawable/above_shadow_rect" />
 
-    <com.sourcecanyon.whatsClone.adapters.others.WelcomeViewPager
+    <com.fortunekidew.pewaa.adapters.others.WelcomeViewPager
         android:id="@+id/viewPagerVertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -305,5 +305,5 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp" />
         </LinearLayout>
-    </com.sourcecanyon.whatsClone.adapters.others.WelcomeViewPager>
+    </com.fortunekidew.pewaa.adapters.others.WelcomeViewPager>
 </LinearLayout>

@@ -22,7 +22,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.groups.AddMembersToGroupActivity;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
 import com.fortunekidew.pewaa.activities.profile.ProfilePreviewActivity;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -112,13 +112,13 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 AppHelper.LogCat("" + e.getMessage());
             }
             contactsViewHolder.setOnClickListener(view -> {
-                if (view.getId() == R.id.user_image) {
+                if (view.getId() == R.id.wishlist_image) {
                     Intent mIntent = new Intent(mActivity, ProfilePreviewActivity.class);
                     mIntent.putExtra("userID", contactsModel.getId());
                     mIntent.putExtra("isGroup", false);
                     mActivity.startActivity(mIntent);
                 } else {
-                    Intent messagingIntent = new Intent(mActivity, MessagesActivity.class);
+                    Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
                     messagingIntent.putExtra("conversationID", 0);
                     messagingIntent.putExtra("recipientID", contactsModel.getId());
                     messagingIntent.putExtra("isGroup", false);
@@ -163,9 +163,9 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
         @Bind(R.id.status)
         EmojiconTextView status;

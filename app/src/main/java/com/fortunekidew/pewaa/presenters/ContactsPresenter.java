@@ -14,6 +14,7 @@ import com.fortunekidew.pewaa.helpers.UpdateSettings;
 import com.fortunekidew.pewaa.helpers.UtilsPhone;
 import com.fortunekidew.pewaa.interfaces.Presenter;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
+import com.fortunekidew.pewaa.models.users.contacts.PusherContacts;
 import com.fortunekidew.pewaa.models.users.contacts.SyncContacts;
 import com.fortunekidew.pewaa.services.apiServices.ContactsService;
 
@@ -161,5 +162,16 @@ public class ContactsPresenter implements Presenter {
     @Override
     public void onStop() {
 
+    }
+
+    public void onEventMainThread(PusherContacts pusher) {
+        switch (pusher.getAction()) {
+            case "updatedContactsList":
+                contactsFragmentView.updateContacts(pusher.getContactsModelList());
+                break;
+            case "updatedContactsListThrowable":
+                contactsFragmentView.onErrorLoading(pusher.getThrowable());
+                break;
+        }
     }
 }

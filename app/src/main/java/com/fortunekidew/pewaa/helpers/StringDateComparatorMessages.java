@@ -1,6 +1,6 @@
 package com.fortunekidew.pewaa.helpers;
 
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 
 import java.util.Comparator;
 

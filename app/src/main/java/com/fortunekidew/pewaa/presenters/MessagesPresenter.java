@@ -3,15 +3,14 @@ package com.fortunekidew.pewaa.presenters;
 
 import android.os.Handler;
 
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
 import com.fortunekidew.pewaa.api.APIService;
-import com.fortunekidew.pewaa.app.AppConstants;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.helpers.notifications.NotificationsManager;
 import com.fortunekidew.pewaa.interfaces.Presenter;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 import com.fortunekidew.pewaa.services.apiServices.ContactsService;
 import com.fortunekidew.pewaa.services.apiServices.MessagesService;
 
@@ -23,15 +22,15 @@ import io.realm.Realm;
  * Email : abderrahim.elimame@gmail.com
  */
 public class MessagesPresenter implements Presenter {
-    private final MessagesActivity view;
+    private final WishlistActivity view;
     private final Realm realm;
     private int ConversationID, GroupID;
     private String RecipientID;
     private Boolean isGroup;
     private MessagesService mMessagesService;
 
-    public MessagesPresenter(MessagesActivity messagesActivity) {
-        this.view = messagesActivity;
+    public MessagesPresenter(WishlistActivity wishlistActivity) {
+        this.view = wishlistActivity;
         this.realm = Realm.getDefaultInstance();
     }
 
@@ -92,8 +91,7 @@ public class MessagesPresenter implements Presenter {
             realm.executeTransaction(realm1 -> {
                 WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", ConversationID).findFirst();
                 if (wishlistsModel1 != null) {
-                    wishlistsModel1.setStatus(AppConstants.IS_SEEN);
-                    wishlistsModel1.setUnreadMessageCounter("0");
+
                     realm1.copyToRealmOrUpdate(wishlistsModel1);
                     EventBus.getDefault().post(new Pusher("MessagesCounter"));
                     EventBus.getDefault().post(new Pusher("messages_read", ConversationID));

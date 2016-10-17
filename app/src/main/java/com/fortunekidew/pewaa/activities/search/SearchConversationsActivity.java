@@ -15,10 +15,10 @@ import android.widget.ImageView;
 
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.adapters.recyclerView.TextWatcherAdapter;
-import com.fortunekidew.pewaa.adapters.recyclerView.messages.WishlistsAdapter;
+import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.WishlistsAdapter;
 import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.AppHelper;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 import com.fortunekidew.pewaa.presenters.SearchConversationsPresenter;
 
 import java.util.List;
@@ -78,14 +78,14 @@ public class SearchConversationsActivity extends AppCompatActivity {
     /**
      * method to show conversations list
      *
-     * @param wishlistsModels this is the parameter for  ShowConversation  method
+     * @param wishlistsModels this is the parameter for  ShowWishlist  method
      */
     public void ShowConversation(List<WishlistsModel> wishlistsModels) {
         RealmList<WishlistsModel> wishlistsModels1 = new RealmList<WishlistsModel>();
         for (WishlistsModel wishlistsModel : wishlistsModels) {
             wishlistsModels1.add(wishlistsModel);
         }
-        mWishlistsAdapter.setConversations(wishlistsModels1);
+        mWishlistsAdapter.setWishlists(wishlistsModels1);
     }
 
     /**

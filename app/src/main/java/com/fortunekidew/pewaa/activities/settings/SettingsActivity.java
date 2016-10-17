@@ -146,7 +146,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
                     Picasso.with(this)
-                            .load(EndPoints.BASE_URL + mContactsModel.getImage())
+                            .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
                             .transform(new CropSquareTransformation())
                             .resize(100, 100)
                             .networkPolicy(NetworkPolicy.NO_CACHE)

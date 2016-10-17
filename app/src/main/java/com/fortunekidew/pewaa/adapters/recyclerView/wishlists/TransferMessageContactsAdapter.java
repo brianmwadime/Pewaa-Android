@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaa.adapters.recyclerView.messages;
+package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;
@@ -139,7 +139,7 @@ public class TransferMessageContactsAdapter extends RecyclerView.Adapter<Recycle
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                 builder.setMessage(mActivity.getString(R.string.transfer_message_to) + Username)
                         .setPositiveButton(mActivity.getString(R.string.Yes), (dialog, which) -> {
-                            Intent messagingIntent = new Intent(mActivity, MessagesActivity.class);
+                            Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
                             messagingIntent.putExtra("conversationID", 0);
                             messagingIntent.putExtra("recipientID", contactsModel.getId());
                             messagingIntent.putExtra("isGroup", false);
@@ -175,9 +175,9 @@ public class TransferMessageContactsAdapter extends RecyclerView.Adapter<Recycle
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
         @Bind(R.id.status)
         EmojiconTextView status;

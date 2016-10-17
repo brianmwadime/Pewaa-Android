@@ -2,8 +2,8 @@ package com.fortunekidew.pewaa.services.apiServices;
 
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.models.groups.GroupsModel;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 
 import java.util.List;

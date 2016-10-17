@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ParentLayoutConversations"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ParentLayoutWishlists"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
@@ -43,8 +44,11 @@
                     android:text="@string/NoWishlists"
                     android:textColor="@color/colorGray2"
                     android:textSize="16sp" />
+
             </LinearLayout>
+
         </ScrollView>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -53,7 +57,18 @@
         android:layout_height="match_parent"
         android:visibility="visible"
         android:scrollbars="vertical"
-        tools:listitem="@layout/row_conversation" />
+        tools:listitem="@layout/row_wishlist" />
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addWishlistFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|right"
+        pressedTranslationZ="6dp"
+        app:backgroundTint="@color/colorPinkDark"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_behavior="com.fortunekidew.pewaa.ui.ScrollAwareFABBehavior"
+        app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

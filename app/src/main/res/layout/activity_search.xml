@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:visibility="visible"
         android:scrollbars="vertical"
-        tools:listitem="@layout/row_conversation">
+        tools:listitem="@layout/row_wishlist">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -3,6 +3,7 @@ package com.fortunekidew.pewaa.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
@@ -22,24 +23,24 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.adapters.recyclerView.messages.WishlistsAdapter;
+import com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity;
+import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.WishlistsAdapter;
 import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.AppHelper;
-import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.interfaces.LoadingData;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 import com.fortunekidew.pewaa.presenters.WishlistsPresenter;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
+import io.socket.client.Socket;
 
 /**
  * Created by Abderrahim El imame  on 20/01/2016.
@@ -50,21 +51,24 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
     @Bind(R.id.WishlistsList)
     RecyclerView WishlistList;
     @Bind(R.id.empty)
-    LinearLayout emptyWishlists;
+    LinearLayout EmptyWishlists;
+
+    @Bind(R.id.addWishlistFab)
+    FloatingActionButton AddWishlist;
 
     private WishlistsAdapter mWishlistsAdapter;
     private WishlistsPresenter mWishlistsPresenter = new WishlistsPresenter(this);
     private Realm realm;
     private GestureDetectorCompat gestureDetector;
     private ActionMode actionMode;
-    private RealmList<WishlistsModel> mWishlists;
+    private Socket mSocket;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View mView = inflater.inflate(R.layout.fragment_conversations, container, false);
+        View mView = inflater.inflate(R.layout.fragment_wishlists, container, false);
         ButterKnife.bind(this, mView);
         realm = Realm.getDefaultInstance();
         mWishlistsPresenter.onCreate();
@@ -80,7 +84,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mWishlistsAdapter = new WishlistsAdapter(getActivity(), mWishlists);
+        mWishlistsAdapter = new WishlistsAdapter(getActivity(), WishlistList, mSocket);
         WishlistList.setLayoutManager(mLinearLayoutManager);
         WishlistList.setAdapter(mWishlistsAdapter);
         WishlistList.setItemAnimator(new DefaultItemAnimator());
@@ -93,6 +97,11 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         gestureDetector.onTouchEvent(e);
         return false;
+    }
+
+    @OnClick(R.id.addWishlistFab)
+    public void addWishlist(View view) {
+        AppHelper.LaunchActivity(getActivity(), AddWishlistsActivity.class);
     }
 
     @Override
@@ -154,50 +163,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
                             currentPosition = mWishlistsAdapter.getSelectedItems().get(x);
                             WishlistsModel wishlistsModel = mWishlistsAdapter.getItem(currentPosition);
 
-                            int conversationID = getConversationId(wishlistsModel.getRecipientID(), PreferenceManager.getID(PewaaApplication.getAppContext()), realm);
-
-
-                            realm.executeTransactionAsync(realm1 -> {
-                                RealmResults<MessagesModel> messagesModel1 = realm1.where(MessagesModel.class).equalTo("conversationID", conversationID).findAll();
-                                messagesModel1.deleteAllFromRealm();
-                            }, () -> {
-                                AppHelper.LogCat("Message Deleted  successfully  WishlistsFragment");
-
-                                RealmResults<MessagesModel> messagesModel1 = realm.where(MessagesModel.class).equalTo("conversationID", conversationID).findAll();
-                                if (messagesModel1.size() == 0) {
-                                    realm.executeTransactionAsync(realm1 -> {
-                                        WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", conversationID).findFirst();
-                                        wishlistsModel1.deleteFromRealm();
-                                    }, () -> {
-                                        AppHelper.LogCat("Conversation deleted successfully WishlistsFragment");
-                                        EventBus.getDefault().post(new Pusher("deleteConversation"));
-                                        mWishlistsAdapter.notifyDataSetChanged();
-                                    }, error -> {
-                                        AppHelper.LogCat("Delete conversation failed  WishlistsFragment" + error.getMessage());
-
-                                    });
-                                } else {
-                                    MessagesModel lastMessage = realm.where(MessagesModel.class).equalTo("conversationID", conversationID).findAll().last();
-                                    realm.executeTransactionAsync(realm1 -> {
-                                        WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", conversationID).findFirst();
-                                        wishlistsModel1.setLastMessage(lastMessage.getMessage());
-                                        wishlistsModel1.setLastMessageId(lastMessage.getId());
-                                        realm1.copyToRealmOrUpdate(wishlistsModel1);
-                                    }, () -> {
-                                        AppHelper.LogCat("Conversation deleted successfully WishlistsFragment ");
-                                        EventBus.getDefault().post(new Pusher("deleteConversation"));
-                                        mWishlistsAdapter.notifyDataSetChanged();
-                                    }, error -> {
-                                        AppHelper.LogCat("Delete conversation failed  WishlistsFragment" + error.getMessage());
-
-                                    });
-                                }
-                            }, error -> {
-                                AppHelper.LogCat("Delete message failed WishlistsFragment" + error.getMessage());
-
-                            });
-
-
                         }
                         AppHelper.hideDialog();
                     }
@@ -221,28 +186,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
         }
     }
 
-    /**
-     * method to get a conversation id
-     *
-     * @param recipientId this is the first parameter for getConversationId method
-     * @param senderId    this is the second parameter for getConversationId method
-     * @param realm       this is the thirded parameter for getConversationId method
-     * @return conversation id
-     */
-    private int getConversationId(String recipientId, String senderId, Realm realm) {
-        try {
-            WishlistsModel wishlistsModelNew = realm.where(WishlistsModel.class)
-                    .beginGroup()
-                    .equalTo("RecipientID", recipientId)
-                    .or()
-                    .equalTo("RecipientID", senderId)
-                    .endGroup().findAll().first();
-            return wishlistsModelNew.getId();
-        } catch (Exception e) {
-            AppHelper.LogCat("Conversation id Exception MainService" + e.getMessage());
-            return 0;
-        }
-    }
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
@@ -262,14 +205,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
         public void onLongPress(MotionEvent e) {
             View view = WishlistList.findChildViewUnder(e.getX(), e.getY());
             int currentPosition = WishlistList.getChildAdapterPosition(view);
-            WishlistsModel wishlistsModel = mWishlistsAdapter.getItem(currentPosition);
-            if (!wishlistsModel.isGroup()) {
-                if (actionMode != null) {
-                    return;
-                }
-                actionMode = getActivity().startActionMode(WishlistsFragment.this);
-                ToggleSelection(currentPosition);
-            }
 
             super.onLongPress(e);
         }
@@ -279,45 +214,46 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
     /**
      * method to show conversation list
      *
-     * @param wishlistsModels this is parameter for  ShowConversation  method
+     * @param wishlistsModels this is parameter for  ShowWishlist  method
      */
-    public void ShowConversation(List<WishlistsModel> wishlistsModels) {
+    public void ShowWishlist(List<WishlistsModel> wishlistsModels) {
 
+//        mWishlistsModelList = wishlistsModels;
         if (wishlistsModels.size() != 0) {
             WishlistList.setVisibility(View.VISIBLE);
-            emptyWishlists.setVisibility(View.GONE);
+            EmptyWishlists.setVisibility(View.GONE);
             RealmList<WishlistsModel> wishlistsModels1 = new RealmList<WishlistsModel>();
-            for (WishlistsModel wishlistsModel : wishlistsModels) {
-                wishlistsModels1.add(wishlistsModel);
+            for (WishlistsModel conversationsModel : wishlistsModels) {
+                wishlistsModels1.add(conversationsModel);
             }
-            mWishlists = wishlistsModels1;
+            mWishlistsAdapter.setWishlists(wishlistsModels1);
+
         } else {
             WishlistList.setVisibility(View.GONE);
-            emptyWishlists.setVisibility(View.VISIBLE);
+            EmptyWishlists.setVisibility(View.VISIBLE);
         }
+
     }
 
     /**
      * method to show conversation list
      *
-     * @param wishlistsModels this is parameter for  ShowConversation  method
+     * @param wishlistsModels this is parameter for  ShowWishlist  method
      */
-    public void UpdateConversation(List<WishlistsModel> wishlistsModels) {
-
+    public void UpdateWishlist(List<WishlistsModel> wishlistsModels) {
         if (wishlistsModels.size() != 0) {
             WishlistList.setVisibility(View.VISIBLE);
-            emptyWishlists.setVisibility(View.GONE);
+            EmptyWishlists.setVisibility(View.GONE);
             RealmList<WishlistsModel> wishlistsModels1 = new RealmList<WishlistsModel>();
             for (WishlistsModel wishlistsModel : wishlistsModels) {
                 wishlistsModels1.add(wishlistsModel);
             }
-            mWishlistsAdapter.setConversations(wishlistsModels1);
+            mWishlistsAdapter.setWishlists(wishlistsModels1);
         } else {
             WishlistList.setVisibility(View.GONE);
-            emptyWishlists.setVisibility(View.VISIBLE);
+            EmptyWishlists.setVisibility(View.VISIBLE);
         }
     }
-
 
     @Override
     public void onDestroy() {
@@ -360,32 +296,25 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
                 }
 
                 break;
-            case "new_message_group":
-            case "new_message":
-                mWishlistsPresenter.updateConversationList();
+            case "new_wishlist":
+                WishlistsModel newWishlist = new WishlistsModel();
+                newWishlist.setName(pusher.getWishlistObject().getName());
+                newWishlist.setName(pusher.getWishlistObject().getDescription());
+                newWishlist.setId(pusher.getWishlistObject().getId());
+                mWishlistsAdapter.addItem(0, newWishlist);
                 break;
-            case "messages_read":
-                mWishlistsPresenter.updateConversationList();
-                break;
-            case "new_message_sent":
-            case "messages_seen":
-            case "messages_delivered":
-                mWishlistsPresenter.updateConversationList();
-                break;
-            case "deleteConversation":
-                mWishlistsPresenter.updateConversationList();
-                break;
-            case "createGroup":
-            case "deleteGroup":
-            case "exitGroup":
-                mWishlistsPresenter.updateConversationList();
+            case "deleteWishlist":
+            case "exitWishlist":
+                mWishlistsPresenter.updateWishlistList();
                 break;
         }
     }
 
     @Override
     public void onErrorLoading(Throwable throwable) {
-        AppHelper.LogCat("Conversations Fragment " + throwable.getMessage());
+        WishlistList.setVisibility(View.GONE);
+        EmptyWishlists.setVisibility(View.VISIBLE);
+        AppHelper.LogCat("Wishlists Fragment " + throwable.getMessage());
     }
 
 

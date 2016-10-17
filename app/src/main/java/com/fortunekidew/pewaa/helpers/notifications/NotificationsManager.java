@@ -17,7 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
 import com.fortunekidew.pewaa.activities.settings.PreferenceSettingsManager;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -44,7 +44,7 @@ public class NotificationsManager {
     public static void showUserNotification(Context mContext, Intent resultIntent, String phone, String text, String userId, String Avatar) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         // Adds the back stack
-        stackBuilder.addParentStack(MessagesActivity.class);
+        stackBuilder.addParentStack(WishlistActivity.class);
         // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         // Gets a PendingIntent containing the entire back stack
@@ -172,7 +172,7 @@ public class NotificationsManager {
     public static void showGroupNotification(Context mContext, Intent resultIntent, String groupName, String text, int groupId, String Avatar) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         // Adds the back stack
-        stackBuilder.addParentStack(MessagesActivity.class);
+        stackBuilder.addParentStack(WishlistActivity.class);
         // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         // Gets a PendingIntent containing the entire back stack

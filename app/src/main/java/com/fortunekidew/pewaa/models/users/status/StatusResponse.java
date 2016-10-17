@@ -7,6 +7,7 @@ package com.fortunekidew.pewaa.models.users.status;
 public class StatusResponse {
     private boolean success;
     private String message;
+    private String id;
 
 
     public boolean isSuccess() {
@@ -23,6 +24,14 @@ public class StatusResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

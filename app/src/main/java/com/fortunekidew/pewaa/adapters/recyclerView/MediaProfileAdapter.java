@@ -22,7 +22,7 @@ import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

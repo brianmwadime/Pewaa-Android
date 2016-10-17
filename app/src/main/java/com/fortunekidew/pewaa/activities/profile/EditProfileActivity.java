@@ -61,7 +61,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     ImageView userAvatar;
     @Bind(R.id.addAvatar)
     FloatingActionButton addAvatar;
-    @Bind(R.id.username)
+    @Bind(R.id.wishlist_name)
     TextView username;
     @Bind(R.id.status)
     EmojiconTextView status;
@@ -172,7 +172,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             } else {
 
                 Picasso.with(this)
-                        .load(EndPoints.BASE_URL + mContactsModel.getImage())
+                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
                         .transform(new CropSquareTransformation())
                         .resize(200, 200)
                         .networkPolicy(NetworkPolicy.NO_CACHE)

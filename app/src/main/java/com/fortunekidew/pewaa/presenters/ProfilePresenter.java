@@ -8,8 +8,9 @@ import com.fortunekidew.pewaa.app.AppConstants;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.interfaces.Presenter;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.services.apiServices.ContactsService;
@@ -178,23 +179,19 @@ public class ProfilePresenter implements Presenter {
                         AppHelper.LogCat("last message  ID   0 Exception" + e.getMessage());
                     }
 
-                    RealmList<MessagesModel> messagesModelRealmList = wishlistsModel.getMessages();
-                    MessagesModel messagesModel = new MessagesModel();
-                    messagesModel.setId(lastID);
-                    messagesModel.setDate(sendTime);
-                    messagesModel.setSenderID(contactsModel.getId());
-                    messagesModel.setStatus(AppConstants.IS_WAITING);
-                    messagesModel.setUsername(contactsModel.getUsername());
-                    messagesModel.setGroup(true);
-                    messagesModel.setMessage("LT");
-                    messagesModel.setGroupID(groupID);
-                    messagesModel.setConversationID(wishlistsModel.getId());
-                    messagesModelRealmList.add(messagesModel);
-                    wishlistsModel.setLastMessage("LT");
-                    wishlistsModel.setLastMessageId(lastID);
-                    wishlistsModel.setMessages(messagesModelRealmList);
-                    wishlistsModel.setStatus(AppConstants.IS_WAITING);
-                    wishlistsModel.setUnreadMessageCounter("0");
+                    RealmList<GiftsModel> messagesModelRealmList = wishlistsModel.getGifts();
+                    GiftsModel messagesModel = new GiftsModel();
+//                    messagesModel.setId(lastID);
+//                    messagesModel.setDate(sendTime);
+//                    messagesModel.setSenderID(contactsModel.getId());
+//                    messagesModel.setStatus(AppConstants.IS_WAITING);
+//                    messagesModel.setUsername(contactsModel.getUsername());
+//                    messagesModel.setGroup(true);
+//                    messagesModel.setMessage("LT");
+//                    messagesModel.setGroupID(groupID);
+//                    messagesModel.setWishlistID(wishlistsModel.getId());
+//                    messagesModelRealmList.add(messagesModel);
+
                     wishlistsModel.setCreatedOnline(true);
                     realm1.copyToRealmOrUpdate(wishlistsModel);
                 }, () -> {

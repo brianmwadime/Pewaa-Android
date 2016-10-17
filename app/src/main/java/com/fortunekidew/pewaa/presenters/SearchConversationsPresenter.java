@@ -3,7 +3,6 @@ package com.fortunekidew.pewaa.presenters;
 
 import com.fortunekidew.pewaa.activities.search.SearchConversationsActivity;
 import com.fortunekidew.pewaa.interfaces.Presenter;
-import com.fortunekidew.pewaa.services.apiServices.ConversationsService;
 
 import io.realm.Realm;
 
@@ -29,8 +28,8 @@ public class SearchConversationsPresenter implements Presenter {
 
     @Override
     public void onCreate() {
-        ConversationsService mConversationsService = new ConversationsService(realm);
-        mConversationsService.getConversations().subscribe(mSearchConversationsActivity::ShowConversation, mSearchConversationsActivity::onErrorLoading);
+//        WishlistsService mWishlistsService = new WishlistsService(realm);
+//        mWishlistsService.getWishlists().subscribe(mSearchConversationsActivity::ShowConversation, mSearchConversationsActivity::onErrorLoading);
     }
 
     @Override

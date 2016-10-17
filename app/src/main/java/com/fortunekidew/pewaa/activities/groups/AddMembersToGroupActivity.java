@@ -189,7 +189,7 @@ public class AddMembersToGroupActivity extends AppCompatActivity implements Recy
                         membersGroupModel.setRole(role);
                         PreferenceManager.addMember(this, membersGroupModel);
                     }
-                    AppHelper.LaunchActivity(this, CreateGroupActivity.class);
+//                    AppHelper.LaunchActivity(this, CreateGroupActivity.class);
                 } else {
                     AppHelper.Snackbar(this, ParentLayoutAddContact, getString(R.string.select_one_at_least), AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
 

@@ -24,7 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
 import com.fortunekidew.pewaa.api.APIGroups;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.AppConstants;
@@ -152,7 +152,7 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 builder.setItems(options, (dialog, which) -> {
                     switch (which) {
                         case 0:
-                            Intent messagingIntent = new Intent(mActivity, MessagesActivity.class);
+                            Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
                             messagingIntent.putExtra("conversationID", 0);
                             messagingIntent.putExtra("recipientID", membersGroupModel.getUserId());
                             messagingIntent.putExtra("isGroup", false);
@@ -206,9 +206,9 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
         @Bind(R.id.status)
         EmojiconTextView status;

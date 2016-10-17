@@ -35,7 +35,7 @@
     <string name="error_response_messages">Unable to update messages.</string>
     <string name="name_is_too_short">the name is too short</string>
     <string name="select_picture">select an image</string>
-    <string name="new_group">New group</string>
+    <string name="new_wishlist">New wishlist</string>
     <string name="starred_messages">Starred messages</string>
     <string name="status">Status</string>
     <string name="settings">Settings</string>
@@ -274,5 +274,8 @@
     <string name="alert_message_delete_account">Are you  sure that you want to delete your account?</string>
     <string name="delete_account_failed_please_try_later">Failed to delete your account please try again later.</string>
     <string name="unexpected_reponse_from_server">An error has occured. Please contact support.</string>
+    <string name="Settings">Settings</string>
+    <string name="hintName">Name</string>
+    <string name="hintDescription">Description</string>
 
 </resources>

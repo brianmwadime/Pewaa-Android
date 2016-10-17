@@ -62,7 +62,7 @@ import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.profile.ProfileActivity;
 import com.fortunekidew.pewaa.activities.settings.PreferenceSettingsManager;
 import com.fortunekidew.pewaa.adapters.recyclerView.TextWatcherAdapter;
-import com.fortunekidew.pewaa.adapters.recyclerView.messages.MessagesAdapter;
+import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.MessagesAdapter;
 import com.fortunekidew.pewaa.animations.ViewAudioProxy;
 import com.fortunekidew.pewaa.app.AppConstants;
 import com.fortunekidew.pewaa.app.EndPoints;
@@ -77,8 +77,8 @@ import com.fortunekidew.pewaa.helpers.notifications.NotificationsManager;
 import com.fortunekidew.pewaa.interfaces.LoadingData;
 import com.fortunekidew.pewaa.models.groups.GroupsModel;
 import com.fortunekidew.pewaa.models.groups.MembersGroupModel;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.notifications.NotificationsModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
@@ -125,12 +125,12 @@ import static com.fortunekidew.pewaa.helpers.UtilsString.escapeJavaString;
  */
 
 @SuppressLint("SetTextI18n")
-public class MessagesActivity extends AppCompatActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener, LoadingData, RecyclerView.OnItemTouchListener, ActionMode.Callback, View.OnClickListener {
+public class WishlistActivity extends AppCompatActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener, LoadingData, RecyclerView.OnItemTouchListener, ActionMode.Callback, View.OnClickListener {
 
     @Bind(R.id.activity_messages)
     LinearLayout mView;
     @Bind(R.id.listMessages)
-    RecyclerView messagesList;
+    RecyclerView giftsList;
     @Bind(R.id.send_button)
     ImageButton SendButton;
     @Bind(R.id.send_record_button)
@@ -455,10 +455,10 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
         LinearLayoutManager layoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setStackFromEnd(true);
-        messagesList.setLayoutManager(layoutManager);
-        messagesList.setAdapter(mMessagesAdapter);
-        messagesList.setItemAnimator(new DefaultItemAnimator());
-        messagesList.addOnItemTouchListener(this);
+        giftsList.setLayoutManager(layoutManager);
+        giftsList.setAdapter(mMessagesAdapter);
+        giftsList.setItemAnimator(new DefaultItemAnimator());
+        giftsList.addOnItemTouchListener(this);
         gestureDetector = new GestureDetectorCompat(this, new RecyclerViewBenOnGestureListener());
         mView.setBackgroundColor(Color.parseColor(PreferenceSettingsManager.getDefault_wallpaper(this)));
         EmoticonButton.setVisibility(View.VISIBLE);
@@ -884,7 +884,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                                 }
                             }
                         } catch (Exception e) {
-                            AppHelper.LogCat("Exception videoLocation MessagesActivity " + e);
+                            AppHelper.LogCat("Exception videoLocation WishlistActivity " + e);
                         }
                     }
                     break;
@@ -977,7 +977,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                     }
                 }
 
-                if (PreferenceSettingsManager.enter_send(MessagesActivity.this)) {
+                if (PreferenceSettingsManager.enter_send(WishlistActivity.this)) {
                     messageWrapper.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
                     messageWrapper.setSingleLine(true);
                     messageWrapper.setOnEditorActionListener((v, actionId, event) -> {
@@ -1140,7 +1140,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                 AppHelper.LogCat("send group message " + e.getMessage());
             }
             unSentMessagesGroup(groupID);
-            new Handler().postDelayed(() -> runOnUiThread(() -> setStatusAsWaiting(messageGroup, true)), 100);
+
             AppHelper.LogCat("send group message to");
 
         } else {
@@ -1207,7 +1207,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                 AppHelper.LogCat("send message " + e.getMessage());
             }
             unSentMessagesForARecipient(recipientId, false);
-            new Handler().postDelayed(() -> runOnUiThread(() -> setStatusAsWaiting(message, false)), 100);
+
         }
         messageWrapper.setText("");
         messageTransfer = null;
@@ -1367,12 +1367,12 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
     /**
      * method to get a conversation id
      *
-     * @param recipientId this is the first parameter for getConversationId method
-     * @param senderId    this is the second parameter for getConversationId method
-     * @param realm       this is the thirded parameter for getConversationId method
+     * @param recipientId this is the first parameter for getWishlistId method
+     * @param senderId    this is the second parameter for getWishlistId method
+     * @param realm       this is the thirded parameter for getWishlistId method
      * @return conversation id
      */
-    private int getConversationId(String recipientId, String senderId, Realm realm) {
+    private String getWishlistId(String recipientId, String senderId, Realm realm) {
         try {
             WishlistsModel wishlistsModelNew = realm.where(WishlistsModel.class)
                     .beginGroup()
@@ -1382,306 +1382,10 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                     .endGroup().findFirst();
             return wishlistsModelNew.getId();
         } catch (Exception e) {
-            AppHelper.LogCat("Get conversation id Exception MessagesActivity " + e.getMessage());
-            return 0;
+            AppHelper.LogCat("Get conversation id Exception WishlistActivity " + e.getMessage());
+            return "";
         }
     }
-
-
-    /**
-     * method to save new message as waitng messages
-     *
-     * @param data    this is the first parameter for setStatusAsWaiting method
-     * @param isgroup this is the second parameter for setStatusAsWaiting method
-     */
-    private void setStatusAsWaiting(JSONObject data, boolean isgroup) {
-
-        try {
-            if (isgroup) {
-                int senderId = data.getInt("senderId");
-                String messageBody = data.getString("messageBody");
-                String senderName = data.getString("senderName");
-                String senderPhone = data.getString("phone");
-                String GroupImage = data.getString("GroupImage");
-                String GroupName = data.getString("GroupName");
-                String dateTmp = data.getString("date");
-                String video = data.getString("video");
-                String thumbnail = data.getString("thumbnail");
-                boolean isGroup = data.getBoolean("isGroup");
-                String image = data.getString("image");
-                String audio = data.getString("audio");
-                String document = data.getString("document");
-                String fileSize = data.getString("fileSize");
-                String duration = data.getString("duration");
-                int groupID = data.getInt("groupID");
-                realm.executeTransactionAsync(realm1 -> {
-                    int lastID = 1;
-                    try {
-
-                        MessagesModel messagesModel1 = realm1.where(MessagesModel.class).findAll().last();
-                        lastID = messagesModel1.getId() + 1;
-                        WishlistsModel wishlistsModel = realm1.where(WishlistsModel.class).equalTo("groupID", groupID).findFirst();
-                        RealmList<MessagesModel> messagesModelRealmList = wishlistsModel.getMessages();
-                        MessagesModel messagesModel = new MessagesModel();
-                        messagesModel.setId(lastID);
-                        messagesModel.setDate(dateTmp);
-                        messagesModel.setStatus(AppConstants.IS_WAITING);
-                        messagesModel.setUsername(senderName);
-                        messagesModel.setSenderID(PreferenceManager.getID(this));
-                        messagesModel.setGroup(isGroup);
-                        messagesModel.setMessage(messageBody);
-                        messagesModel.setGroupID(groupID);
-                        messagesModel.setImageFile(image);
-                        messagesModel.setVideoFile(video);
-                        messagesModel.setAudioFile(audio);
-                        messagesModel.setDocumentFile(document);
-                        messagesModel.setFileSize(fileSize);
-                        messagesModel.setDuration(duration);
-                        messagesModel.setVideoThumbnailFile(thumbnail);
-                        if (!image.equals("null") || !video.equals("null") || !audio.equals("null") || !document.equals("null") || !thumbnail.equals("null")) {
-                            messagesModel.setFileUpload(false);
-
-                        } else {
-                            messagesModel.setFileUpload(true);
-                        }
-                        messagesModel.setFileDownLoad(true);
-                        messagesModel.setConversationID(wishlistsModel.getId());
-                        messagesModelRealmList.add(messagesModel);
-                        wishlistsModel.setLastMessage(messageBody);
-                        wishlistsModel.setLastMessageId(lastID);
-                        wishlistsModel.setMessages(messagesModelRealmList);
-                        wishlistsModel.setStatus(AppConstants.IS_WAITING);
-                        wishlistsModel.setUnreadMessageCounter("0");
-                        realm1.copyToRealmOrUpdate(wishlistsModel);
-                        runOnUiThread(() -> addMessage(messagesModel));
-
-                    } catch (Exception e) {
-                        AppHelper.LogCat("last conversation  ID  group if conversation id = 0 Exception MessagesActivity  " + e.getMessage());
-                    }
-
-
-                }, () -> {
-                    if (!image.equals("null") || !video.equals("null") || !audio.equals("null") || !document.equals("null") || !thumbnail.equals("null"))
-                        return;
-                    mSocket.emit(AppConstants.SOCKET_SAVE_NEW_MESSAGE_GROUP, data, (Ack) argObjects -> {
-                        JSONObject dataString = (JSONObject) argObjects[0];//TODO hna ghandir condition if lmessage is not saved on the data base bach nbdl dakchi f realm ondir b7al failled and he can try to send it
-                        runOnUiThread(() -> {
-                            List<MembersGroupModel> contactsModelList = mGroupsModel.getMembers();
-                            for (int i = 0; i < contactsModelList.size(); i++) {
-                                String recipientID = contactsModelList.get(i).getUserId();
-                                new Handler().postDelayed(() -> runOnUiThread(() -> {
-                                    try {
-                                        int messageId = dataString.getInt("messageId");
-                                        JSONObject jsonObject = new JSONObject();
-                                        jsonObject.put("messageId", messageId);
-                                        jsonObject.put("recipientId", recipientID);
-                                        jsonObject.put("messageBody", messageBody);
-                                        jsonObject.put("senderId", senderId);
-                                        jsonObject.put("senderName", senderName);
-                                        jsonObject.put("phone", senderPhone);
-                                        jsonObject.put("GroupImage", GroupImage);
-                                        jsonObject.put("GroupName", GroupName);
-                                        jsonObject.put("groupID", groupID);
-                                        jsonObject.put("date", dateTmp);
-                                        jsonObject.put("isGroup", isGroup);
-                                        jsonObject.put("image", image);
-                                        jsonObject.put("video", video);
-                                        jsonObject.put("thumbnail", thumbnail);
-                                        jsonObject.put("audio", audio);
-                                        jsonObject.put("document", document);
-                                        jsonObject.put("fileSize", fileSize);
-                                        jsonObject.put("duration", duration);
-
-
-                                        mSocket.emit(AppConstants.SOCKET_NEW_MESSAGE_GROUP, jsonObject);
-                                    } catch (JSONException e) {
-                                        AppHelper.LogCat("JSONException group " + e.getMessage());
-                                    }
-
-                                }), 200);
-                            }
-                        });
-
-
-                    });
-
-
-                }, error -> {
-                    AppHelper.LogCat("Save group message failed MessagesActivity " + error.getMessage());
-                });
-
-
-            } else {
-                AppHelper.LogCat("esedd message ");
-
-                String senderId = data.getString("senderId");
-                String recipientId = data.getString("recipientId");
-                String messageBody = data.getString("messageBody");
-                String senderName = data.getString("senderName");
-                String dateTmp = data.getString("date");
-                String video = data.getString("video");
-                String thumbnail = data.getString("thumbnail");
-                boolean isGroup = data.getBoolean("isGroup");
-                String image = data.getString("image");
-                String audio = data.getString("audio");
-                String document = data.getString("document");
-                String phone = data.getString("phone");
-                String fileSize = data.getString("fileSize");
-                String duration = data.getString("duration");
-
-                String recipientName = mUsersModelRecipient.getUsername();
-                String recipientImage = mUsersModelRecipient.getImage();
-                String recipientPhone = mUsersModelRecipient.getPhone();
-                int conversationID = getConversationId(recipientId, senderId, realm);
-                if (conversationID == 0) {
-                    realm.executeTransactionAsync(realm1 -> {
-                        int lastConversationID = 1;
-                        int lastID = 1;
-                        try {
-                            WishlistsModel wishlistsModel = realm1.where(WishlistsModel.class).findAll().last();
-                            lastConversationID = wishlistsModel.getId() + 1;
-
-                            MessagesModel messagesModel1 = realm1.where(MessagesModel.class).findAll().last();
-                            lastID = messagesModel1.getId() + 1;
-
-                            AppHelper.LogCat("last ID  message  MessagesActivity " + lastID);
-
-                        } catch (Exception e) {
-                            AppHelper.LogCat("last conversation  ID  if conversation id = 0 Exception MessagesActivity " + e.getMessage());
-                            lastConversationID = 1;
-                        }
-                        RealmList<MessagesModel> messagesModelRealmList = new RealmList<MessagesModel>();
-                        MessagesModel messagesModel = new MessagesModel();
-                        messagesModel.setId(lastID);
-                        messagesModel.setUsername(senderName);
-                        messagesModel.setRecipientID(recipientId);
-                        messagesModel.setDate(dateTmp);
-                        messagesModel.setStatus(AppConstants.IS_WAITING);
-                        messagesModel.setGroup(isGroup);
-                        messagesModel.setSenderID(senderId);
-                        messagesModel.setConversationID(lastConversationID);
-                        messagesModel.setMessage(messageBody);
-                        messagesModel.setImageFile(image);
-                        messagesModel.setVideoFile(video);
-                        messagesModel.setAudioFile(audio);
-                        messagesModel.setDocumentFile(document);
-                        messagesModel.setFileSize(fileSize);
-                        messagesModel.setDuration(duration);
-                        messagesModel.setVideoThumbnailFile(thumbnail);
-                        if (!image.equals("null") || !video.equals("null") || !audio.equals("null") || !document.equals("null") || !thumbnail.equals("null")) {
-                            messagesModel.setFileUpload(false);
-
-                        } else {
-                            messagesModel.setFileUpload(true);
-                        }
-                        messagesModel.setFileDownLoad(true);
-                        messagesModel.setPhone(phone);
-                        messagesModelRealmList.add(messagesModel);
-                        WishlistsModel wishlistsModel1 = new WishlistsModel();
-                        wishlistsModel1.setRecipientID(recipientId);
-                        wishlistsModel1.setLastMessage(messageBody);
-                        wishlistsModel1.setRecipientUsername(recipientName);
-                        wishlistsModel1.setRecipientImage(recipientImage);
-                        wishlistsModel1.setMessageDate(dateTmp);
-                        wishlistsModel1.setId(lastConversationID);
-                        wishlistsModel1.setStatus(AppConstants.IS_WAITING);
-                        wishlistsModel1.setRecipientPhone(recipientPhone);
-                        wishlistsModel1.setMessages(messagesModelRealmList);
-                        wishlistsModel1.setUnreadMessageCounter("0");
-                        wishlistsModel1.setLastMessageId(lastID);
-                        wishlistsModel1.setCreatedOnline(true);
-                        realm1.copyToRealmOrUpdate(wishlistsModel1);
-                        ConversationID = lastConversationID;
-                        runOnUiThread(() -> addMessage(messagesModel));
-                        try {
-                            data.put("messageId", lastID);
-                        } catch (JSONException e) {
-                            AppHelper.LogCat("last id");
-                        }
-                    }, () -> {
-                        if (!image.equals("null") || !video.equals("null") || !audio.equals("null") || !document.equals("null") || !thumbnail.equals("null"))
-                            return;
-                        mSocket.emit(AppConstants.SOCKET_NEW_MESSAGE, data);
-                        mSocket.emit(AppConstants.SOCKET_SAVE_NEW_MESSAGE, data);
-                    }, error -> AppHelper.LogCat("Error  conversation id MessagesActivity " + error.getMessage()));
-
-
-                } else {
-
-                    realm.executeTransactionAsync(realm1 -> {
-                        try {
-
-
-                            MessagesModel messagesModel1 = realm1.where(MessagesModel.class).findAll().last();
-                            int lastID = messagesModel1.getId() + 1;
-
-                            AppHelper.LogCat("last ID  message   MessagesActivity" + lastID);
-                            WishlistsModel wishlistsModel;
-                            RealmQuery<WishlistsModel> conversationsModelRealmQuery = realm1.where(WishlistsModel.class).equalTo("id", conversationID);
-                            wishlistsModel = conversationsModelRealmQuery.findAll().first();
-                            MessagesModel messagesModel = new MessagesModel();
-                            messagesModel.setId(lastID);
-                            messagesModel.setUsername(senderName);
-                            messagesModel.setRecipientID(recipientId);
-                            messagesModel.setDate(dateTmp);
-                            messagesModel.setStatus(AppConstants.IS_WAITING);
-                            messagesModel.setGroup(isGroup);
-                            messagesModel.setSenderID(senderId);
-                            messagesModel.setConversationID(conversationID);
-                            messagesModel.setMessage(messageBody);
-                            messagesModel.setImageFile(image);
-                            messagesModel.setVideoFile(video);
-                            messagesModel.setAudioFile(audio);
-                            messagesModel.setDocumentFile(document);
-                            messagesModel.setFileSize(fileSize);
-                            messagesModel.setDuration(duration);
-                            messagesModel.setVideoThumbnailFile(thumbnail);
-                            if (!image.equals("null") || !video.equals("null") || !audio.equals("null") || !document.equals("null") || !thumbnail.equals("null")) {
-                                messagesModel.setFileUpload(false);
-
-                            } else {
-                                messagesModel.setFileUpload(true);
-                            }
-                            messagesModel.setFileDownLoad(true);
-                            messagesModel.setPhone(phone);
-                            wishlistsModel.getMessages().add(messagesModel);
-                            wishlistsModel.setLastMessageId(lastID);
-                            wishlistsModel.setLastMessage(messageBody);
-                            wishlistsModel.setMessageDate(dateTmp);
-                            wishlistsModel.setCreatedOnline(true);
-                            realm1.copyToRealmOrUpdate(wishlistsModel);
-                            runOnUiThread(() -> addMessage(messagesModel));
-                            try {
-                                data.put("messageId", lastID);
-                            } catch (JSONException e) {
-                                AppHelper.LogCat("last id");
-                            }
-                        } catch (Exception e) {
-                            AppHelper.LogCat("Exception  last id message  MessagesActivity " + e.getMessage());
-                        }
-                    }, () -> {
-                        if (!image.equals("null") || !video.equals("null") || !audio.equals("null") || !document.equals("null") || !thumbnail.equals("null"))
-                            return;
-                        mSocket.emit(AppConstants.SOCKET_NEW_MESSAGE, data);
-                        mSocket.emit(AppConstants.SOCKET_SAVE_NEW_MESSAGE, data);
-                    }, error -> AppHelper.LogCat("Error  last id  MessagesActivity " + error.getMessage()));
-                }
-            }
-
-
-        } catch (JSONException e) {
-            AppHelper.LogCat("JSONException  MessagesActivity " + e);
-        }
-
-        FileAudioPath = null;
-        FileVideoPath = null;
-        FileDocumentPath = null;
-        FileImagePath = null;
-        FileVideoThumbnailPath = null;
-        FileSize = "0";
-        Duration = "0";
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1749,63 +1453,6 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                     mIntent.putExtra("isGroup", false);
                     startActivity(mIntent);
                     break;
-                case R.id.clear_chat:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage(R.string.clear_chat);
-
-                    builder.setPositiveButton(R.string.Yes, (dialog, whichButton) -> {
-                        AppHelper.showDialog(this, getString(R.string.clear_chat));
-                        realm.executeTransactionAsync(realm1 -> {
-                            RealmResults<MessagesModel> messagesModel1 = realm1.where(MessagesModel.class).equalTo("conversationID", ConversationID).findAll();
-                            messagesModel1.deleteAllFromRealm();
-                        }, () -> {
-                            AppHelper.LogCat("Message Deleted  successfully  MessagesActivity");
-
-                            RealmResults<MessagesModel> messagesModel1 = realm.where(MessagesModel.class).equalTo("conversationID", ConversationID).findAll();
-                            if (messagesModel1.size() == 0) {
-                                realm.executeTransactionAsync(realm1 -> {
-                                    WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", ConversationID).findFirst();
-                                    wishlistsModel1.deleteFromRealm();
-                                }, () -> {
-                                    AppHelper.LogCat("Conversation deleted successfully MessagesActivity");
-                                    EventBus.getDefault().post(new Pusher("deleteConversation"));
-                                    finish();
-                                }, error -> {
-                                    AppHelper.LogCat("Delete conversation failed  MessagesActivity" + error.getMessage());
-
-                                });
-                            } else {
-                                MessagesModel lastMessage = realm.where(MessagesModel.class).equalTo("conversationID", ConversationID).findAll().last();
-                                realm.executeTransactionAsync(realm1 -> {
-                                    WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", ConversationID).findFirst();
-                                    wishlistsModel1.setLastMessage(lastMessage.getMessage());
-                                    wishlistsModel1.setLastMessageId(lastMessage.getId());
-                                    realm1.copyToRealmOrUpdate(wishlistsModel1);
-                                }, () -> {
-                                    AppHelper.LogCat("Conversation deleted successfully MessagesActivity ");
-                                    EventBus.getDefault().post(new Pusher("deleteConversation"));
-                                    finish();
-                                }, error -> {
-                                    AppHelper.LogCat("Delete conversation failed  MessagesActivity" + error.getMessage());
-
-                                });
-                            }
-                        }, error -> {
-                            AppHelper.LogCat("Delete message failed MessagesActivity" + error.getMessage());
-
-                        });
-                        AppHelper.hideDialog();
-
-                    });
-
-                    builder.setNegativeButton(R.string.No, (dialog, whichButton) -> {
-
-                    });
-
-                    builder.show();
-                    break;
-
-
             }
         }
         return true;
@@ -1817,7 +1464,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
     @SuppressWarnings("unused")
     @OnClick(R.id.close_btn_search_view)
     public void closeSearchView() {
-        final Animation animation = AnimationUtils.loadAnimation(MessagesActivity.this, R.anim.scale_for_button_animtion_exit);
+        final Animation animation = AnimationUtils.loadAnimation(WishlistActivity.this, R.anim.scale_for_button_animtion_exit);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -1848,7 +1495,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
     }
 
     private void launcherSearchView() {
-        final Animation animation = AnimationUtils.loadAnimation(MessagesActivity.this, R.anim.scale_for_button_animtion_enter);
+        final Animation animation = AnimationUtils.loadAnimation(WishlistActivity.this, R.anim.scale_for_button_animtion_enter);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -1923,7 +1570,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
         filteredModelList = FilterList(string);
         if (filteredModelList.size() != 0) {
             mMessagesAdapter.animateTo(filteredModelList);
-            messagesList.scrollToPosition(0);
+            giftsList.scrollToPosition(0);
         }
     }
 
@@ -1962,7 +1609,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                             .findAllSorted("id", Sort.ASCENDING);
 
                 } catch (Exception e) {
-                    AppHelper.LogCat(" Conversation Exception MessagesActivity" + e.getMessage());
+                    AppHelper.LogCat(" Conversation Exception WishlistActivity" + e.getMessage());
                 }
             } else {
                 messagesModels = realm.where(MessagesModel.class)
@@ -2112,7 +1759,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
             }
 
         } catch (Exception e) {
-            AppHelper.LogCat(" Recipient username  is null MessagesActivity" + e.getMessage());
+            AppHelper.LogCat(" Recipient username  is null WishlistActivity" + e.getMessage());
         }
         if (contactsModels.getImage() != null) {
             String userId = String.valueOf(contactsModels.getId());
@@ -2186,8 +1833,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
     @Override
     protected void onPause() {
         super.onPause();
-        if (!isGroup)
-            LastSeenTimeEmit();
+
     }
 
     @Override
@@ -2209,275 +1855,16 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
 
     @Override
     public void onErrorLoading(Throwable throwable) {
-        AppHelper.LogCat("Messages " + throwable.getMessage());
+        AppHelper.LogCat("Gifts " + throwable.getMessage());
     }
 
     /**
      * method to connect to the chat sever by socket
      */
     private void connectToChatServer() {
-        mSocket = MainService.mSocket;
-        if (mSocket == null) {
-            MainService.connectToServer();
-            mSocket = MainService.mSocket;
-        }
-        if (mSocket == null) {
-            return;
-        }
-        if (!mSocket.connected()) {
-            MainService.connectToServer();
-            mSocket = MainService.mSocket;
-        }
-
-        setTypingEvent();
-        if (isGroup) {
-            AppHelper.LogCat("here group seen");
-        } else {
-            checkIfUserIsOnline();
-            emitMessageSeen();
-        }
-
 
     }
 
-
-    /**
-     * method to check if user is online or not
-     */
-    private void checkIfUserIsOnline() {
-        mSocket.on(AppConstants.SOCKET_IS_ONLINE, args -> runOnUiThread(() -> {
-            final JSONObject data = (JSONObject) args[0];
-            try {
-                String senderID = data.getString("senderId");
-                if (senderID == recipientId) {
-                    if (data.getBoolean("connected")) {
-                        updateUserStatus(AppConstants.STATUS_USER_CONNECTED, null);
-                    } else {
-                        updateUserStatus(AppConstants.STATUS_USER_DISCONNECTED, null);
-                    }
-                }
-            } catch (JSONException e) {
-                AppHelper.LogCat(e);
-            }
-
-        }));
-    }
-
-    /**
-     * method to set user typing event
-     */
-    private void setTypingEvent() {
-        if (isGroup) {
-            mSocket.on(AppConstants.SOCKET_IS_MEMBER_TYPING, args -> runOnUiThread(() -> {
-
-                JSONObject data = (JSONObject) args[0];
-                try {
-
-                    String senderID = data.getString("senderId");
-                    ContactsModel contactsModel = realm.where(ContactsModel.class).equalTo("id", senderID).findFirst();
-                    String finalName;
-                    String name = UtilsPhone.getContactName(this, contactsModel.getPhone());
-                    if (name != null) {
-                        finalName = name;
-                    } else {
-                        finalName = contactsModel.getPhone();
-                    }
-                    int groupId = data.getInt("groupId");
-                    if (groupId == groupID) {
-                        if (senderID == PreferenceManager.getID(this)) return;
-                        updateGroupMemberStatus(AppConstants.STATUS_USER_TYPING, finalName);
-                    }
-
-                } catch (Exception e) {
-                    AppHelper.LogCat(e);
-                }
-            }));
-
-            mSocket.on(AppConstants.SOCKET_IS_MEMBER_STOP_TYPING, args -> runOnUiThread(() -> {
-                updateGroupMemberStatus(AppConstants.STATUS_USER_STOP_TYPING, null);
-
-            }));
-        } else {
-            mSocket.on(AppConstants.SOCKET_IS_TYPING, args -> runOnUiThread(() -> {
-
-                JSONObject data = (JSONObject) args[0];
-                try {
-
-                    String senderID = data.getString("senderId");
-                    String recipientID = data.getString("recipientId");
-                    if (senderID == recipientId && recipientID == senderId) {
-                        updateUserStatus(AppConstants.STATUS_USER_TYPING, null);
-                    }
-
-                } catch (Exception e) {
-                    AppHelper.LogCat(e);
-                }
-            }));
-
-            mSocket.on(AppConstants.SOCKET_IS_STOP_TYPING, args -> runOnUiThread(() -> {
-                try {
-                    JSONObject json = new JSONObject();
-                    try {
-                        json.put("connected", true);
-                        json.put("senderId", senderId);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
-                } catch (Exception e) {
-                    AppHelper.LogCat(e);
-                }
-            }));
-            mSocket.on(AppConstants.SOCKET_IS_LAST_SEEN, args -> runOnUiThread(() -> {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    String senderID = data.getString("senderId");
-                    String recipientID = data.getString("recipientId");
-                    String lastSeen = data.getString("lastSeen");
-                    if (senderID == recipientId && recipientID == senderId) {
-                        DateTime messageDate = UtilsTime.getCorrectDate(lastSeen);
-                        String finalDate = UtilsTime.convertDateToString(this, messageDate);
-                        updateUserStatus(AppConstants.STATUS_USER_LAST_SEEN, finalDate);
-                    }
-                } catch (Exception e) {
-                    AppHelper.LogCat(e);
-                }
-            }));
-        }
-
-
-    }
-
-    /**
-     * method to emit last seen of conversation
-     */
-    private void LastSeenTimeEmit() {
-        DateTime current = new DateTime();
-        String lastTime = String.valueOf(current);
-        JSONObject data = new JSONObject();
-        try {
-            data.put("senderId", PreferenceManager.getID(this));
-            data.put("recipientId", recipientId);
-            data.put("lastSeen", lastTime);
-        } catch (JSONException e) {
-            AppHelper.LogCat(e);
-        }
-        mSocket.emit(AppConstants.SOCKET_IS_LAST_SEEN, data);
-    }
-
-    /**
-     * method to update  group members  to show them on toolbar status
-     *
-     * @param statusUserTyping this is the first parameter for  updateGroupMemberStatus method
-     * @param memberName       this is the second parameter for updateGroupMemberStatus method
-     */
-    private void updateGroupMemberStatus(int statusUserTyping, String memberName) {
-        StringBuilder names = new StringBuilder();
-        for (int x = 0; x <= mGroupsModel.getMembers().size() - 1; x++) {
-            if (x <= 1) {
-                String finalName;
-                if (mGroupsModel.getMembers().get(x).getUserId() == PreferenceManager.getID(this)) {
-                    finalName = "You";
-                } else {
-                    String phone = UtilsPhone.getContactName(this, mGroupsModel.getMembers().get(x).getPhone());
-                    if (phone != null) {
-                        finalName = phone.substring(0, 5);
-                    } else {
-                        finalName = mGroupsModel.getMembers().get(x).getPhone().substring(0, 5);
-                    }
-
-                }
-                names.append(finalName);
-                names.append(",");
-            }
-
-        }
-        String groupsNames = UtilsString.removelastString(names.toString());
-        switch (statusUserTyping) {
-            case AppConstants.STATUS_USER_TYPING:
-                lastVu.setVisibility(View.VISIBLE);
-                lastVu.setText(memberName + " " + getString(R.string.isTyping));
-                break;
-            case AppConstants.STATUS_USER_STOP_TYPING:
-                lastVu.setVisibility(View.VISIBLE);
-                lastVu.setText(groupsNames);
-                break;
-            default:
-                lastVu.setVisibility(View.VISIBLE);
-                lastVu.setText(groupsNames);
-                break;
-        }
-    }
-
-    /**
-     * method to update user status
-     *
-     * @param statusUserTyping this is the first parameter for  updateUserStatus method
-     * @param lastTime         this is the second parameter for  updateUserStatus method
-     */
-    private void updateUserStatus(int statusUserTyping, String lastTime) {
-        Realm realm = Realm.getDefaultInstance();
-
-        switch (statusUserTyping) {
-            case AppConstants.STATUS_USER_TYPING:
-                lastVu.setVisibility(View.VISIBLE);
-                realm.executeTransaction(realm1 -> {
-                    ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", recipientId).findFirst();
-                    contactsModel.setUserState(getString(R.string.isTyping));
-                    realm.copyToRealmOrUpdate(contactsModel);
-                    lastVu.setText(getString(R.string.isTyping));
-                });
-                AppHelper.LogCat("typing...");
-                break;
-            case AppConstants.STATUS_USER_DISCONNECTED:
-                lastVu.setVisibility(View.VISIBLE);
-                realm.executeTransaction(realm1 -> {
-                    ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", recipientId).findFirst();
-                    contactsModel.setUserState(getString(R.string.isOffline));
-                    realm.copyToRealmOrUpdate(contactsModel);
-                    lastVu.setText(getString(R.string.isOffline));
-                });
-
-                AppHelper.LogCat("Offline...");
-                break;
-            case AppConstants.STATUS_USER_CONNECTED:
-                lastVu.setVisibility(View.VISIBLE);
-                realm.executeTransaction(realm1 -> {
-                    ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", recipientId).findFirst();
-                    contactsModel.setUserState(getString(R.string.isOnline));
-                    realm.copyToRealmOrUpdate(contactsModel);
-                    lastVu.setText(getString(R.string.isOnline));
-                });
-
-                AppHelper.LogCat("Online...");
-                break;
-            case AppConstants.STATUS_USER_STOP_TYPING:
-                break;
-            case AppConstants.STATUS_USER_LAST_SEEN:
-                lastVu.setVisibility(View.VISIBLE);
-                realm.executeTransaction(realm1 -> {
-                    ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", recipientId).findFirst();
-                    contactsModel.setUserState(getString(R.string.lastSeen) + " " + lastTime);
-                    realm.copyToRealmOrUpdate(contactsModel);
-                    lastVu.setText(getString(R.string.lastSeen) + " " + lastTime);
-                });
-
-                break;
-            default:
-                lastVu.setVisibility(View.VISIBLE);
-                realm.executeTransaction(realm1 -> {
-                    ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", recipientId).findFirst();
-                    contactsModel.setUserState(getString(R.string.isOffline));
-                    realm.copyToRealmOrUpdate(contactsModel);
-                    lastVu.setText(getString(R.string.isOffline));
-                });
-
-                break;
-
-
-        }
-        realm.close();
-    }
 
     /**
      * method to check if user is exist
@@ -2538,7 +1925,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                     unSentMessagesForARecipient(pusher.getMessagesModel().getRecipientID(), true);
                 break;
             case "ItemIsActivatedMessages":
-                int idx = messagesList.getChildAdapterPosition(pusher.getView());
+                int idx = giftsList.getChildAdapterPosition(pusher.getView());
                 if (actionMode != null) {
                     ToggleSelection(idx);
                     return;
@@ -2550,7 +1937,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                 if (newUserNotification.getRecipientId() == recipientId) {
                     return;
                 } else {
-                    Intent messagingIntent = new Intent(PewaaApplication.getAppContext(), MessagesActivity.class);
+                    Intent messagingIntent = new Intent(PewaaApplication.getAppContext(), WishlistActivity.class);
                     messagingIntent.putExtra("conversationID", newUserNotification.getConversationID());
                     messagingIntent.putExtra("recipientID", newUserNotification.getRecipientId());
                     messagingIntent.putExtra("isGroup", newUserNotification.isGroup());
@@ -2568,7 +1955,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                 if (newGroupNotification.getGroupID() == groupID) {
                     return;
                 } else {
-                    Intent messagingIntent = new Intent(PewaaApplication.getAppContext(), MessagesActivity.class);
+                    Intent messagingIntent = new Intent(PewaaApplication.getAppContext(), WishlistActivity.class);
                     messagingIntent.putExtra("conversationID", newGroupNotification.getConversationID());
                     messagingIntent.putExtra("groupID", newGroupNotification.getGroupID());
                     messagingIntent.putExtra("isGroup", newGroupNotification.isGroup());
@@ -2601,7 +1988,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
      * method to scroll to the bottom of list
      */
     private void scrollToBottom() {
-        messagesList.scrollToPosition(mMessagesAdapter.getItemCount() - 1);
+        giftsList.scrollToPosition(mMessagesAdapter.getItemCount() - 1);
     }
 
     /**
@@ -2642,7 +2029,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                             FileAudioPath = null;
                     }
                 } catch (Exception e) {
-                    AppHelper.LogCat("Exception record path file  MessagesActivity");
+                    AppHelper.LogCat("Exception record path file  WishlistActivity");
                 }
             } else {
 
@@ -2913,7 +2300,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                             MessagesModel messagesModel1 = realm1.where(MessagesModel.class).equalTo("id", messageId).equalTo("conversationID", ConversationID).findFirst();
                             messagesModel1.deleteFromRealm();
                         }, () -> {
-                            AppHelper.LogCat("Message deleted successfully MessagesActivity ");
+                            AppHelper.LogCat("Message deleted successfully WishlistActivity ");
                             mMessagesAdapter.remove(currentPosition1);
                             RealmResults<MessagesModel> messagesModel1 = realm.where(MessagesModel.class).equalTo("conversationID", ConversationID).findAll();
                             if (messagesModel1.size() == 0) {
@@ -2921,29 +2308,28 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                                     WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", ConversationID).findFirst();
                                     wishlistsModel1.deleteFromRealm();
                                 }, () -> {
-                                    AppHelper.LogCat("Conversation deleted successfully MessagesActivity ");
+                                    AppHelper.LogCat("Conversation deleted successfully WishlistActivity ");
                                     EventBus.getDefault().post(new Pusher("deleteConversation"));
                                 }, error -> {
-                                    AppHelper.LogCat("delete conversation failed MessagesActivity " + error.getMessage());
+                                    AppHelper.LogCat("delete conversation failed WishlistActivity " + error.getMessage());
 
                                 });
                             } else {
                                 MessagesModel lastMessage = realm.where(MessagesModel.class).equalTo("conversationID", ConversationID).findAll().last();
                                 realm.executeTransactionAsync(realm1 -> {
                                     WishlistsModel wishlistsModel1 = realm1.where(WishlistsModel.class).equalTo("id", ConversationID).findFirst();
-                                    wishlistsModel1.setLastMessage(lastMessage.getMessage());
-                                    wishlistsModel1.setLastMessageId(lastMessage.getId());
+
                                     realm1.copyToRealmOrUpdate(wishlistsModel1);
                                 }, () -> {
-                                    AppHelper.LogCat("Conversation deleted successfully  MessagesActivity ");
+                                    AppHelper.LogCat("Conversation deleted successfully  WishlistActivity ");
                                     EventBus.getDefault().post(new Pusher("deleteConversation"));
                                 }, error -> {
-                                    AppHelper.LogCat("delete conversation failed  MessagesActivity" + error.getMessage());
+                                    AppHelper.LogCat("delete conversation failed  WishlistActivity" + error.getMessage());
 
                                 });
                             }
                         }, error -> {
-                            AppHelper.LogCat("delete message failed  MessagesActivity" + error.getMessage());
+                            AppHelper.LogCat("delete message failed  WishlistActivity" + error.getMessage());
 
                         });
 
@@ -3004,7 +2390,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
     @Override
     public void onClick(View view) {
 
-        int position = messagesList.getChildAdapterPosition(view);
+        int position = giftsList.getChildAdapterPosition(view);
         if (actionMode != null) {
             ToggleSelection(position);
             return;
@@ -3019,16 +2405,16 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
         }
 
         public void onLongPress(MotionEvent e) {
-            View view = messagesList.findChildViewUnder(e.getX(), e.getY());
+            View view = giftsList.findChildViewUnder(e.getX(), e.getY());
 
-            int currentPosition = messagesList.getChildAdapterPosition(view);
+            int currentPosition = giftsList.getChildAdapterPosition(view);
             MessagesModel messagesModel = mMessagesAdapter.getItem(currentPosition);
             if (!messagesModel.isGroup()) {
 
                 if (actionMode != null) {
                     return;
                 }
-                actionMode = startActionMode(MessagesActivity.this);
+                actionMode = startActionMode(WishlistActivity.this);
                 ToggleSelection(currentPosition);
             }
             super.onLongPress(e);
@@ -3053,7 +2439,7 @@ public class MessagesActivity extends AppCompatActivity implements EmojiconGridF
                     }
 
                 } catch (Exception e) {
-                    AppHelper.LogCat("Exception record MessagesActivity");
+                    AppHelper.LogCat("Exception record WishlistActivity");
                 }
 
             });

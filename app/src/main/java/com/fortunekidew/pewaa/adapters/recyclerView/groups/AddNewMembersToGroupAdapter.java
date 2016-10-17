@@ -212,10 +212,10 @@ public class AddNewMembersToGroupAdapter extends RecyclerView.Adapter<RecyclerVi
 
 
     class ContactsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
 
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
 
         @Bind(R.id.status)

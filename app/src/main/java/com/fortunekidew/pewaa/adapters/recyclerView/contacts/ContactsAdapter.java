@@ -24,11 +24,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
 import com.fortunekidew.pewaa.activities.profile.ProfilePreviewActivity;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;
 import com.fortunekidew.pewaa.app.AppConstants;
@@ -212,7 +212,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 AppHelper.LogCat("Contacts adapters Exception " + e.getMessage());
             }
             contactsViewHolder.setOnClickListener(view -> {
-                if (view.getId() == R.id.user_image) {
+                if (view.getId() == R.id.wishlist_image) {
 
                     if (AppHelper.isAndroid5()) {
                         Intent mIntent = new Intent(mActivity, ProfilePreviewActivity.class);
@@ -228,7 +228,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 } else {
                     if (contactsModel.isLinked()) {
-                        Intent messagingIntent = new Intent(mActivity, MessagesActivity.class);
+                        Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
                         messagingIntent.putExtra("conversationID", 0);
                         messagingIntent.putExtra("recipientID", contactsModel.getId());
                         messagingIntent.putExtra("isGroup", false);
@@ -308,9 +308,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
         @Bind(R.id.status)
         EmojiconTextView status;

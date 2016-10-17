@@ -190,10 +190,10 @@ public class AddMembersToGroupAdapter extends RecyclerView.Adapter<RecyclerView.
 
 
     class ContactsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
 
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
 
         @Bind(R.id.status)

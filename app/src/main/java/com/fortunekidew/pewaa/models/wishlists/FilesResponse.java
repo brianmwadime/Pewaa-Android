@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaa.models.messages;
+package com.fortunekidew.pewaa.models.wishlists;
 
 /**
  * Created by Abderrahim El imame on 7/26/16.

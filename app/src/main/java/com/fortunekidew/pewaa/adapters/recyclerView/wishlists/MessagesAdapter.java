@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaa.adapters.recyclerView.messages;
+package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -52,8 +52,8 @@ import com.fortunekidew.pewaa.helpers.images.BlurTransformation;
 import com.fortunekidew.pewaa.interfaces.AudioCallbacks;
 import com.fortunekidew.pewaa.interfaces.DownloadCallbacks;
 import com.fortunekidew.pewaa.interfaces.UploadCallbacks;
-import com.fortunekidew.pewaa.models.messages.FilesResponse;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.FilesResponse;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.ui.ColorGenerator;
@@ -267,7 +267,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         //  }
 
                     } catch (Exception e) {
-                        AppHelper.LogCat("Group username is null" + e.getMessage());
+                        AppHelper.LogCat("Group wishlist_name is null" + e.getMessage());
                     }
                 }
             } else {
@@ -756,7 +756,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class MessagesViewHolder extends RecyclerView.ViewHolder implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
         @Bind(R.id.message_text)
         EmojiconTextView message;
-        @Bind(R.id.date_message)
+        @Bind(R.id.date_created)
         TextView date;
         @Bind(R.id.sender_name)
         TextView senderName;

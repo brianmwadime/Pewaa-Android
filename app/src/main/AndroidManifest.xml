@@ -3,7 +3,6 @@
 
 
     <!-- permissions for Network -->
-
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
@@ -16,14 +15,12 @@
     <!-- permissions for contacts -->
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
 
     <!-- Authenticator -->
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -84,12 +81,16 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.com.novasera.whatsclone.messaging‌​" />
 
             </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.com.fortunekidew.pewaa.android.profile"/>
+            </intent-filter>
         </activity>
 
-
-        <!--    MessagesActivity -->
+        <!--    WishlistActivity -->
         <activity
-            android:name="com.fortunekidew.pewaa.activities.messages.MessagesActivity"
+            android:name="com.fortunekidew.pewaa.activities.messages.WishlistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName="com.fortunekidew.pewaa.activities.main.MainActivity"
             android:windowSoftInputMode="adjustResize">
@@ -99,13 +100,12 @@
         </activity>
 
         <!--  CreateGroupActivity -->
-        <activity
-            android:name="com.fortunekidew.pewaa.activities.groups.CreateGroupActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustResize" />
 
         <!--  AddMembersToGroupActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.groups.AddMembersToGroupActivity" />
+
+        <!--  AddWishlistsActivity -->
+        <activity android:name="com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity" />
 
         <!--  AddNewMembersToGroupActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity">
@@ -165,8 +165,7 @@
         <!-- AuthenticationService -->
         <service
             android:name="com.fortunekidew.pewaa.sync.AuthenticatorService"
-            android:exported="true"
-            android:process=":auth">
+            android:exported="true"> <!--android:process=":auth"-->
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -175,23 +174,23 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-        <!-- SyncService for SyncAdapter -->
+
+        <!-- ContactsSyncAdapterService for SyncAdapter -->
+
         <service
-            android:name="com.fortunekidew.pewaa.sync.SyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:name="com.fortunekidew.pewaa.sync.ContactsSyncAdapterService"
+            android:exported="true"> <!--android:process=":sync"-->
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_adapter" />
+                android:resource="@xml/sync_contacts" />
 
-                <meta-data
-                    android:name="android.provider.CONTACTS_STRUCTURE"
-                    android:resource="@xml/sync_contacts" />
-
+            <meta-data
+                android:name="android.provider.CONTACTS_STRUCTURE"
+                android:resource="@xml/contacts" />
         </service>
 
         <!-- SettingsActivity -->
@@ -199,7 +198,6 @@
             android:name="com.fortunekidew.pewaa.activities.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
-
 
         <!-- SearchConversationsActivity -->
         <activity
@@ -247,12 +245,6 @@
 
 
         <!-- EditGroupActivity -->
-        <activity
-            android:name="com.fortunekidew.pewaa.activities.groups.EditGroupActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_edit_group_name"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
 
         <!-- NewContactsActivity -->
         <activity
@@ -285,7 +277,8 @@
             android:label="@string/app_service_name">
             <intent-filter>
                 <action android:name="new_wishlist_notification" />
-                <!--<action android:name="new_group_message_notification" />-->
+                <action android:name="new_payment_notification" />
+                <action android:name="payment_completed_notification" />
             </intent-filter>
         </service>
     </application>

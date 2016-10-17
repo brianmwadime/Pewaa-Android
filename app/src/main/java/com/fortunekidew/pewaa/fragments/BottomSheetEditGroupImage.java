@@ -66,7 +66,7 @@ public class BottomSheetEditGroupImage extends BottomSheetDialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mEditProfilePresenter.onActivityResult(requestCode, resultCode, data);
+//        mEditProfilePresenter.onActivityResult(requestCode, resultCode, data);
         dismiss();
     }
 

@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.app.AppConstants;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -182,7 +182,7 @@ public class AppHelper {
         File exportRealmFile = null;
         try {
             // get or create an "whatsClone.realm" file
-            exportRealmFile = new File(mContext.getExternalCacheDir(), "whatsClone.realm");
+            exportRealmFile = new File(mContext.getExternalCacheDir(), AppConstants.DATABASE_LOCAL_NAME);
 
             // if "whatsClone.realm" already exists, delete
             exportRealmFile.delete();
@@ -198,9 +198,9 @@ public class AppHelper {
         // init email intent and add export.realm as attachment
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
-        intent.putExtra(Intent.EXTRA_EMAIL, "abderrahim.elimame@gmail.com");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "this is ur local realm database whatsClone");
-        intent.putExtra(Intent.EXTRA_TEXT, "Hi man");
+        intent.putExtra(Intent.EXTRA_EMAIL, "mwadime@fortunekidew.c.ke");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Your realm database Pewaa");
+        intent.putExtra(Intent.EXTRA_TEXT, "Hello");
         Uri u = Uri.fromFile(exportRealmFile);
         intent.putExtra(Intent.EXTRA_STREAM, u);
 

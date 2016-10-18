@@ -3,6 +3,7 @@ package com.fortunekidew.pewaa.api;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
 import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
+import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 
 import java.util.List;
@@ -43,4 +44,13 @@ public interface APIWishlists {
      */
     @GET(EndPoints.GET_WISHLIST)
     Observable<WishlistsModel> getWishlist(@Path("wishlistId") String wishlistId);
+
+    /**
+     * method to get group information
+     *
+     * @param wishlistId this is  parameter for  getWishlist method
+     * @return this is return value
+     */
+    @GET(EndPoints.WISHLIST_ITEMS)
+    Observable<List<GiftsModel>> getGifts(@Path("wishlistId") String wishlistId);
 }

@@ -2,7 +2,6 @@ package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -25,11 +24,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
-import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +40,13 @@ import io.realm.RealmList;
 import io.socket.client.Socket;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-
 /**
- * Created by Brian Mwakima on 20/02/2016.
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Abderrahim El imame on 20/02/2016.
+ * Email : abderrahim.elimame@gmail.com
  */
-public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected final Activity mActivity;
-    private RealmList<WishlistsModel> mWishlists;
+    private RealmList<GiftsModel> mGifts;
     private Realm realm;
     private APIService mApiService;
     private String SearchQuery;
@@ -60,17 +57,17 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-    public WishlistsAdapter(@NonNull Activity mActivity) {
+    public GiftsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
-        this.mWishlists = new RealmList<>();
+        this.mGifts = new RealmList<>();
         this.realm = Realm.getDefaultInstance();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
     }
 
-    public WishlistsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList, Socket mSocket) {
+    public GiftsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList, Socket mSocket) {
         this.mActivity = mActivity;
-        this.mWishlists = new RealmList<>();
+        this.mGifts = new RealmList<>();
         this.wishlistList = wishlistList;
         this.realm = Realm.getDefaultInstance();
         this.mApiService = new APIService(mActivity);
@@ -78,8 +75,8 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mSocket = mSocket;
     }
 
-    public void setWishlists(RealmList<WishlistsModel> wishlistsModelList) {
-        this.mWishlists = wishlistsModelList;
+    public void setGifts(RealmList<GiftsModel> wishlistsModelList) {
+        this.mGifts = wishlistsModelList;
         notifyDataSetChanged();
     }
 
@@ -90,81 +87,81 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyDataSetChanged();
     }
 
-    public void animateTo(List<WishlistsModel> models) {
+    public void animateTo(List<GiftsModel> models) {
         applyAndAnimateRemovals(models);
         applyAndAnimateAdditions(models);
         applyAndAnimateMovedItems(models);
     }
 
-    private void applyAndAnimateRemovals(List<WishlistsModel> newModels) {
-        for (int i = mWishlists.size() - 1; i >= 0; i--) {
-            final WishlistsModel model = mWishlists.get(i);
+    private void applyAndAnimateRemovals(List<GiftsModel> newModels) {
+        for (int i = mGifts.size() - 1; i >= 0; i--) {
+            final GiftsModel model = mGifts.get(i);
             if (!newModels.contains(model)) {
                 removeItem(i);
             }
         }
     }
 
-    private void applyAndAnimateAdditions(List<WishlistsModel> newModels) {
+    private void applyAndAnimateAdditions(List<GiftsModel> newModels) {
         for (int i = 0, count = newModels.size(); i < count; i++) {
-            final WishlistsModel model = newModels.get(i);
-            if (!mWishlists.contains(model)) {
+            final GiftsModel model = newModels.get(i);
+            if (!mGifts.contains(model)) {
                 addItem(i, model);
             }
         }
     }
 
-    private void applyAndAnimateMovedItems(List<WishlistsModel> newModels) {
+    private void applyAndAnimateMovedItems(List<GiftsModel> newModels) {
         for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
-            final WishlistsModel model = newModels.get(toPosition);
-            final int fromPosition = mWishlists.indexOf(model);
+            final GiftsModel model = newModels.get(toPosition);
+            final int fromPosition = mGifts.indexOf(model);
             if (fromPosition >= 0 && fromPosition != toPosition) {
                 moveItem(fromPosition, toPosition);
             }
         }
     }
 
-    private WishlistsModel removeItem(int position) {
-        final WishlistsModel model = mWishlists.remove(position);
+    private GiftsModel removeItem(int position) {
+        final GiftsModel model = mGifts.remove(position);
         notifyItemRemoved(position);
         return model;
     }
 
-    public void addItem(int position, WishlistsModel model) {
-        mWishlists.add(position, model);
+    public void addItem(int position, GiftsModel model) {
+        mGifts.add(position, model);
         notifyItemInserted(position);
     }
 
     private void moveItem(int fromPosition, int toPosition) {
-        final WishlistsModel model = mWishlists.remove(fromPosition);
-        mWishlists.add(toPosition, model);
+        final GiftsModel model = mGifts.remove(fromPosition);
+        mGifts.add(toPosition, model);
         notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_wishlist, parent, false);
-        return new WishlistViewHolder(itemView);
+        return new GiftsAdapter.GiftViewHolder(itemView);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof WishlistViewHolder) {
+        if (holder instanceof GiftsAdapter.GiftViewHolder) {
 
-            final WishlistViewHolder wishlistViewHolder = (WishlistViewHolder) holder;
-            final WishlistsModel wishlistsModel = this.mWishlists.get(position);
+            final GiftsAdapter.GiftViewHolder GiftViewHolder = (GiftsAdapter.GiftViewHolder) holder;
+            final GiftsModel GiftsModel = this.mGifts.get(position);
 
             try {
 
-                String Name = wishlistsModel.getName();
+                String Name = GiftsModel.getName();
 
-                wishlistViewHolder.wishlist_name.setTextColor(mActivity.getResources().getColor(R.color.colorBlack));
+                GiftViewHolder.gift_name.setTextColor(mActivity.getResources().getColor(R.color.colorBlack));
 
                 SpannableString wishlistName = SpannableString.valueOf(Name);
                 if (SearchQuery == null) {
-                    wishlistViewHolder.wishlist_name.setText(wishlistName, TextView.BufferType.NORMAL);
+                    GiftViewHolder.gift_name.setText(wishlistName, TextView.BufferType.NORMAL);
                 } else {
                     int index = TextUtils.indexOf(Name.toLowerCase(), SearchQuery.toLowerCase());
                     if (index >= 0) {
@@ -172,20 +169,20 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         wishlistName.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), index, index + SearchQuery.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     }
 
-                    wishlistViewHolder.wishlist_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
+                    GiftViewHolder.gift_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
                 }
 
-                wishlistViewHolder.setWishlistImage(wishlistsModel.getAvatar());
+                GiftViewHolder.setGiftImage(GiftsModel.getAvatar());
 
-                wishlistViewHolder.setOnClickListener(view -> {
+                GiftViewHolder.setOnClickListener(view -> {
 
-                    Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
-                    messagingIntent.putExtra("wishlistID", wishlistsModel.getId());
-                    mActivity.startActivity(messagingIntent);
-                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                    Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
+//                    messagingIntent.putExtra("wishlistID", GiftsModel.getId());
+//                    mActivity.startActivity(messagingIntent);
+//                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 });
             } catch (Exception e) {
-                AppHelper.LogCat("Wishlists Adapter  Exception" + e.getMessage());
+                AppHelper.LogCat("Gifts Adapter  Exception" + e.getMessage());
             }
 
         }
@@ -194,7 +191,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        if (mWishlists != null) return mWishlists.size();
+        if (mGifts != null) return mGifts.size();
         return 0;
     }
 
@@ -232,60 +229,49 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-    public WishlistsModel getItem(int position) {
-        return mWishlists.get(position);
+    public GiftsModel getItem(int position) {
+        return mGifts.get(position);
     }
 
-    class HeaderViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.adParentLyout)
-        LinearLayout rootLayout;
-
-        HeaderViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
-
-    class WishlistViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.wishlist_image)
-        ImageView wishlistImage;
-        @Bind(R.id.wishlist_name)
-        EmojiconTextView wishlist_name;
+    class GiftViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.gift_image)
+        ImageView GiftImage;
+        @Bind(R.id.gift_name)
+        EmojiconTextView gift_name;
         @Bind(R.id.counter)
         TextView counter;
         @Bind(R.id.date_created)
-        TextView wishlistDate;
+        TextView GiftDate;
 
-        @Bind(R.id.wishlist_row)
-        LinearLayout WishlistRow;
+        @Bind(R.id.gift_row)
+        LinearLayout GiftRow;
 
-        WishlistViewHolder(View itemView) {
+        GiftViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
 
-        void setWishlistImage(String ImageUrl) {
+        void setGiftImage(String ImageUrl) {
 
-            BitmapImageViewTarget target = new BitmapImageViewTarget(wishlistImage) {
+            BitmapImageViewTarget target = new BitmapImageViewTarget(GiftImage) {
                 @Override
                 public void onLoadStarted(Drawable placeholder) {
                     super.onLoadStarted(placeholder);
-                    wishlistImage.setImageDrawable(placeholder);
+                    GiftImage.setImageDrawable(placeholder);
                 }
 
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     super.onResourceReady(resource, glideAnimation);
-                    wishlistImage.setImageBitmap(resource);
+                    GiftImage.setImageBitmap(resource);
 
                 }
 
                 @Override
                 public void onLoadFailed(Exception e, Drawable errorDrawable) {
                     super.onLoadFailed(e, errorDrawable);
-                    wishlistImage.setImageDrawable(errorDrawable);
+                    GiftImage.setImageDrawable(errorDrawable);
                 }
 
 
@@ -300,24 +286,23 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
-        void setNullWishlistImage(int drawable) {
-            wishlistImage.setPadding(2, 2, 2, 2);
-            wishlistImage.setImageResource(drawable);
+        void setNullGiftImage(int drawable) {
+            GiftImage.setPadding(2, 2, 2, 2);
+            GiftImage.setImageResource(drawable);
         }
 
 
-        void setWishlist_name(String wishlist) {
+        void setGift_name(String wishlist) {
 
             if (wishlist.length() > 16)
-                wishlist_name.setText(wishlist.substring(0, 16) + "... " + "");
+                gift_name.setText(wishlist.substring(0, 16) + "... " + "");
             else
-                wishlist_name.setText(wishlist);
+                gift_name.setText(wishlist);
 
         }
 
-
-        void setWishlistDate(String creationDate) {
-            wishlistDate.setText(creationDate);
+        void setGiftDate(String creationDate) {
+            GiftDate.setText(creationDate);
         }
 
 
@@ -336,9 +321,8 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void setOnClickListener(View.OnClickListener listener) {
             itemView.setOnClickListener(listener);
-            wishlistImage.setOnClickListener(listener);
+            GiftImage.setOnClickListener(listener);
         }
 
     }
-
 }

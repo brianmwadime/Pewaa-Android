@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * methdo to load number of unread messages
+     * methdo to load number of unread gifts
      */
     private void loadCounter() {
 //        Realm realm = Realm.getDefaultInstance();

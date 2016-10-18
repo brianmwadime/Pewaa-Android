@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;

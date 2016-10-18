@@ -17,7 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.activities.settings.PreferenceSettingsManager;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;

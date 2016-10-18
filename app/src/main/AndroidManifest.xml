@@ -90,7 +90,7 @@
 
         <!--    WishlistActivity -->
         <activity
-            android:name="com.fortunekidew.pewaa.activities.messages.WishlistActivity"
+            android:name="com.fortunekidew.pewaa.activities.gifts.WishlistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName="com.fortunekidew.pewaa.activities.main.MainActivity"
             android:windowSoftInputMode="adjustResize">
@@ -107,6 +107,9 @@
         <!--  AddWishlistsActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity" />
 
+        <!--  AddGiftsActivity -->
+        <activity android:name="com.fortunekidew.pewaa.activities.gifts.AddGiftsActivity" />
+
         <!--  AddNewMembersToGroupActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity">
             <intent-filter>
@@ -118,7 +121,7 @@
         </activity>
 
         <!--  TransferMessageContactsActivity -->
-        <activity android:name="com.fortunekidew.pewaa.activities.messages.TransferMessageContactsActivity" />
+        <activity android:name="com.fortunekidew.pewaa.activities.gifts.TransferMessageContactsActivity" />
 
         <!--  NotificationsSettingsActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.settings.NotificationsSettingsActivity" />

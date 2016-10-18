@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaa.activities.messages;
+package com.fortunekidew.pewaa.activities.gifts;
 
 import android.annotation.TargetApi;
 import android.app.SearchManager;

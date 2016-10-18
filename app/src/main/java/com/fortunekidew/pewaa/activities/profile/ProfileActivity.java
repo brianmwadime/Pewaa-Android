@@ -35,7 +35,7 @@ import android.widget.TextView;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity;
 import com.fortunekidew.pewaa.activities.main.MainActivity;
-import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.adapters.recyclerView.MediaProfileAdapter;
 import com.fortunekidew.pewaa.adapters.recyclerView.groups.GroupMembersAdapter;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;

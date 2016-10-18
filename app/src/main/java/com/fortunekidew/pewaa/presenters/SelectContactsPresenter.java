@@ -2,7 +2,7 @@ package com.fortunekidew.pewaa.presenters;
 
 
 import com.fortunekidew.pewaa.activities.NewContactsActivity;
-import com.fortunekidew.pewaa.activities.messages.TransferMessageContactsActivity;
+import com.fortunekidew.pewaa.activities.gifts.TransferMessageContactsActivity;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.interfaces.Presenter;

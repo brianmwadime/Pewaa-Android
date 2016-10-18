@@ -157,7 +157,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
                     int currentPosition;
                     if (mWishlistsAdapter.getSelectedItemCount() != 0) {
 
-                        AppHelper.showDialog(getActivity(), getString(R.string.deleting_chat));
+                        AppHelper.showDialog(getActivity(), getString(R.string.deleting_gift));
 
                         for (int x = 0; x < mWishlistsAdapter.getSelectedItems().size(); x++) {
                             currentPosition = mWishlistsAdapter.getSelectedItems().get(x);
@@ -218,7 +218,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
      */
     public void ShowWishlist(List<WishlistsModel> wishlistsModels) {
 
-//        mWishlistsModelList = wishlistsModels;
         if (wishlistsModels.size() != 0) {
             WishlistList.setVisibility(View.VISIBLE);
             EmptyWishlists.setVisibility(View.GONE);
@@ -285,7 +284,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
      */
     @SuppressWarnings("unused")
     public void onEventMainThread(Pusher pusher) {
-        // mWishlistsPresenter.onEvent(pusher);
         int messageId = pusher.getMessageId();
         switch (pusher.getAction()) {
             case "ItemIsActivated":

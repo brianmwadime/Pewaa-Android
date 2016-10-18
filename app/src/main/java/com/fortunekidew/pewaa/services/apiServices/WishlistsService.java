@@ -9,6 +9,7 @@ import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
 import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
+import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 
 import java.util.List;
@@ -60,6 +61,18 @@ public class WishlistsService {
     }
 
     /**
+     * method to get wishlist gifts list
+     *
+     * @return return value
+     */
+    public Observable<List<GiftsModel>> getGifts(String wishlistId) {
+        return initializeApiWishlists().getGifts(wishlistId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(this::copyOrUpdateGifts);
+    }
+
+    /**
      * method to get single wishlist information
      * @param wishlistID this is parameter for  getGroupWishlist method
      * @return return value
@@ -90,6 +103,18 @@ public class WishlistsService {
         List<WishlistsModel> realmWishlists = realm.copyToRealmOrUpdate(wishlists);
         realm.commitTransaction();
         return realmWishlists;
+    }
+
+    /**
+     * method to copy or update wishlists list
+     * @param wishlists this is parameter for copyOrUpdateWishlists method
+     * @return return value
+     */
+    private List<GiftsModel> copyOrUpdateGifts(List<GiftsModel> gifts) {
+        realm.beginTransaction();
+        List<GiftsModel> realmGifts = realm.copyToRealmOrUpdate(gifts);
+        realm.commitTransaction();
+        return realmGifts;
     }
 
     /**

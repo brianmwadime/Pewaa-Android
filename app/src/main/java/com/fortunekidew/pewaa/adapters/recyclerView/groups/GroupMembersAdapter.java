@@ -24,7 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.WishlistActivity;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.api.APIGroups;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.AppConstants;

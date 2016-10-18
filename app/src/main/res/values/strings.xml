@@ -23,7 +23,8 @@
     <string name="Fullname">Fullname</string>
     <string name="title_sign_up">Sign up</string>
     <string name="Passwords_does_not_match">Password doesn\'t match</string>
-    <string name="NoWishlists">you have no wishlists yet</string>
+    <string name="NoWishlists">you have no wishlists yet.</string>
+    <string name="NoGifts">you have no gifts yet.</string>
     <string name="NoGroups">there\'s no group you may create one </string>
     <string name="error_response">Unable to update.</string>
     <string name="NoContacts">There is no contacts try to add one</string>
@@ -160,10 +161,10 @@
 
     <!--Permissions strings end -->
 
-    <string name="deleting_chat">" Deleting Chat … "</string>
+    <string name="deleting_gift">" Deleting Gift … "</string>
     <string name="copy_message">Copy</string>
     <string name="transfer_message">Transfer</string>
-    <string name="message_delete">Delete message?</string>
+    <string name="gift_delete">Delete gift?</string>
     <string name="message_copy">Text message</string>
 
     <!--settings strings-->
@@ -238,7 +239,7 @@
     <string name="failed_to_make_member_as_admin">Failed to make this member(s) as an admin please try again later</string>
     <string name="failed_to_remove_member">Failed to remove member(s) please try again later</string>
     <!--group adapters end -->
-    <!--conversations and messages  adapters start-->
+    <!--conversations and gifts  adapters start-->
     <string name="tap_to_create_group">Tap to create this group</string>
     <string name="you_created_this_group">You created group this group</string>
     <string name="he_created_this_group">" created group this group"</string>
@@ -247,7 +248,7 @@
     <string name="document">Document</string>
     <string name="no_application_to_show_image">"No Application Available to  show image "</string>
     <string name="no_application_to_view_pdf">No Application Available to View PDF</string>
-    <!--conversations and messages adapters start-->
+    <!--conversations and gifts adapters start-->
     <string name="transfer_message_to">"Transfer  message  to "</string>
     <string name="no_app_to_play_video">"No Application Available to play video "</string>
     <string name="no_app_to_play_audio">"No Application Available to play audio "</string>
@@ -277,5 +278,6 @@
     <string name="Settings">Settings</string>
     <string name="hintName">Name</string>
     <string name="hintDescription">Description</string>
+    <string name="hintPrice">Price</string>
 
 </resources>

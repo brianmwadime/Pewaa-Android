@@ -2,8 +2,8 @@ package com.fortunekidew.pewaa.services.apiServices;
 
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.models.groups.GroupsModel;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class MessagesService {
     }
 
     /**
-     * method to get all conversation messages
+     * method to get all conversation gifts
      *
      * @param conversationID this is the first parameter for getConversation method
      * @param recipientID    this is the second parameter for getConversation method
@@ -62,7 +62,7 @@ public class MessagesService {
     }
 
     /**
-     * method to get messages list from local
+     * method to get gifts list from local
      *
      * @param conversationID this is parameter for getConversation method
      * @return return value

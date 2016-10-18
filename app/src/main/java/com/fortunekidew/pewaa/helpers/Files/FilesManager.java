@@ -519,7 +519,7 @@ public class FilesManager {
     public static void downloadFilesToDevice(Context mContext, String fileUrl, String Identifier, String name, String type) {
 
         APIService apiService = new APIService(mContext);
-        final FilesDownloadService downloadService = apiService.RootService(FilesDownloadService.class, PreferenceManager.getToken(mContext), EndPoints.BASE_URL);
+        final FilesDownloadService downloadService = apiService.RootService(FilesDownloadService.class, PreferenceManager.getToken(mContext), EndPoints.ASSETS_BASE_URL);
 
         new AsyncTask<Void, Long, Void>() {
             @Override

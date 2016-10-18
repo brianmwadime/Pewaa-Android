@@ -2,7 +2,7 @@ package com.fortunekidew.pewaa.api;
 
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.Files.UploadFilesHelper;
-import com.fortunekidew.pewaa.models.messages.FilesResponse;
+import com.fortunekidew.pewaa.models.wishlists.FilesResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;

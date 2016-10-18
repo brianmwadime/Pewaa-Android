@@ -55,7 +55,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/username"
+                    android:id="@+id/wishlist_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

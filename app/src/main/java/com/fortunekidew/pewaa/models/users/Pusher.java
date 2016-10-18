@@ -2,7 +2,8 @@ package com.fortunekidew.pewaa.models.users;
 
 import android.view.View;
 
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.notifications.NotificationsModel;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 
@@ -23,6 +24,7 @@ public class Pusher {
     private List<MessagesModel> messagesModelList;
     private JSONObject jsonObject;
     private MessagesModel messagesModel;
+    private EditWishlist wishlistObject;
     private NotificationsModel notificationsModel;
     private int messageId;
 
@@ -66,6 +68,11 @@ public class Pusher {
     public Pusher(String action, MessagesModel messagesModel) {
         this.action = action;
         this.messagesModel = messagesModel;
+    }
+
+    public Pusher(String action, EditWishlist wishlist) {
+        this.action = action;
+        this.wishlistObject = wishlist;
     }
 
     public Pusher(String itemIsActivated, View view) {
@@ -158,6 +165,14 @@ public class Pusher {
 
     public ContactsModel getContactsModel() {
         return contactsModel;
+    }
+
+    public void setWishlistObject(EditWishlist wishlistObject) {
+        this.wishlistObject = wishlistObject;
+    }
+
+    public EditWishlist getWishlistObject() {
+        return wishlistObject;
     }
 
     public void setContactsModel(ContactsModel contactsModel) {

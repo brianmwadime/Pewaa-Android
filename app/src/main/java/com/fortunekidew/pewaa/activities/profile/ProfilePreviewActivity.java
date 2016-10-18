@@ -26,7 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -125,14 +125,14 @@ public class ProfilePreviewActivity extends Activity {
         }
         ContactBtn.setOnClickListener(v -> {
             if (isGroup) {
-                Intent messagingIntent = new Intent(this, MessagesActivity.class);
+                Intent messagingIntent = new Intent(this, WishlistActivity.class);
                 messagingIntent.putExtra("conversationID", conversationID);
                 messagingIntent.putExtra("groupID", groupID);
                 messagingIntent.putExtra("isGroup", true);
                 startActivity(messagingIntent);
                 finish();
             } else {
-                Intent messagingIntent = new Intent(this, MessagesActivity.class);
+                Intent messagingIntent = new Intent(this, WishlistActivity.class);
                 messagingIntent.putExtra("conversationID", 0);
                 messagingIntent.putExtra("recipientID", userID);
                 messagingIntent.putExtra("isGroup", false);

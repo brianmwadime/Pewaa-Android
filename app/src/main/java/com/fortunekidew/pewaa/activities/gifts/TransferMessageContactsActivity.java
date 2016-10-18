@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaa.activities.messages;
+package com.fortunekidew.pewaa.activities.gifts;
 
 import android.annotation.TargetApi;
 import android.app.SearchManager;
@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.adapters.recyclerView.messages.TransferMessageContactsAdapter;
+import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.TransferMessageContactsAdapter;
 import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;

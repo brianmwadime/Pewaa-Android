@@ -34,9 +34,8 @@ import android.widget.TextView;
 
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity;
-import com.fortunekidew.pewaa.activities.groups.EditGroupActivity;
 import com.fortunekidew.pewaa.activities.main.MainActivity;
-import com.fortunekidew.pewaa.activities.messages.MessagesActivity;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.adapters.recyclerView.MediaProfileAdapter;
 import com.fortunekidew.pewaa.adapters.recyclerView.groups.GroupMembersAdapter;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;
@@ -54,8 +53,8 @@ import com.fortunekidew.pewaa.helpers.UtilsTime;
 import com.fortunekidew.pewaa.models.groups.GroupResponse;
 import com.fortunekidew.pewaa.models.groups.GroupsModel;
 import com.fortunekidew.pewaa.models.groups.MembersGroupModel;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
@@ -328,10 +327,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void launchEditGroupName() {
-        Intent mIntent = new Intent(this, EditGroupActivity.class);
-        mIntent.putExtra("currentGroupName", mGroupsModel.getGroupName());
-        mIntent.putExtra("groupID", mGroupsModel.getId());
-        startActivity(mIntent);
+//        Intent mIntent = new Intent(this, EditGroupActivity.class);
+//        mIntent.putExtra("currentGroupName", mGroupsModel.getGroupName());
+//        mIntent.putExtra("groupID", mGroupsModel.getId());
+//        startActivity(mIntent);
     }
 
     public void ShowContact(ContactsModel contactsModel) {
@@ -769,7 +768,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void sendMessage(ContactsModel mContactsModel) {
-        Intent messagingIntent = new Intent(this, MessagesActivity.class);
+        Intent messagingIntent = new Intent(this, WishlistActivity.class);
         messagingIntent.putExtra("conversationID", 0);
         messagingIntent.putExtra("recipientID", mContactsModel.getId());
         messagingIntent.putExtra("isGroup", false);
@@ -922,7 +921,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                                     }, () -> realm.executeTransactionAsync(realm1 -> {
                                         WishlistsModel wishlistsModel = realm1.where(WishlistsModel.class).equalTo("groupID", groupId).findFirst();
-                                        wishlistsModel.setRecipientImage(response.body().getGroupImage());
+                                        wishlistsModel.setAvatar(response.body().getGroupImage());
                                         realm1.copyToRealmOrUpdate(wishlistsModel);
                                     }, () -> {
                                         setImage(response.body().getGroupImage(), String.valueOf(groupId));

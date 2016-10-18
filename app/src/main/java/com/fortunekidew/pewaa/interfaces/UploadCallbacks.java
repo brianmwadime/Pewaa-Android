@@ -1,6 +1,6 @@
 package com.fortunekidew.pewaa.interfaces;
 
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 
 /**
  * Created by Abderrahim El imame on 7/28/16.

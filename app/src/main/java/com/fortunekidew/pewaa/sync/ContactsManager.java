@@ -11,20 +11,20 @@ import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import java.util.ArrayList;
 
 /**
- * Created by Abderrahim El imame on 01/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 13/10/2016.
+ * Email : mwadime@fortunekidew.co.ke
  */
 public class ContactsManager {
     //this mimetype to launch a specific activity when use click on it
-    private static String MIMETYPE = "vnd.android.cursor.item/vnd.com.novasera.whatsclone";
+    private static String MIMETYPE = "vnd.android.cursor.item/vnd.com.fortunekidew.pewaa";
 
     public static void addContact(Context context,ContactsModel contact){
         ContentResolver resolver = context.getContentResolver();
         ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
         int rawContactInsertIndex = ops.size();
         ops.add(ContentProviderOperation.newInsert(addCallerIsSyncAdapterParameter(ContactsContract.RawContacts.CONTENT_URI, true))
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, "WhatsClone")
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, AuthenticatorService.ACCOUNT_TYPE)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, "Pewaa")
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, "com.fortunekidew.pewaa")
                 .withValue(ContactsContract.RawContacts.AGGREGATION_MODE, ContactsContract.RawContacts.AGGREGATION_MODE_DEFAULT)
                 .build());
 

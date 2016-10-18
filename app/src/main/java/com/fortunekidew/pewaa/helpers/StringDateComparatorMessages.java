@@ -1,6 +1,6 @@
 package com.fortunekidew.pewaa.helpers;
 
-import com.fortunekidew.pewaa.models.messages.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 
 import java.util.Comparator;
 
@@ -21,7 +21,7 @@ public class StringDateComparatorMessages implements Comparator<MessagesModel> {
     /* try {
             Collections.sort(messagesModelList, new StringDateComparatorMessages());
         } catch (Exception e) {
-            AppHelper.LogCat("messages compare " + e.getMessage());
+            AppHelper.LogCat("gifts compare " + e.getMessage());
         }*/
 }
 

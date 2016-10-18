@@ -40,8 +40,8 @@ public class NotificationsSettingsActivity extends PreferenceActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         setupMessageRingTone();
         setupMessageLight();
-        setupMessageGroupRingTone();
-        setupMessageGroupLight();
+//        setupMessageGroupRingTone();
+//        setupMessageGroupLight();
     }
 
     private void setupMessageGroupLight() {

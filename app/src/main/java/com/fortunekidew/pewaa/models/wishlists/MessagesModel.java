@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaa.models.messages;
+package com.fortunekidew.pewaa.models.wishlists;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -158,7 +158,7 @@ public class MessagesModel extends RealmObject {
         return conversationID;
     }
 
-    public void setConversationID(int conversationID) {
+    public void setWishlistID(int conversationID) {
         this.conversationID = conversationID;
     }
 

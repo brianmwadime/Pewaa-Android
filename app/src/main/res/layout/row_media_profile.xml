@@ -24,7 +24,7 @@
             android:layout_height="@dimen/image_profile_height"
             android:layout_gravity="center"
             android:background="@color/colorGray"
-            android:contentDescription="@string/new_group"
+            android:contentDescription="@string/new_wishlist"
             android:visibility="gone" />
 
         <ImageView
@@ -33,7 +33,7 @@
             android:layout_height="@dimen/image_profile_height"
             android:layout_gravity="center"
             android:background="@drawable/bg_rect_audio_profile"
-            android:contentDescription="@string/new_group"
+            android:contentDescription="@string/new_wishlist"
             android:padding="12dp"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_headset_white_24dp" />
@@ -50,7 +50,7 @@
                 android:layout_height="@dimen/image_profile_height"
                 android:layout_gravity="center"
                 android:background="@color/colorGray"
-                android:contentDescription="@string/new_group"
+                android:contentDescription="@string/new_wishlist"
                 android:visibility="visible" />
 
             <ImageButton

@@ -1,6 +1,6 @@
 package com.fortunekidew.pewaa.helpers;
 
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 
 import java.util.Comparator;
 
@@ -15,14 +15,15 @@ public class StringDateComparatorConversations implements Comparator<WishlistsMo
 
     public int compare(WishlistsModel app1, WishlistsModel app2) {
 
-        String date1 = app1.getMessageDate();
-        String date2 = app2.getMessageDate();
-        return date2.compareTo(date1);
+//        String date1 = app1.getMessageDate();
+//        String date2 = app2.getMessageDate();
+//        return date2.compareTo(date1);
+            return 1;
     }
     /* try {
             Collections.sort(messagesModelList, new StringDateComparatorMessages());
         } catch (Exception e) {
-            AppHelper.LogCat("messages compare " + e.getMessage());
+            AppHelper.LogCat("gifts compare " + e.getMessage());
         }*/
 }
 

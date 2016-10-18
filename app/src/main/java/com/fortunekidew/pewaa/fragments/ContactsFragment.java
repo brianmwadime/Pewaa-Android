@@ -19,6 +19,7 @@ import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.interfaces.LoadingData;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
+import com.fortunekidew.pewaa.models.users.contacts.PusherContacts;
 import com.fortunekidew.pewaa.presenters.ContactsPresenter;
 import com.fortunekidew.pewaa.ui.RecyclerViewFastScroller;
 
@@ -115,6 +116,16 @@ public class ContactsFragment extends Fragment implements LoadingData {
     public void updateContacts(List<ContactsModel> contactsModels) {
         this.mContactsModelList = contactsModels;
         mContactsAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * method of EventBus
+     *
+     * @param pusher this is parameter of onEventMainThread method
+     */
+    @SuppressWarnings("unused")
+    public void onEventMainThread(PusherContacts pusher) {
+        mContactsPresenter.onEventMainThread(pusher);
     }
 
 

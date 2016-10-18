@@ -10,7 +10,7 @@ import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.models.groups.GroupResponse;
 import com.fortunekidew.pewaa.models.groups.GroupsModel;
 import com.fortunekidew.pewaa.models.groups.MembersGroupModel;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 
 import java.util.List;
 

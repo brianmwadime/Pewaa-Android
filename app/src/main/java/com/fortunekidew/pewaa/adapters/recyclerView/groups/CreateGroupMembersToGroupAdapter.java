@@ -96,10 +96,10 @@ public class CreateGroupMembersToGroupAdapter extends RecyclerView.Adapter<Recyc
 
 
     class ContactsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.user_image)
+        @Bind(R.id.wishlist_image)
         ImageView userImage;
 
-        @Bind(R.id.username)
+        @Bind(R.id.wishlist_name)
         TextView username;
 
 

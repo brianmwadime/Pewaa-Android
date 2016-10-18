@@ -35,7 +35,6 @@ import com.fortunekidew.pewaa.adapters.others.TabsAdapter;
 import com.fortunekidew.pewaa.app.AppConstants;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.PreferenceManager;
-import com.fortunekidew.pewaa.models.messages.WishlistsModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.receivers.NetworkChangeListener;
 import com.fortunekidew.pewaa.services.MainService;
@@ -44,12 +43,9 @@ import com.fortunekidew.pewaa.sync.AuthenticatorService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
-import io.realm.Realm;
 
 /**
  * Email : mwadime@fortunekidew.co.ke
@@ -100,33 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
         loadCounter();
         new Handler().postDelayed(this::Permissions, 5000);
-        if (PreferenceManager.ShowInterstitialrAds(this)) {
-            if (PreferenceManager.getUnitInterstitialAdID(this) != null) {
-                initializerAds();
-            }
-        }
 
     }
 
-    private void initializerAds() {
-//        mInterstitialAd = new InterstitialAd(this);
-//        mInterstitialAd.setAdUnitId(PreferenceManager.getUnitInterstitialAdID(this));
-//        mInterstitialAd.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdClosed() {
-//                requestNewInterstitial();
-//                AppHelper.LaunchActivity(MainActivity.this, SettingsActivity.class);
-//            }
-//        });
-//
-//        requestNewInterstitial();
-    }
-
-
-    private void requestNewInterstitial() {
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mInterstitialAd.loadAd(adRequest);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -137,27 +109,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.search_contacts:
                 AppHelper.LaunchActivity(this, SearchContactsActivity.class);
                 break;
-//            case R.id.new_group:
-//                PreferenceManager.clearMembers(this);
-//                AppHelper.LaunchActivity(this, AddMembersToGroupActivity.class);
-//                break;
             case R.id.settings:
-                if (PreferenceManager.ShowInterstitialrAds(this)) {
-//                    if (mInterstitialAd.isLoaded()){
-//                        mInterstitialAd.show();
-//                    }else {
-//                        AppHelper.LaunchActivity(this, SettingsActivity.class);
-//                    }
-                } else {
-                    AppHelper.LaunchActivity(this, SettingsActivity.class);
-                }
+                AppHelper.LaunchActivity(this, SettingsActivity.class);
                 break;
             case R.id.status:
                 AppHelper.LaunchActivity(this, StatusActivity.class);
                 break;
-//            case R.id.new_message:
-//                AppHelper.LaunchActivity(this, NewContactsActivity.class);
-//                break;
             case R.id.add_contact:
                 try {
                     Intent mIntent = new Intent(Intent.ACTION_INSERT);
@@ -387,22 +344,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * methdo to load number of unread messages
+     * methdo to load number of unread gifts
      */
     private void loadCounter() {
-        Realm realm = Realm.getDefaultInstance();
-        List<WishlistsModel> wishlistsModel1 = realm.where(WishlistsModel.class)
-                .equalTo("Status", AppConstants.IS_WAITING)
-                .equalTo("RecipientID", PreferenceManager.getID(this))
-                .findAll();
-        if (wishlistsModel1.size() == 0) {
-            findViewById(R.id.counterTabMessages).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.counterTabMessages).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.counterTabMessages)).setText(String.valueOf(wishlistsModel1.size()));
-
-        }
-        realm.close();
+//        Realm realm = Realm.getDefaultInstance();
+//        List<WishlistsModel> wishlistsModel1 = realm.where(WishlistsModel.class)
+//                .equalTo("Status", AppConstants.IS_WAITING)
+//                .equalTo("RecipientID", PreferenceManager.getID(this))
+//                .findAll();
+//        if (wishlistsModel1.size() == 0) {
+//            findViewById(R.id.counterTabMessages).setVisibility(View.GONE);
+//        } else {
+//            findViewById(R.id.counterTabMessages).setVisibility(View.VISIBLE);
+//            ((TextView) findViewById(R.id.counterTabMessages)).setText(String.valueOf(wishlistsModel1.size()));
+//
+//        }
+//        realm.close();
     }
 
     /**

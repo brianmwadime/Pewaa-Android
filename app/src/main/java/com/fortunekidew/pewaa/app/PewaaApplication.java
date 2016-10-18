@@ -48,7 +48,6 @@ public class PewaaApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        MainService.disconnectSocket();
     }
 
 }

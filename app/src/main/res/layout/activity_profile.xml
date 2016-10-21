@@ -18,12 +18,12 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.WhatsClone.Title.Collapsed"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.Pewaa.Title.Collapsed"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="@dimen/TitleMarginBottom"
             app:expandedTitleMarginEnd="@dimen/TitleMarginEnd"
             app:expandedTitleMarginStart="@dimen/TitleMarginStar"
-            app:expandedTitleTextAppearance="@style/TextAppearance.WhatsClone.Title.Expanded"
+            app:expandedTitleTextAppearance="@style/TextAppearance.Pewaa.Title.Expanded"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -65,6 +65,7 @@
                     android:layout_marginLeft="60dp"
                     android:layout_weight="1"
                     android:gravity="bottom"
+                    android:text="test"
                     android:textColor="@color/colorWhite"
                     android:textSize="12sp" />
 

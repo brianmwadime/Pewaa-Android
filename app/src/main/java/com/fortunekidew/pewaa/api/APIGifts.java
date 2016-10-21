@@ -1,13 +1,18 @@
 package com.fortunekidew.pewaa.api;
 
 import com.fortunekidew.pewaa.app.EndPoints;
+import com.fortunekidew.pewaa.models.wishlists.GiftResponse;
 import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -25,12 +30,22 @@ public interface APIGifts {
     Observable<List<GiftsModel>> gifts();
 
     /**
-     * method to add a gift
+     * method to create group
      *
+     * @param wishlistID this is the first parameter for  editGift method
+     * @param name   this is the second parameter for  editGift method
+     * @param image  this is the thirded parameter for  editGift method
+     * @param description    this is the fourth  parameter for  editGift method
+     * @param price   this is the fifth parameter for  editGift method
      * @return this is return value
      */
+    @Multipart
     @POST(EndPoints.GIFTS)
-    Observable<List<GiftsModel>> addGift();
+     Call<GiftResponse> editGift(@Part("wishlist_id") RequestBody wishlistID,
+                                @Part("name") RequestBody name,
+                                @Part("image\"; filename=\"giftImage\" ") RequestBody image,
+                                @Part("description") RequestBody description,
+                                @Part("price") float price);
 
     /**
      * method to get a gift's information

@@ -2,10 +2,12 @@ package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -17,13 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
+import com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -38,7 +40,6 @@ import io.github.rockerhieu.emojicon.EmojiconTextView;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.socket.client.Socket;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by Abderrahim El imame on 20/02/2016.
@@ -140,7 +141,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_wishlist, parent, false);
+        View itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_gift, parent, false);
         return new GiftsAdapter.GiftViewHolder(itemView);
     }
 
@@ -172,14 +173,18 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     GiftViewHolder.gift_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
                 }
 
+                GiftViewHolder.setGiftDate(GiftsModel.getCreatedOn().toString());
+
                 GiftViewHolder.setGiftImage(GiftsModel.getAvatar());
 
                 GiftViewHolder.setOnClickListener(view -> {
 
-//                    Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
-//                    messagingIntent.putExtra("wishlistID", GiftsModel.getId());
-//                    mActivity.startActivity(messagingIntent);
-//                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    Intent messagingIntent = new Intent(mActivity, GiftDetailsActivity.class);
+                    messagingIntent.putExtra("giftID", GiftsModel.getId());
+                    messagingIntent.putExtra("giftTitle", GiftsModel.getName());
+                    messagingIntent.putExtra("giftPrice", GiftsModel.getPrice());
+                    mActivity.startActivity(messagingIntent);
+                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 });
             } catch (Exception e) {
                 AppHelper.LogCat("Gifts Adapter  Exception" + e.getMessage());
@@ -238,13 +243,11 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ImageView GiftImage;
         @Bind(R.id.gift_name)
         EmojiconTextView gift_name;
-        @Bind(R.id.counter)
-        TextView counter;
         @Bind(R.id.date_created)
         TextView GiftDate;
 
-        @Bind(R.id.gift_row)
-        LinearLayout GiftRow;
+        @Bind(R.id.cardview)
+        CardView GiftRow;
 
         GiftViewHolder(View itemView) {
             super(itemView);
@@ -280,8 +283,8 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Glide.with(mActivity)
                     .load(EndPoints.ASSETS_BASE_URL + ImageUrl)
                     .asBitmap()
-                    .transform(new CropCircleTransformation(mActivity))
-                    .override(100, 100)
+                    .override(640, 230)
+                    .fitCenter()
                     .into(target);
 
         }
@@ -292,31 +295,17 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
 
-        void setGift_name(String wishlist) {
+        void setGiftName(String gift) {
 
-            if (wishlist.length() > 16)
-                gift_name.setText(wishlist.substring(0, 16) + "... " + "");
+            if (gift.length() > 16)
+                gift_name.setText(gift.substring(0, 16) + "... " + "");
             else
-                gift_name.setText(wishlist);
+                gift_name.setText(gift);
 
         }
 
         void setGiftDate(String creationDate) {
             GiftDate.setText(creationDate);
-        }
-
-
-        void setCounter(String Counter) {
-            counter.setText(Counter.toUpperCase());
-        }
-
-        void hideCounter() {
-            counter.setVisibility(View.GONE);
-        }
-
-
-        void showCounter() {
-            counter.setVisibility(View.VISIBLE);
         }
 
         void setOnClickListener(View.OnClickListener listener) {

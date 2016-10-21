@@ -55,13 +55,13 @@
     </style>
 
 
-    <style name="TextAppearance.WhatsClone.Title.Collapsed" parent="android:TextAppearance">
+    <style name="TextAppearance.Pewaa.Title.Collapsed" parent="android:TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.WhatsClone.Title.Expanded" parent="android:TextAppearance">
+    <style name="TextAppearance.Pewaa.Title.Expanded" parent="android:TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>

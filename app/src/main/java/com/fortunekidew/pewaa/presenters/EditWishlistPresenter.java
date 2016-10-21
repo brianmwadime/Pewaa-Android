@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.AppConstants;
@@ -17,7 +16,6 @@ import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;
 import com.fortunekidew.pewaa.interfaces.Presenter;
 import com.fortunekidew.pewaa.models.users.Pusher;
-import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
 import com.fortunekidew.pewaa.services.apiServices.WishlistsService;
 
 import java.io.File;
@@ -144,24 +142,6 @@ public class EditWishlistPresenter implements Presenter {
         } else {
             AppHelper.LogCat("imagePath is null");
         }
-    }
-
-
-    public void EditWishlist(String name, String description) {
-        EditWishlist editWishlist = new EditWishlist();
-        editWishlist.setName(name);
-        editWishlist.setDescription(description);
-        mWishlistsService.editWishlist(name, description).subscribe(statusResponse -> {
-            if (statusResponse.isSuccess()) {
-                AppHelper.Snackbar(view.getBaseContext(), view.findViewById(R.id.ParentLayoutAddWishlist), statusResponse.getMessage(), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
-                editWishlist.setId(statusResponse.getId());
-                EventBus.getDefault().post(new Pusher("new_wishlist", editWishlist));
-                view.finish();
-            } else {
-                AppHelper.Snackbar(view.getBaseContext(), view.findViewById(R.id.ParentLayoutAddWishlist), statusResponse.getMessage(), AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
-            }
-        }, AppHelper::LogCat);
-
     }
 
 }

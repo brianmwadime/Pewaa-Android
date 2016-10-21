@@ -2,10 +2,8 @@ package com.fortunekidew.pewaa.activities.gifts;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +13,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -124,20 +124,28 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-
-            switch (item.getItemId()) {
-                case R.id.search_messages:
-//                    launcherSearchView();
-                    break;
-                case R.id.view_contact:
-//                    mIntent = new Intent(this, ProfileActivity.class);
-//                    mIntent.putExtra("userID", recipientId);
-//                    mIntent.putExtra("isGroup", false);
-//                    startActivity(mIntent);
-                    break;
+        if (item.getItemId() == android.R.id.home) {
+            if (AppHelper.isAndroid5()) {
+                Transition enterTrans = new Fade();
+                getWindow().setEnterTransition(enterTrans);
+                enterTrans.setDuration(300);
             }
+            finish();
+        }
 
-        return true;
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (AppHelper.isAndroid5()) {
+            //Transition animation
+            Transition enterTrans = new Fade();
+            getWindow().setEnterTransition(enterTrans);
+            enterTrans.setDuration(300);
+        }
+        finish();
     }
 
     @Override
@@ -167,16 +175,19 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
 
     @OnClick(R.id.addGiftFab)
     public void addGift(View view) {
-        AppHelper.LaunchActivity(this, AddGiftsActivity.class);
+        Intent wishlistIntent = new Intent(this, AddGiftsActivity.class);
+        wishlistIntent.putExtra("wishlistID", WishlistID);
+        this.startActivity(wishlistIntent);
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
+//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        finish();
+//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+//    }
 
     @Override
     protected void onPause() {
@@ -219,7 +230,15 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
         int messageId = pusher.getMessageId();
         switch (pusher.getAction()) {
             case "new_gift":
+                GiftsModel newGift = new GiftsModel();
+                newGift.setName(pusher.getGiftObject().getName());
+                newGift.setName(pusher.getGiftObject().getDescription());
+                newGift.setId(pusher.getGiftObject().getId());
+                newGift.setAvatar(pusher.getGiftObject().getAvatar());
+                newGift.setDescription(pusher.getGiftObject().getDescription());
+                newGift.setPrice(pusher.getGiftObject().getPrice());
 
+                mGiftsAdapter.addItem(0, newGift);
 
                 break;
         }

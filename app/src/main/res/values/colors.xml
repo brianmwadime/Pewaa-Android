@@ -51,5 +51,6 @@
     <color name="transparent">#00000000</color>
     <color name="colorYellow">#d6de23</color>
     <color name="colorCyan">#00FFFF</color>
+    <color name="viewBackground">#f1f5f8</color>
 
 </resources>

@@ -37,6 +37,7 @@
     <string name="name_is_too_short">the name is too short</string>
     <string name="select_picture">select an image</string>
     <string name="new_wishlist">New wishlist</string>
+    <string name="new_gift">New gift</string>
     <string name="starred_messages">Starred messages</string>
     <string name="status">Status</string>
     <string name="settings">Settings</string>
@@ -133,6 +134,7 @@
     <string name="picture_transition">Picture transition</string>
     <string name="user_image_transition">userImage</string>
     <string name="user_name_transition">userName</string>
+    <string name="gift_name_transition">giftTitle</string>
 
     <!-- Permissions strings start -->
     <string name="camera_permission">Camera Permission</string>
@@ -279,5 +281,7 @@
     <string name="hintName">Name</string>
     <string name="hintDescription">Description</string>
     <string name="hintPrice">Price</string>
+    <string name="backdrop_title">Gift Title</string>
+    <string name="backdrop_subtitle">Some interesting text</string>
 
 </resources>

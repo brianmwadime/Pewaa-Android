@@ -16,7 +16,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 24
         versionCode 2
-        versionName "1.0.0"
+        versionName "1.0.1"
         vectorDrawables.useSupportLibrary = true
 
     }
@@ -26,12 +26,34 @@ android {
     }
     buildTypes {
 
-        release {
+        debug {
             minifyEnabled false
+            debuggable true
+        }
+
+        release {
+            minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
     }
+
+    productFlavors {
+        // Define separate dev and prod flavors
+        dev21 {
+            minSdkVersion 21
+        }
+        dev14 {
+            minSdkVersion 17
+        }
+        prod {
+            // The actual minSdkVersion for the production app
+            minSdkVersion 14
+        }
+    }
+
+
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }

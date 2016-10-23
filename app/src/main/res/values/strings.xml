@@ -283,5 +283,8 @@
     <string name="hintPrice">Price</string>
     <string name="backdrop_title">Gift Title</string>
     <string name="backdrop_subtitle">Some interesting text</string>
+    <string name="transition_gift_avatar" translatable="false">transition_gift_avatar</string>
+
+    <string name="action_undo">UNDO</string>
 
 </resources>

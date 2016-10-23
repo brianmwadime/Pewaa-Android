@@ -57,7 +57,7 @@ public class BottomSheetEditGift extends BottomSheetDialogFragment {
 
     private void setCameraBtn() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        cameraIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         startActivityForResult(cameraIntent, AppConstants.SELECT_PROFILE_CAMERA);
     }
 

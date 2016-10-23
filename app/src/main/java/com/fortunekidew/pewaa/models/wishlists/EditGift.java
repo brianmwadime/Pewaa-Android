@@ -1,5 +1,7 @@
 package com.fortunekidew.pewaa.models.wishlists;
 
+import java.util.Date;
+
 /**
  * Created by Abderrahim El imame on 20/02/2016.
  * Email : abderrahim.elimame@gmail.com
@@ -10,7 +12,16 @@ public class EditGift {
     private String description;
     private String avatar;
     private String wishlist_id;
+    private Date created_on;
     private float price;
+
+    public Date getCreatedOn() {
+        return created_on;
+    }
+
+    public void setCreatedOn(Date created_on) {
+        this.created_on = created_on;
+    }
 
     public float getPrice() {
         return price;

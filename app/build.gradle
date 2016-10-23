@@ -9,11 +9,11 @@ repositories {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "com.fortunekidew.pewaa"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 2
         versionName "1.0.1"
@@ -44,12 +44,9 @@ android {
         dev21 {
             minSdkVersion 21
         }
-        dev14 {
-            minSdkVersion 17
-        }
         prod {
             // The actual minSdkVersion for the production app
-            minSdkVersion 14
+            minSdkVersion 21
         }
     }
 

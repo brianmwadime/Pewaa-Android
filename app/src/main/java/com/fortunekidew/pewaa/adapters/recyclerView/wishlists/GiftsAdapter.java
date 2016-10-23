@@ -2,9 +2,11 @@ package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -12,26 +14,27 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView;
+import com.fortunekidew.pewaa.util.glide.PewaaTarget;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -54,6 +57,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private SparseBooleanArray selectedItems;
     private boolean isActivated = false;
     private RecyclerView wishlistList;
+    private final ColorDrawable[] giftLoadingPlaceholders;
     private Socket mSocket;
 
 
@@ -64,6 +68,20 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.realm = Realm.getDefaultInstance();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
+
+        // get the gift placeholder colors & badge color from the theme
+        final TypedArray a = this.mActivity.obtainStyledAttributes(R.styleable.GiftFeed);
+        final int loadingColorArrayId =
+                a.getResourceId(R.styleable.GiftFeed_giftLoadingPlaceholderColors, 0);
+        if (loadingColorArrayId != 0) {
+            int[] placeholderColors = this.mActivity.getResources().getIntArray(loadingColorArrayId);
+            giftLoadingPlaceholders = new ColorDrawable[placeholderColors.length];
+            for (int i = 0; i < placeholderColors.length; i++) {
+                giftLoadingPlaceholders[i] = new ColorDrawable(placeholderColors[i]);
+            }
+        } else {
+            giftLoadingPlaceholders = new ColorDrawable[] { new ColorDrawable(Color.DKGRAY) };
+        }
     }
 
     public GiftsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList, Socket mSocket) {
@@ -74,6 +92,20 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
         this.mSocket = mSocket;
+
+        // get the gift placeholder colors & badge color from the theme
+        final TypedArray a = this.mActivity.obtainStyledAttributes(R.styleable.GiftFeed);
+        final int loadingColorArrayId =
+                a.getResourceId(R.styleable.GiftFeed_giftLoadingPlaceholderColors, 0);
+        if (loadingColorArrayId != 0) {
+            int[] placeholderColors = this.mActivity.getResources().getIntArray(loadingColorArrayId);
+            giftLoadingPlaceholders = new ColorDrawable[placeholderColors.length];
+            for (int i = 0; i < placeholderColors.length; i++) {
+                giftLoadingPlaceholders[i] = new ColorDrawable(placeholderColors[i]);
+            }
+        } else {
+            giftLoadingPlaceholders = new ColorDrawable[] { new ColorDrawable(Color.DKGRAY) };
+        }
     }
 
     public void setGifts(RealmList<GiftsModel> wishlistsModelList) {
@@ -173,18 +205,25 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     GiftViewHolder.gift_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
                 }
 
-                GiftViewHolder.setGiftDate(GiftsModel.getCreatedOn().toString());
+                GiftViewHolder.setGiftDate(GiftsModel.getCreatedOn());
 
                 GiftViewHolder.setGiftImage(GiftsModel.getAvatar());
 
                 GiftViewHolder.setOnClickListener(view -> {
 
-                    Intent messagingIntent = new Intent(mActivity, GiftDetailsActivity.class);
-                    messagingIntent.putExtra("giftID", GiftsModel.getId());
-                    messagingIntent.putExtra("giftTitle", GiftsModel.getName());
-                    messagingIntent.putExtra("giftPrice", GiftsModel.getPrice());
-                    mActivity.startActivity(messagingIntent);
-                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    Intent gift = new Intent(mActivity, GiftDetailsActivity.class);
+                    gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID, GiftsModel.getId());
+                    gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_IMAGE, GiftsModel.getAvatar());
+                    gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_TITLE, GiftsModel.getName());
+                    gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_DESC, GiftsModel.getDescription());
+                    gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_PRICE, GiftsModel.getPrice());
+
+                    ActivityOptions options =
+                            ActivityOptions.makeSceneTransitionAnimation(mActivity,
+                                    GiftViewHolder.GiftImage, mActivity.getString(R.string.transition_gift_avatar));
+
+                    mActivity.startActivity(gift, options.toBundle());
+//                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 });
             } catch (Exception e) {
                 AppHelper.LogCat("Gifts Adapter  Exception" + e.getMessage());
@@ -238,9 +277,20 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return mGifts.get(position);
     }
 
+    public int getItemPosition(final String itemId) {
+        for (int position = 0; position < mGifts.size(); position++) {
+            if (getItem(position).getId() == itemId) return position;
+        }
+        return RecyclerView.NO_POSITION;
+    }
+
     class GiftViewHolder extends RecyclerView.ViewHolder {
+
+        private final int[] NORMAL_IMAGE_SIZE = new int[] { 400, 300 };
+        private final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
+
         @Bind(R.id.gift_image)
-        ImageView GiftImage;
+        BadgedFourThreeImageView GiftImage;
         @Bind(R.id.gift_name)
         EmojiconTextView gift_name;
         @Bind(R.id.date_created)
@@ -257,35 +307,13 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         void setGiftImage(String ImageUrl) {
 
-            BitmapImageViewTarget target = new BitmapImageViewTarget(GiftImage) {
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                    GiftImage.setImageDrawable(placeholder);
-                }
-
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    super.onResourceReady(resource, glideAnimation);
-                    GiftImage.setImageBitmap(resource);
-
-                }
-
-                @Override
-                public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                    super.onLoadFailed(e, errorDrawable);
-                    GiftImage.setImageDrawable(errorDrawable);
-                }
-
-
-            };
-
             Glide.with(mActivity)
                     .load(EndPoints.ASSETS_BASE_URL + ImageUrl)
-                    .asBitmap()
-                    .override(640, 230)
+                    .placeholder(giftLoadingPlaceholders[3 % giftLoadingPlaceholders.length])
                     .fitCenter()
-                    .into(target);
+                    .override(NORMAL_IMAGE_SIZE[0], NORMAL_IMAGE_SIZE[1])
+
+                    .into(new PewaaTarget(GiftImage, false));
 
         }
 
@@ -304,8 +332,10 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         }
 
-        void setGiftDate(String creationDate) {
-            GiftDate.setText(creationDate);
+        void setGiftDate(Date creationDate) {
+            GiftDate.setText(DateUtils.getRelativeTimeSpanString(creationDate.getTime(),
+                    System.currentTimeMillis(),
+                    DateUtils.SECOND_IN_MILLIS).toString().toLowerCase());
         }
 
         void setOnClickListener(View.OnClickListener listener) {

@@ -1,16 +1,16 @@
 package com.fortunekidew.pewaa.activities.gifts;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.util.TypedValue;
@@ -19,11 +19,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.PaymentsAdapter;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;
+import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.interfaces.LoadingData;
@@ -35,7 +37,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class GiftDetailsActivity extends AppCompatActivity implements LoadingData {
+public class GiftDetailsActivity extends Activity implements LoadingData {
+
+    public final static String RESULT_EXTRA_GIFT_ID = "RESULT_EXTRA_GIFT_ID";
+    public final static String RESULT_EXTRA_GIFT_TITLE = "RESULT_EXTRA_GIFT_TITLE";
+    public final static String RESULT_EXTRA_GIFT_DESC = "RESULT_EXTRA_GIFT_DESC";
+    public final static String RESULT_EXTRA_GIFT_IMAGE = "RESULT_EXTRA_GIFT_IMAGE";
+    public static final String RESULT_EXTRA_GIFT_PRICE = "RESULT_EXTRA_GIFT_PRICE";
 
     @Bind(R.id.appbar)
     AppBarLayout appBarLayout;
@@ -57,7 +65,7 @@ public class GiftDetailsActivity extends AppCompatActivity implements LoadingDat
     TextView mGiftDescirption;
     private PaymentsAdapter adapter;
     private List<EditPayments> paymentList;
-    private String giftID, giftTitle;
+    private String giftID, giftTitle, giftImage, giftDesc;
     private float giftPrice;
 
     @Override
@@ -66,46 +74,55 @@ public class GiftDetailsActivity extends AppCompatActivity implements LoadingDat
         setContentView(R.layout.activity_gift);
         ButterKnife.bind(this);
 
+        if (getIntent().getExtras() != null) {
+            if (getIntent().hasExtra(RESULT_EXTRA_GIFT_TITLE)) {
+                giftTitle = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_TITLE);
+            }
+
+            if (getIntent().hasExtra(RESULT_EXTRA_GIFT_IMAGE)) {
+                giftImage = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_IMAGE);
+            }
+
+            if (getIntent().hasExtra(RESULT_EXTRA_GIFT_ID)) {
+                giftID = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_ID);
+            }
+
+            if (getIntent().hasExtra(RESULT_EXTRA_GIFT_PRICE)) {
+                giftPrice = getIntent().getExtras().getFloat(RESULT_EXTRA_GIFT_PRICE);
+            }
+
+            if (getIntent().hasExtra(RESULT_EXTRA_GIFT_DESC)) {
+                giftDesc = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_DESC);
+            }
+        }
+
         initializerView();
-
-        if (getIntent().getExtras() != null) {
-            if (getIntent().hasExtra("giftTitle")) {
-                giftTitle = getIntent().getExtras().getString("giftTitle");
-            }
-        }
-
-        if (getIntent().getExtras() != null) {
-            if (getIntent().hasExtra("giftID")) {
-                giftID = getIntent().getExtras().getString("giftID");
-            }
-        }
-
-        if (getIntent().getExtras() != null) {
-            if (getIntent().hasExtra("giftPrice")) {
-                giftPrice = getIntent().getExtras().getFloat("giftPrice");
-            }
-        }
 
         initCollapsingToolbar();
 
         prepareAlbums();
 
-        try {
-            Glide.with(this).load(R.drawable.cover).into(GiftCover);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void initializerView() {
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        setActionBar(toolbar);
+        if (getActionBar() != null)
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         if (AppHelper.isAndroid5()) {
-            collapsingToolbar.setTransitionName(getString(R.string.gift_name_transition));
+            getActionBar().setTitle(giftTitle);
         }
+
+
+        mGiftDescirption.setText(giftDesc);
+        mGiftTitle.setText(giftTitle);
+
+        Glide.with(this)
+            .load(EndPoints.ASSETS_BASE_URL + giftImage)
+            .placeholder(R.drawable.cover)
+
+            .into(GiftCover);
 
         paymentList = new ArrayList<>();
         adapter = new PaymentsAdapter(this, paymentList);
@@ -114,7 +131,7 @@ public class GiftDetailsActivity extends AppCompatActivity implements LoadingDat
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -125,11 +142,9 @@ public class GiftDetailsActivity extends AppCompatActivity implements LoadingDat
      * Will show and hide the toolbar title on scroll
      */
     private void initCollapsingToolbar() {
-        collapsingToolbar.setTitle(" ");
+
         AnimationsUtil.expandToolbar(containerGift, appBarLayout);
 
-
-//        mGiftTitle.setText(giftTitle);
 
         // hiding & showing the title when toolbar expanded & collapsed
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -142,11 +157,11 @@ public class GiftDetailsActivity extends AppCompatActivity implements LoadingDat
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(giftTitle);
+                    getActionBar().setTitle("");
 
                     isShow = true;
                 } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
+                    getActionBar().setTitle(giftTitle);
 
                     isShow = false;
                 }
@@ -281,14 +296,20 @@ public class GiftDetailsActivity extends AppCompatActivity implements LoadingDat
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        if (AppHelper.isAndroid5()) {
-            //Transition animation
-            Transition enterTrans = new Fade();
-            getWindow().setEnterTransition(enterTrans);
-            enterTrans.setDuration(300);
-        }
-        finish();
+        setResultAndFinish();
+    }
+
+    @Override
+    public boolean onNavigateUp() {
+        setResultAndFinish();
+        return true;
+    }
+
+    private void setResultAndFinish() {
+        final Intent resultData = new Intent();
+        resultData.putExtra(RESULT_EXTRA_GIFT_ID, giftID);
+        setResult(RESULT_OK, resultData);
+        finishAfterTransition();
     }
 
     @Override

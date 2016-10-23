@@ -77,6 +77,6 @@
         app:backgroundTint="@color/colorPinkDark"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="com.fortunekidew.pewaa.ui.ScrollAwareFABBehavior"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

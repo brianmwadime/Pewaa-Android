@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+	<!-- standard metrics -->
+	<dimen name="spacing_normal">8dp</dimen>
+	<dimen name="spacing_micro">4dp</dimen>
+	<dimen name="padding_normal">16dp</dimen>
+	<dimen name="spacing_large">32dp</dimen>
+	<dimen name="spacing_xlarge">48dp</dimen>
+	<dimen name="spacing_huge">64dp</dimen>
+	<dimen name="fab_size">56dp</dimen>
+	<dimen name="fab_radius">28dp</dimen>
+	<dimen name="keyline_1">72dp</dimen>
+	<dimen name="display_4_text_size">112sp</dimen>
+	<dimen name="divider_height">1px</dimen>
+	<dimen name="dialog_corners">2dp</dimen>
+	<dimen name="padding_room_for_fab">88dp</dimen> <!-- padding_normal + fab_size + padding_normal -->
+	<dimen name="fab_plus_single_padding">72dp</dimen> <!-- fab_size + padding_normal -->
+	<dimen name="half_fab_plus_single_padding">44dp</dimen> <!-- (fab_size / 2) + padding_normal -->
+	<dimen name="drag_dismiss_distance">112dp</dimen> <!-- 2 * ?android:actionBarSize -->
+	<!-- text input layout seems to add 4dp of extra padding. The following account for this -->
+	<dimen name="padding_normal_til">12dp</dimen>
+	<dimen name="til_margin_fix">-4dp</dimen>
+
+	<!-- dialogs -->
+	<dimen name="padding_dialog">24dp</dimen>
+	<dimen name="dialog_title_spacing">20dp</dimen>
+
+	<!-- gift -->
+	<dimen name="gift_collapsed_app_bar_height">168dp</dimen> <!-- 3 * ?android:actionBarSize -->
+	<!-- avatar should be a 40dp asset in a 48dp touch target & optically aligned with standard padding -->
+	<dimen name="avatar_size">40dp</dimen>
+	<dimen name="avatar_bounds">48dp</dimen>
+	<dimen name="avatar_padding">4dp</dimen> <!-- (avatar_bounds - avatar_size) / 2 -->
+	<dimen name="avatar_margin">12dp</dimen> <!-- padding_normal - avatar_padding -->
+	<dimen name="avatar_ripple_radius">20dp</dimen> <!-- avatar_size / 2 -->
+	<dimen name="comment_actions_height">40dp</dimen>
+	<dimen name="comment_like_margin_adjustment">-8dp</dimen>
+
 	<!-- Default screen margins, per the Android Design guidelines. -->
 	<dimen name="activity_horizontal_margin">16dp</dimen>
 	<dimen name="activity_vertical_margin">16dp</dimen>
@@ -31,8 +68,10 @@
 
 	<!--Gift details-->
 	<dimen name="detail_backdrop_height">250dp</dimen>
-	<dimen name="backdrop_title">30sp</dimen>
+	<dimen name="backdrop_title">25sp</dimen>
 	<dimen name="backdrop_subtitle">18sp</dimen>
+	<dimen name="touch_raise">6dp</dimen>
+
 
 	<!--Payments Card-->
 	<dimen name="card_album_radius">0dp</dimen>
@@ -44,4 +83,7 @@
 	<dimen name="ic_album_overflow_width">20dp</dimen>
 	<dimen name="ic_album_overflow_height">30dp</dimen>
 	<dimen name="ic_album_overflow_margin_top">10dp</dimen>
+
+	<!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
+	<item name="match_parent" format="integer" type="dimen">-1</item>
 </resources>

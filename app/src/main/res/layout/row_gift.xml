@@ -2,25 +2,25 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
-    android:elevation="3dp"
-    android:layout_margin="@dimen/card_margin"
-    android:layout_gravity="center"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="2dp">
+    android:layout_gravity="top"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
+        android:layout_height="wrap_content">
+
+        <com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView
             android:id="@+id/gift_image"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
             android:layout_gravity="top"
-            android:adjustViewBounds="true"
-            android:background="@color/colorGrayDark"
-            android:contentDescription="@string/new_gift" />
+            android:layout_height="0dp"
+            android:transitionName="@string/transition_gift_avatar"
+            android:stateListAnimator="@animator/raise"
+            android:foreground="@drawable/mid_grey_ripple"/>
 
         <LinearLayout
             android:id="@+id/layoutgift"
@@ -30,12 +30,12 @@
 
             <io.github.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/gift_name"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Gift Item"
                 android:layout_weight="1"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/text_primary_dark"
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
 
@@ -47,8 +47,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="12-01-2016"
-
-                android:textColor="@color/colorGray2"
+                android:textColor="@color/text_secondary_dark"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>

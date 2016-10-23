@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.api.APIGifts;
 import com.fortunekidew.pewaa.api.APIService;
@@ -25,12 +25,10 @@ import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.wishlists.EditGift;
 import com.fortunekidew.pewaa.models.wishlists.GiftResponse;
 import com.fortunekidew.pewaa.presenters.EditGiftPresenter;
-import com.fortunekidew.pewaa.ui.CropSquareTransformation;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+import com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView;
 
 import java.io.File;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,11 +49,14 @@ import retrofit2.Response;
 @SuppressLint("SetTextI18n")
 public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
+    private static final int[] NORMAL_IMAGE_SIZE = new int[] { 400, 300 };
+    private final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     @Bind(R.id.giftAvatar)
-    ImageView giftAvatar;
+    BadgedFourThreeImageView giftAvatar;
 
     @Bind(R.id.addGiftFab)
     FloatingActionButton addAvatar;
@@ -114,12 +115,10 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
      */
     public void setImage(String path) {
         if (path != null) {
-            Picasso.with(this)
+            Glide.with(this)
                     .load(path)
-                    .transform(new CropSquareTransformation())
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .centerCrop()
+                    .fitCenter()
+                    .override(NORMAL_IMAGE_SIZE[0], NORMAL_IMAGE_SIZE[1])
                     .into(giftAvatar);
         } else {
             giftAvatar.setPadding(2, 2, 2, 2);
@@ -230,11 +229,13 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
                     gift.setAvatar(response.body().getAvatar());
                     gift.setName(response.body().getName());
                     gift.setId(response.body().getId());
+                    gift.setCreatedOn(new Date());
                     gift.setWishlistId(response.body().getWishlistId());
                     gift.setDescription(response.body().getDescription());
                     gift.setPrice(response.body().getPrice());
 
                     EventBus.getDefault().post(new Pusher("new_gift", gift));
+                    finish();
 
                 } else {
                     AppHelper.CustomToast(AddGiftsActivity.this, response.message());

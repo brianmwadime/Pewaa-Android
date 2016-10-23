@@ -20,14 +20,15 @@
             android:layout_height="234dp"
             android:layout_margin="0dp">
 
-            <ImageView
+            <com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView
                 android:id="@+id/giftAvatar"
                 android:layout_width="match_parent"
-                android:background="@color/colorGray"
-                android:scaleType="fitCenter"
-                android:layout_height="234dp"
+                android:layout_height="0dp"
                 app:srcCompat="@drawable/ic_file_upload_white_24dp"
-                android:transitionName="giftAvatar" />
+                android:layout_gravity="top"
+                android:stateListAnimator="@animator/raise"
+                android:foreground="@drawable/mid_grey_ripple"/>
+
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/addGiftFab"

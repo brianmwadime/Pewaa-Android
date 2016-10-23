@@ -2,10 +2,11 @@ package com.fortunekidew.pewaa.models.users;
 
 import android.view.View;
 
-import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
-import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.notifications.NotificationsModel;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
+import com.fortunekidew.pewaa.models.wishlists.EditGift;
+import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ public class Pusher {
     private JSONObject jsonObject;
     private MessagesModel messagesModel;
     private EditWishlist wishlistObject;
+    private EditGift giftObject;
     private NotificationsModel notificationsModel;
     private int messageId;
 
@@ -73,6 +75,11 @@ public class Pusher {
     public Pusher(String action, EditWishlist wishlist) {
         this.action = action;
         this.wishlistObject = wishlist;
+    }
+
+    public Pusher(String action, EditGift gift) {
+        this.action = action;
+        this.giftObject = gift;
     }
 
     public Pusher(String itemIsActivated, View view) {
@@ -169,6 +176,14 @@ public class Pusher {
 
     public void setWishlistObject(EditWishlist wishlistObject) {
         this.wishlistObject = wishlistObject;
+    }
+
+    public EditGift getGiftObject() {
+        return giftObject;
+    }
+
+    public void setGiftObject(EditGift giftObject) {
+        this.giftObject = giftObject;
     }
 
     public EditWishlist getWishlistObject() {

@@ -8,6 +8,7 @@ import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -34,7 +35,7 @@ public interface APIWishlists {
      * @return this is return value
      */
     @POST(EndPoints.WISHLISTS_LIST)
-    Observable<StatusResponse> editWishlist(@Body EditWishlist editWishlist);
+    Call<StatusResponse> editWishlist(@Body EditWishlist editWishlist);
 
     /**
      * method to get group information

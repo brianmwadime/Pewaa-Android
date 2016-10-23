@@ -110,6 +110,9 @@
         <!--  AddGiftsActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.gifts.AddGiftsActivity" />
 
+        <!--  GiftActivity -->
+        <activity android:name="com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity" />
+
         <!--  AddNewMembersToGroupActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity">
             <intent-filter>

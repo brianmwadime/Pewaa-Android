@@ -26,6 +26,8 @@
 
     </style>
 
+    <style name="Widget.Pewaa" parent="android:Widget" />
+
     <style name="CustomTabPageIndicator.Text" parent="android:TextAppearance.Medium">
         <item name="android:textColor">@drawable/bg_tabs_text_color</item>
     </style>
@@ -43,7 +45,55 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TextAppearance.GiftTitle" parent="@android:style/TextAppearance.Material.Headline">
+        <!--<item name="font">roboto-mono-regular</item>-->
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
 
+    <style name="TextAppearance.PaymentTimestamp" parent="@android:style/TextAppearance.Material.Caption">
+        <item name="android:textColor">@color/hint_disabled_dark</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFeatureSettings">onum, smcp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <!-- todo revert to material styles? -->
+    <style name="TextAppearance.Description" parent="@android:style/TextAppearance.Material.Body1">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_secondary_dark</item>
+        <!--<item name="android:letterSpacing">0.01</item>-->
+    </style>
+
+    <style name="TextAppearance.GiftDescription" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textColor">@color/text_tertiary_dark</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="TextAppearance.PaymentAuthor" parent="@android:style/TextAppearance.Material.Caption">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFeatureSettings">smcp, onum</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="TextAppearance.PaymentAuthor.Pewaa">
+        <item name="android:textColor">@color/text_primary_dark</item>
+    </style>
+
+    <style name="Widget.Pewaa.Description">
+        <item name="android:textAppearance">@style/TextAppearance.Description</item>
+        <item name="lineHeightHint">24sp</item>
+    </style>
+
+    <style name="Widget.Pewaa.GiftTitle">
+        <item name="android:textAppearance">@style/TextAppearance.GiftTitle</item>
+        <item name="lineHeightHint">32sp</item>
+    </style>
+
+    <style name="Widget.Pewaa.GiftDescription">
+        <item name="android:textAppearance">@style/TextAppearance.GiftDescription</item>
+        <item name="lineHeightHint">24sp</item>
+    </style>
 
     <!-- les cardView styles -->
     <style name="Widget.CardContent" parent="android:Widget">
@@ -55,13 +105,13 @@
     </style>
 
 
-    <style name="TextAppearance.WhatsClone.Title.Collapsed" parent="android:TextAppearance">
+    <style name="TextAppearance.Pewaa.Title.Collapsed" parent="android:TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.WhatsClone.Title.Expanded" parent="android:TextAppearance">
+    <style name="TextAppearance.Pewaa.Title.Expanded" parent="android:TextAppearance">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
@@ -87,5 +137,10 @@
         <item name="android:textColor">@drawable/bg_buttons_text_color_welcome</item>
         <item name="android:background">@drawable/bg_buttons_delete_account</item>
         <item name="android:padding">6dp</item>
+    </style>
+
+    <style name="UndoButtonStyle">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

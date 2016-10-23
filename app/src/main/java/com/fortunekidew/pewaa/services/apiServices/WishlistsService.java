@@ -129,21 +129,4 @@ public class WishlistsService {
         realm.commitTransaction();
         return realmWishlists;
     }
-
-    /**
-     * method to create/edit wishlist
-     *
-     * @param name this is the first parameter for editWishlist method
-     * @param description  this is the second parameter for editWishlist method
-     * @return return  value
-     */
-    public Observable<StatusResponse> editWishlist(String name, String description) {
-        EditWishlist editWishlist = new EditWishlist();
-        editWishlist.setName(name);
-        editWishlist.setDescription(description);
-        return initializeApiWishlists().editWishlist(editWishlist)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(statusResponse -> statusResponse);
-    }
 }

@@ -2,24 +2,24 @@ package com.fortunekidew.pewaa.activities.gifts;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toolbar;
 
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.GiftsAdapter;
@@ -28,7 +28,6 @@ import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.interfaces.LoadingData;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
-import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 import com.fortunekidew.pewaa.presenters.GiftsPresenter;
 
 import java.util.List;
@@ -49,7 +48,7 @@ import static com.fortunekidew.pewaa.services.MainService.mSocket;
  */
 
 @SuppressLint("SetTextI18n")
-public class WishlistActivity extends AppCompatActivity implements LoadingData {
+public class WishlistActivity extends Activity implements LoadingData {
 
     @Bind(R.id.GiftsList)
     RecyclerView GiftsList;
@@ -63,9 +62,8 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
     public Intent mIntent = null;
     private GiftsAdapter mGiftsAdapter;
     public Context context;
-    private WishlistsModel mWishlistModel;
     private GiftsPresenter mGiftsPresenter = new GiftsPresenter(this);
-    private String WishlistID;
+    private String wishlistID, wishlistTitle;
 
     private Timer TYPING_TIMER_LENGTH = new Timer();
     private boolean isTyping = false;
@@ -85,7 +83,11 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
 
         if (getIntent().getExtras() != null) {
             if (getIntent().hasExtra("wishlistID")) {
-                WishlistID = getIntent().getExtras().getString("wishlistID");
+                wishlistID = getIntent().getExtras().getString("wishlistID");
+            }
+
+            if (getIntent().hasExtra("wishlistTitle")) {
+                wishlistTitle = getIntent().getExtras().getString("wishlistTitle");
             }
         }
 
@@ -101,9 +103,11 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
      * method initialize the view
      */
     public void initializerView() {
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setActionBar(toolbar);
+        if (getActionBar() != null)
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getActionBar().setTitle(wishlistTitle);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -124,20 +128,28 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-
-            switch (item.getItemId()) {
-                case R.id.search_messages:
-//                    launcherSearchView();
-                    break;
-                case R.id.view_contact:
-//                    mIntent = new Intent(this, ProfileActivity.class);
-//                    mIntent.putExtra("userID", recipientId);
-//                    mIntent.putExtra("isGroup", false);
-//                    startActivity(mIntent);
-                    break;
+        if (item.getItemId() == android.R.id.home) {
+            if (AppHelper.isAndroid5()) {
+                Transition enterTrans = new Fade();
+                getWindow().setEnterTransition(enterTrans);
+                enterTrans.setDuration(300);
             }
+            finish();
+        }
 
-        return true;
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (AppHelper.isAndroid5()) {
+            //Transition animation
+            Transition enterTrans = new Fade();
+            getWindow().setEnterTransition(enterTrans);
+            enterTrans.setDuration(300);
+        }
+        finish();
     }
 
     @Override
@@ -167,15 +179,10 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
 
     @OnClick(R.id.addGiftFab)
     public void addGift(View view) {
-        AppHelper.LaunchActivity(this, AddGiftsActivity.class);
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        Intent wishlistIntent = new Intent(this, AddGiftsActivity.class);
+        wishlistIntent.putExtra("wishlistID", wishlistID);
+        this.startActivity(wishlistIntent);
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
@@ -219,9 +226,47 @@ public class WishlistActivity extends AppCompatActivity implements LoadingData {
         int messageId = pusher.getMessageId();
         switch (pusher.getAction()) {
             case "new_gift":
+                GiftsModel newGift = new GiftsModel();
+                newGift.setName(pusher.getGiftObject().getName());
+                newGift.setDescription(pusher.getGiftObject().getDescription());
+                newGift.setId(pusher.getGiftObject().getId());
+                newGift.setAvatar(pusher.getGiftObject().getAvatar());
+                newGift.setCreatedOn(pusher.getGiftObject().getCreatedOn());
+                newGift.setDescription(pusher.getGiftObject().getDescription());
+                newGift.setPrice(pusher.getGiftObject().getPrice());
 
+                mGiftsAdapter.addItem(0, newGift);
 
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        if (data == null || resultCode != RESULT_OK
+                || !data.hasExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID)) return;
+
+        // When reentering, if the shared element is no longer on screen (e.g. after an
+        // orientation change) then scroll it into view.
+        final String sharedShotId = data.getStringExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID);
+        if (!sharedShotId.isEmpty()                                             // returning from a shot
+                && mGiftsAdapter.getItemCount() > 0                           // grid populated
+                ) {    // view not attached
+            final int position = mGiftsAdapter.getItemPosition(sharedShotId);
+            if (position == RecyclerView.NO_POSITION) return;
+
+            // delay the transition until our shared element is on-screen i.e. has been laid out
+            postponeEnterTransition();
+            GiftsList.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int l, int t, int r, int b,
+                                           int oL, int oT, int oR, int oB) {
+                    GiftsList.removeOnLayoutChangeListener(this);
+                    startPostponedEnterTransition();
+                }
+            });
+            GiftsList.scrollToPosition(position);
+            toolbar.setTranslationZ(-1f);
         }
     }
 }

@@ -181,6 +181,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
                     messagingIntent.putExtra("wishlistID", wishlistsModel.getId());
+                    messagingIntent.putExtra("wishlistTitle", wishlistsModel.getName());
                     mActivity.startActivity(messagingIntent);
                     mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 });

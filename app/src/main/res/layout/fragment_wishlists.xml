@@ -51,13 +51,21 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/WishlistsList"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/row_wishlist" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/WishlistsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/row_wishlist" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -69,6 +77,6 @@
         app:backgroundTint="@color/colorPinkDark"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="com.fortunekidew.pewaa.ui.ScrollAwareFABBehavior"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

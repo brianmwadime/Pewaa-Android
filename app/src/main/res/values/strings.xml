@@ -55,7 +55,7 @@
     <string name="view_in_ad_book">View in address book</string>
     <string name="hello_welcome_to_whats_clone">Welcome</string>
     <string name="next">Next</string>
-    <string name="set_back_and_keep_calm_you_will_receive_an_sms_of_verification">Set back and keep calm you will receive an sms of verification</string>
+    <string name="placeholder_sms_of_verification">You will receive an sms of verification</string>
     <string name="resend">Resend</string>
     <string name="enter_the_code_below_to_verify">Enter the code below to verify</string>
     <string name="enter_your_code">Enter your code</string>

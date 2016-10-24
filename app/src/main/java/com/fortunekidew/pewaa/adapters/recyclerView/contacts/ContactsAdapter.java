@@ -17,25 +17,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.fortunekidew.pewaa.R;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.activities.profile.ProfilePreviewActivity;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;
 import com.fortunekidew.pewaa.app.AppConstants;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;
-import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.helpers.UtilsPhone;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.ui.RecyclerViewFastScroller;
@@ -134,23 +129,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return HEADER_ITEM;
-        } else {
+//        if (position == 0) {
+//            return HEADER_ITEM;
+//        } else {
             return BASIC_ITEM;
-        }
+//        }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-        if (viewType == HEADER_ITEM) {
-            itemView = LayoutInflater.from(mActivity).inflate(R.layout.admob_banner_header, parent, false);
-            return new HeaderViewHolder(itemView);
-        } else {
-            itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_contacts, parent, false);
-            return new ContactsViewHolder(itemView);
-        }
+
+        itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_contacts, parent, false);
+        return new ContactsViewHolder(itemView);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -160,7 +151,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (holder instanceof ContactsViewHolder) {
             final ContactsViewHolder contactsViewHolder = (ContactsViewHolder) holder;
-            final ContactsModel contactsModel = this.mContactsModel.get(position - 1);
+            final ContactsModel contactsModel = this.mContactsModel.get(position);
             try {
 
                 contactsViewHolder.setUsername(contactsModel.getUsername(), contactsModel.getPhone());
@@ -253,29 +244,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             mPreviousPosition = position;
 
-        } else if (holder instanceof HeaderViewHolder) {
-            HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
-            if (PreferenceManager.ShowBannerAds(mActivity)) {
-                headerHolder.rootLayout.setVisibility(View.VISIBLE);
-
-                if (PreferenceManager.getUnitBannerAdsID(mActivity) != null) {
-                    if (!headerAdded) {
-                        AdView mAdView = new AdView(mActivity);
-                        mAdView.setAdSize(AdSize.BANNER);
-                        mAdView.setAdUnitId(PreferenceManager.getUnitBannerAdsID(mActivity));
-                        AdRequest adRequest = new AdRequest.Builder()
-                                .build();
-                        if (mAdView.getAdSize() != null || mAdView.getAdUnitId() != null)
-                            mAdView.loadAd(adRequest);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                        headerHolder.rootLayout.addView(mAdView, params);
-                        headerAdded = true;
-                    }
-                }
-            } else {
-                headerHolder.rootLayout.setVisibility(View.GONE);
-            }
-
         }
 
     }
@@ -295,16 +263,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return e.getMessage();
         }
 
-    }
-
-    class HeaderViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.adParentLyout)
-        LinearLayout rootLayout;
-
-        HeaderViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {

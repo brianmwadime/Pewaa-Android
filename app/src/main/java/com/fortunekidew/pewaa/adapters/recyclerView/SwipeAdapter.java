@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.tr4android.recyclerviewslideitem;
+package com.fortunekidew.pewaa.adapters.recyclerView;
 
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import com.fortunekidew.pewaa.R;
+import com.fortunekidew.pewaa.ui.SwipeConfiguration;
+import com.fortunekidew.pewaa.ui.SwipeItem;
+import com.fortunekidew.pewaa.ui.SwipeRunnable;
 
 import java.util.ArrayList;
 

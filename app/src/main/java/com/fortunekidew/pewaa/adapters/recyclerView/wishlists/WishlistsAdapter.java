@@ -237,17 +237,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return mWishlists.get(position);
     }
 
-    class HeaderViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.adParentLyout)
-        LinearLayout rootLayout;
-
-        HeaderViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
-
     class WishlistViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.wishlist_image)
         ImageView wishlistImage;

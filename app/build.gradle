@@ -3,9 +3,14 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 
 repositories {
-    mavenCentral()
+    jcenter()
     maven { url "https://jitpack.io" }
 }
+
+// query git for the SHA, Tag and commit count. Use these to automate versioning.
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
+def gitCommitCount = 100 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
     compileSdkVersion 24
@@ -15,8 +20,9 @@ android {
         applicationId "com.fortunekidew.pewaa"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 2
-        versionName "1.0.1"
+        versionCode gitCommitCount
+        versionName gitTag
+        archivesBaseName = "pewaa-${versionName}"
         vectorDrawables.useSupportLibrary = true
 
     }

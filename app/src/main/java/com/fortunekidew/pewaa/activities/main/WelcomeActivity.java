@@ -375,7 +375,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     private void requestForSMS(String mobile, String country) {
         APIAuthentication mAPIAuthentication = APIService.RootService(APIAuthentication.class, EndPoints.BASE_URL);
         Call<JoinModel> JoinModelCall = mAPIAuthentication.join(mobile, country);
-        AppHelper.showDialog(this, getString(R.string.set_back_and_keep_calm_you_will_receive_an_sms_of_verification));
+        AppHelper.showDialog(this, getString(R.string.placeholder_sms_of_verification));
         JoinModelCall.enqueue(new Callback<JoinModel>() {
             @Override
             public void onResponse(Call<JoinModel> call, Response<JoinModel> response) {

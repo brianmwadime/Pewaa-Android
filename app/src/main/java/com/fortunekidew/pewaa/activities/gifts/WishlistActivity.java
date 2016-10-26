@@ -250,6 +250,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
     @Override
     public void onErrorLoading(Throwable throwable) {
+        loading.setVisibility(View.GONE);
         GiftsList.setVisibility(View.GONE);
         EmptyGiftslists.setVisibility(View.VISIBLE);
     }

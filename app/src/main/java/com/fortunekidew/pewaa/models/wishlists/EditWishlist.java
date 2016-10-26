@@ -8,7 +8,7 @@ public class EditWishlist {
     private String name;
     private String id;
     private String description;
-    private String recipients;
+    private String recipient;
     private String category;
 
 
@@ -45,11 +45,11 @@ public class EditWishlist {
     }
 
     public String getRecipients() {
-        return recipients;
+        return recipient;
     }
 
     public void setRecipients(String recipients) {
-        this.recipients = recipients;
+        this.recipient = recipients;
     }
 
 }

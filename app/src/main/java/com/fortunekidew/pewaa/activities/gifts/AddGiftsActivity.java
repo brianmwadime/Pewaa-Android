@@ -17,6 +17,7 @@ import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.api.APIGifts;
 import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.app.EndPoints;
+import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.fragments.BottomSheetEditGift;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.PreferenceManager;
@@ -214,6 +215,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
         RequestBody newName = RequestBody.create(MediaType.parse("multipart/form-data"), EditName.getText().toString().trim());
         RequestBody newDescription = RequestBody.create(MediaType.parse("multipart/form-data"), EditDescription.getText().toString().trim());
+
         float newPrice = Float.parseFloat(EditPrice.getText().toString().trim());
 
         APIGifts mApiGift = mApiService.RootService(APIGifts.class, PreferenceManager.getToken(AddGiftsActivity.this), EndPoints.BASE_URL);

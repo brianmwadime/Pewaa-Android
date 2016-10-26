@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@color/background_light"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.wishlists.AddWishlistsActivity"
     tools:showIn="@layout/activity_add_wishlist">
@@ -15,32 +15,42 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <FrameLayout
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="234dp"-->
+            <!--android:layout_margin="0dp">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/wishlistAvatar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:background="@color/colorGray"-->
+                <!--android:scaleType="fitCenter"-->
+                <!--android:layout_height="234dp"-->
+                <!--app:srcCompat="@drawable/ic_file_upload_white_24dp"-->
+                <!--android:transitionName="userAvatar" />-->
+
+            <!--<android.support.design.widget.FloatingActionButton-->
+                <!--android:id="@+id/addWishlistAvatar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="bottom|right"-->
+                <!--android:layout_margin="20dp"-->
+                <!--android:clickable="true"-->
+                <!--app:elevation="2dp"-->
+                <!--app:fabSize="normal"-->
+                <!--app:rippleColor="@color/colorWhiteLight"-->
+                <!--app:srcCompat="@drawable/ic_photo_camera_24dp" />-->
+        <!--</FrameLayout>-->
+        <com.fortunekidew.pewaa.ui.LabelledSpinner
+            android:id="@+id/spinner"
+            app.labelText="Select Wishlist Category"
+            app.widgetColor="@color/colorGray"
             android:layout_width="match_parent"
-            android:layout_height="234dp"
-            android:layout_margin="0dp">
-
-            <ImageView
-                android:id="@+id/wishlistAvatar"
-                android:layout_width="match_parent"
-                android:background="@color/colorGray"
-                android:scaleType="fitCenter"
-                android:layout_height="234dp"
-                app:srcCompat="@drawable/ic_file_upload_white_24dp"
-                android:transitionName="userAvatar" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/addWishlistAvatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_margin="20dp"
-                android:clickable="true"
-                app:elevation="2dp"
-                app:fabSize="normal"
-                app:rippleColor="@color/colorWhiteLight"
-                app:srcCompat="@drawable/ic_photo_camera_24dp" />
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:focusable="true"
+            android:paddingStart="0dp"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -59,6 +69,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:id="@+id/edit_recipient_wrapper">
+            <EditText
+                android:id="@+id/edit_wishlist_recipient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:lines="3"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:hint="@string/hintRecipients"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:id="@+id/edit_description_wrapper">
             <EditText
                 android:id="@+id/edit_wishlist_description"
@@ -66,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:lines="6"
-                android:gravity="top|left"
+                android:gravity="top|start"
                 android:inputType="textMultiLine"
                 android:hint="@string/hintDescription"/>
         </android.support.design.widget.TextInputLayout>

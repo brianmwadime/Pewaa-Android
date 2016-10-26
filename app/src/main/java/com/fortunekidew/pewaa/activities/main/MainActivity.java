@@ -5,7 +5,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -14,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,6 +30,7 @@ import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.search.SearchContactsActivity;
 import com.fortunekidew.pewaa.activities.settings.SettingsActivity;
 import com.fortunekidew.pewaa.activities.status.StatusActivity;
+import com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity;
 import com.fortunekidew.pewaa.adapters.others.TabsAdapter;
 import com.fortunekidew.pewaa.app.AppConstants;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -45,6 +45,7 @@ import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -60,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @Bind(R.id.app_bar)
     Toolbar toolbar;
-    @Bind(R.id.main_view)
-    LinearLayout MainView;
+//    @Bind(R.id.main_view)
+//    LinearLayout MainView;
+    @Bind(R.id.addWishlistFab)
+    FloatingActionButton AddWishlistFab;
     @Bind(R.id.toolbar_progress_bar)
     ProgressBar toolbarProgressBar;
     private EventBus eventBus = EventBus.getDefault();
@@ -115,17 +118,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.status:
                 AppHelper.LaunchActivity(this, StatusActivity.class);
                 break;
-            case R.id.add_contact:
-                try {
-                    Intent mIntent = new Intent(Intent.ACTION_INSERT);
-                    mIntent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                    mIntent.putExtra(ContactsContract.Intents.Insert.PHONE, "");
-                    startActivityForResult(mIntent, 50);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -176,11 +168,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (tab.getPosition()) {
                     case 0:
                         viewPager.setCurrentItem(0);
+                        AddWishlistFab.show();
                         findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter));
                         ((TextView) findViewById(R.id.title_tabs_messages)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorWhite));
                         break;
                     case 1:
                         viewPager.setCurrentItem(1);
+                        AddWishlistFab.hide();
                         findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
                         ((TextView) findViewById(R.id.title_tabs_contacts)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorWhite));
                         break;
@@ -193,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
+
                         findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
                         ((TextView) findViewById(R.id.title_tabs_messages)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorUnSelected));
                         break;
@@ -213,16 +208,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.addWishlistFab)
+    public void addWishlist(View view) {
+        AppHelper.LaunchActivity(this, AddWishlistsActivity.class);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        MainView.setVisibility(View.GONE);
+//        MainView.setVisibility(View.GONE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MainView.setVisibility(View.VISIBLE);
+//        MainView.setVisibility(View.VISIBLE);
     }
 
     @Override

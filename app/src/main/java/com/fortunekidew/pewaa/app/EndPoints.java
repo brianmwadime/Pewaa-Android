@@ -35,10 +35,24 @@ public class EndPoints {
     public static final String GET_WISHLIST = "wishlists/{wishlistId}";
 
     /**
-     *
+     * Gifts
      */
     public static final String GIFTS = "gifts";
     public static final String GIFT = "gifts/{giftId}";
+    public static final String GIFT_CONTRIBUTORS = "gifts/{giftId}/contributors";
+
+    /**
+     * Contributors
+     */
+    public static final String CONTRIBUTORS = "contributors";
+    public static final String CONTRIBUTOR = "contributors/{contributorId}";
+
+    /**
+     * Push Notifications
+     */
+    public static final String NOTIFICATIONS = "notifications";
+    public static final String DEVICES = "devices";
+    public static final String DEVICE = "devices/{deviceId}";
 
     /**
      * Groups

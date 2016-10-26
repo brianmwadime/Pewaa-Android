@@ -175,6 +175,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     wishlistViewHolder.wishlist_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
                 }
 
+
                 wishlistViewHolder.setWishlistImage(wishlistsModel.getAvatar());
 
                 wishlistViewHolder.setOnClickListener(view -> {
@@ -185,6 +186,9 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     mActivity.startActivity(messagingIntent);
                     mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 });
+
+                wishlistViewHolder.setCategory(wishlistsModel.getCategory());
+
             } catch (Exception e) {
                 AppHelper.LogCat("Wishlists Adapter  Exception" + e.getMessage());
             }
@@ -242,8 +246,8 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView wishlistImage;
         @Bind(R.id.wishlist_name)
         EmojiconTextView wishlist_name;
-        @Bind(R.id.counter)
-        TextView counter;
+        @Bind(R.id.category)
+        TextView category;
         @Bind(R.id.date_created)
         TextView wishlistDate;
 
@@ -311,17 +315,17 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
 
-        void setCounter(String Counter) {
-            counter.setText(Counter.toUpperCase());
+        void setCategory(String Counter) {
+            category.setText(Counter.toUpperCase());
         }
 
-        void hideCounter() {
-            counter.setVisibility(View.GONE);
+        void hideCategory() {
+            category.setVisibility(View.GONE);
         }
 
 
-        void showCounter() {
-            counter.setVisibility(View.VISIBLE);
+        void showCategory() {
+            category.setVisibility(View.VISIBLE);
         }
 
         void setOnClickListener(View.OnClickListener listener) {

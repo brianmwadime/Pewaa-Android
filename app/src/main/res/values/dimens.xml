@@ -17,7 +17,7 @@
 	<dimen name="padding_room_for_fab">88dp</dimen> <!-- padding_normal + fab_size + padding_normal -->
 	<dimen name="fab_plus_single_padding">72dp</dimen> <!-- fab_size + padding_normal -->
 	<dimen name="half_fab_plus_single_padding">44dp</dimen> <!-- (fab_size / 2) + padding_normal -->
-	<dimen name="drag_dismiss_distance">112dp</dimen> <!-- 2 * ?android:actionBarSize -->
+	<dimen name="drag_dismiss_distance">168dp</dimen> <!-- 2 * ?android:actionBarSize -->
 	<!-- text input layout seems to add 4dp of extra padding. The following account for this -->
 	<dimen name="padding_normal_til">12dp</dimen>
 	<dimen name="til_margin_fix">-4dp</dimen>
@@ -27,7 +27,7 @@
 	<dimen name="dialog_title_spacing">20dp</dimen>
 
 	<!-- gift -->
-	<dimen name="gift_collapsed_app_bar_height">168dp</dimen> <!-- 3 * ?android:actionBarSize -->
+	<dimen name="gift_collapsed_app_bar_height">168dp</dimen> <!-- 168dp = 3 * ?android:actionBarSize -->
 	<!-- avatar should be a 40dp asset in a 48dp touch target & optically aligned with standard padding -->
 	<dimen name="avatar_size">40dp</dimen>
 	<dimen name="avatar_bounds">48dp</dimen>
@@ -62,7 +62,7 @@
 	<dimen name="text_size">16sp</dimen>
 	<dimen name="view_margin_left">68dp</dimen>
 	<dimen name="view_margin_right">30dp</dimen>
-	<dimen name="fab_margin">16dp</dimen>
+	<dimen name="fab_margin">10dp</dimen>
 	<dimen name="card_margin">10dp</dimen>
 	<dimen name="slide_down_message_items">60dp</dimen>
 
@@ -70,8 +70,11 @@
 	<dimen name="detail_backdrop_height">250dp</dimen>
 	<dimen name="backdrop_title">25sp</dimen>
 	<dimen name="backdrop_subtitle">18sp</dimen>
-	<dimen name="touch_raise">6dp</dimen>
 
+	<!-- Contributor -->
+	<dimen name="large_avatar_size">120dp</dimen> <!-- 2 * actionBarSize - 2 * avatar_padding -->
+	<dimen name="large_avatar_margin">28dp</dimen> <!-- spacing_large - avatar_padding -->
+	<dimen name="large_avatar_height">160dp</dimen> <!-- large_avatar_margin + large_avatar_size + avatar_margin -->
 
 	<!--Payments Card-->
 	<dimen name="card_album_radius">0dp</dimen>
@@ -86,4 +89,15 @@
 
 	<!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
 	<item name="match_parent" format="integer" type="dimen">-1</item>
+
+	<!-- Z-axis elevations -->
+	<dimen name="z_app_bar">4dp</dimen>
+	<dimen name="z_card">2dp</dimen>
+	<dimen name="z_fab">6dp</dimen>
+	<dimen name="touch_raise">6dp</dimen>
+	<dimen name="touched_app_bar">8dp</dimen>
+	<dimen name="z_fab_over_touchable_app_bar">9dp</dimen>
+	<dimen name="z_drawer">16dp</dimen>
+	<dimen name="z_dialog">24dp</dimen>
+	<dimen name="divider_size">10dp</dimen>
 </resources>

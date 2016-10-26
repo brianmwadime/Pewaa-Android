@@ -70,7 +70,7 @@ public class TransferMessageContactsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.title_select_contacts));
+            getSupportActionBar().setTitle(getString(R.string.title_select_contributor));
 
         }
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());

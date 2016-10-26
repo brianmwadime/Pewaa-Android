@@ -1,21 +1,33 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base">
-
-    </style>
-
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Pewaa" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorPrimaryLight</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
         <!-- ActionMode Styles -->
         <item name="android:actionModeBackground">@color/colorGrayDarker</item>
         <item name="android:backgroundStacked">@color/colorAccent</item>
         <item name="android:backgroundSplit">@color/colorGrayDarker</item>
+    </style>
+
+    <style name="Pewaa.Home">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/immersive_bars</item>
+        <item name="android:navigationBarColor">@color/immersive_bars</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:windowEnterTransition">@transition/home_enter</item>
+        <item name="giftLoadingPlaceholderColors">@array/loading_placeholders_dark</item>
+        <item name="initialBadgeColor">@color/gif_badge_dark_image</item>
     </style>
 
     <style name="option" parent="Theme.AppCompat.Light">
@@ -32,29 +44,127 @@
         <item name="android:textColor">@drawable/bg_tabs_text_color</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="Pewaa.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Pewaa.Translucent">
+        <!-- using a semi-transparent window background for the drag-back gesture -->
+        <item name="android:windowBackground">@color/scrim</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <style name="Pewaa.Translucent.Wishlists">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:colorControlActivated">?android:colorAccent</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+    </style>
+
+    <style name="Pewaa.Translucent.Wishlists.gift">
+        <item name="android:windowSharedElementEnterTransition">@transition/pewaa_gift_shared_enter</item>
+        <item name="android:windowSharedElementReturnTransition">@transition/pewaa_gift_shared_return</item>
+        <item name="android:windowEnterTransition">@transition/pewaa_gift_enter</item>
+        <item name="android:windowReturnTransition">@transition/pewaa_gift_return</item>
+    </style>
+
+    <style name="TextAppearance.Gift" parent="@android:style/TextAppearance.Material.Body1">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_secondary_dark</item>
+        <!--<item name="android:letterSpacing">0.01</item>-->
+    </style>
+
+    <style name="TextAppearance.Gift.None">
+        <item name="android:textColor">@color/grey_300</item>
     </style>
 
     <style name="ToolbarSubTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
         <item name="android:textSize">13sp</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Pewaa.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Pewaa.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="TextAppearance.GiftTitle" parent="@android:style/TextAppearance.Material.Headline">
         <!--<item name="font">roboto-mono-regular</item>-->
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
-    <style name="TextAppearance.PaymentTimestamp" parent="@android:style/TextAppearance.Material.Caption">
+    <style name="TextAppearance.ContributorTimestamp" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:textColor">@color/hint_disabled_dark</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFeatureSettings">onum, smcp</item>
         <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="TextAppearance.EmptyState" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textColor">@color/grey_300</item>
+    </style>
+
+    <style name="TextAppearance.Button" parent="@android:style/TextAppearance.Material.Widget.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="Pewaa.Translucent.AssignContributor">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.DarkButton" parent="@android:style/TextAppearance.Material.Widget.Button">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Widget.Pewaa.DialogText">
+        <item name="android:textAppearance">@style/TextAppearance.DialogContent</item>
+        <item name="lineHeightHint">20sp</item>
+    </style>
+
+    <style name="Widget.Pewaa.DialogTitle">
+        <item name="android:textAppearance">@style/TextAppearance.DialogTitle</item>
+        <item name="lineHeightHint">28sp</item>
+    </style>
+
+    <style name="TextAppearance.DialogTitle" parent="@android:style/TextAppearance.Material.Title">
+        <item name="android:textColor">@color/text_primary_dark</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="TextAppearance.DialogContent" parent="@android:style/TextAppearance.Material.Subhead">
+        <item name="android:textColor">@color/text_secondary_dark</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="Widget.Pewaa.EmptyText">
+        <item name="android:textAppearance">@style/TextAppearance.DialogContent</item>
+        <item name="lineHeightHint">24sp</item>
+        <item name="android:textColor">@color/text_primary_light</item>
+    </style>
+
+    <!-- By default float labels (well, the design lib) rely on AppCompat which we're not using
+         yet (minSdk=21). We use this style to work around this and to provide the accent color. -->
+    <style name="TextAppearance.FloatLabelHint" parent="@android:style/TextAppearance.Material.Caption">
+        <item name="android:textColor">?android:colorAccent</item>
+    </style>
+
+    <style name="Widget.Pewaa.HintCheckBox" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/text_secondary_dark</item>
     </style>
 
     <!-- todo revert to material styles? -->
@@ -69,14 +179,14 @@
         <item name="android:letterSpacing">0.01</item>
     </style>
 
-    <style name="TextAppearance.PaymentAuthor" parent="@android:style/TextAppearance.Material.Caption">
+    <style name="TextAppearance.ContributorAuthor" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFeatureSettings">smcp, onum</item>
         <item name="android:letterSpacing">0.02</item>
     </style>
 
-    <style name="TextAppearance.PaymentAuthor.Pewaa">
+    <style name="TextAppearance.ContributorAuthor.Pewaa">
         <item name="android:textColor">@color/text_primary_dark</item>
     </style>
 

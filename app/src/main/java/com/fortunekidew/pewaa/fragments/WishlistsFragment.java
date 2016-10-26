@@ -3,9 +3,9 @@ package com.fortunekidew.pewaa.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity;
 import com.fortunekidew.pewaa.adapters.recyclerView.wishlists.WishlistsAdapter;
 import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -36,25 +35,26 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.socket.client.Socket;
 
+import static com.fortunekidew.pewaa.R.id.swipeContainer;
+
 /**
  * Created by Abderrahim El imame  on 20/01/2016.
  * Email : abderrahim.elimame@gmail.com
  */
-public class WishlistsFragment extends Fragment implements LoadingData, RecyclerView.OnItemTouchListener, ActionMode.Callback {
+public class WishlistsFragment extends Fragment implements LoadingData, ActionMode.Callback {
 
     @Bind(R.id.WishlistsList)
     RecyclerView WishlistList;
     @Bind(R.id.empty)
     LinearLayout EmptyWishlists;
+    @Bind(swipeContainer)
+    SwipeRefreshLayout SwipeToRefresh;
 
-    @Bind(R.id.addWishlistFab)
-    FloatingActionButton AddWishlist;
 
     private WishlistsAdapter mWishlistsAdapter;
     private WishlistsPresenter mWishlistsPresenter = new WishlistsPresenter(this);
@@ -88,29 +88,13 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
         WishlistList.setLayoutManager(mLinearLayoutManager);
         WishlistList.setAdapter(mWishlistsAdapter);
         WishlistList.setItemAnimator(new DefaultItemAnimator());
-        WishlistList.addOnItemTouchListener(this);
-        gestureDetector = new GestureDetectorCompat(getActivity(), new RecyclerViewBenOnGestureListener());
 
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-        gestureDetector.onTouchEvent(e);
-        return false;
-    }
-
-    @OnClick(R.id.addWishlistFab)
-    public void addWishlist(View view) {
-        AppHelper.LaunchActivity(getActivity(), AddWishlistsActivity.class);
-    }
-
-    @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-    }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        SwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mWishlistsPresenter.onRefresh();
+            }
+        });
 
     }
 
@@ -192,7 +176,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
         this.actionMode = null;
         mWishlistsAdapter.clearSelections();
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-        EventBus.getDefault().post(new Pusher("actionModeDestroyed"));
     }
 
 
@@ -217,7 +200,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
      * @param wishlistsModels this is parameter for  ShowWishlist  method
      */
     public void ShowWishlist(List<WishlistsModel> wishlistsModels) {
-
+        SwipeToRefresh.setRefreshing(false);
         if (wishlistsModels.size() != 0) {
             WishlistList.setVisibility(View.VISIBLE);
             EmptyWishlists.setVisibility(View.GONE);
@@ -235,9 +218,9 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
     }
 
     /**
-     * method to show conversation list
+     * method to show wishlist list
      *
-     * @param wishlistsModels this is parameter for  ShowWishlist  method
+     * @param wishlistsModels this is parameter for  UpdateWishlist  method
      */
     public void UpdateWishlist(List<WishlistsModel> wishlistsModels) {
         if (wishlistsModels.size() != 0) {
@@ -310,6 +293,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
 
     @Override
     public void onErrorLoading(Throwable throwable) {
+        SwipeToRefresh.setRefreshing(false);
         WishlistList.setVisibility(View.GONE);
         EmptyWishlists.setVisibility(View.VISIBLE);
         AppHelper.LogCat("Wishlists Fragment " + throwable.getMessage());

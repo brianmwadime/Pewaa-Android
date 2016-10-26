@@ -98,11 +98,6 @@ public class ProfilePreviewActivity extends Activity {
             userID = getIntent().getExtras().getInt("userID");
         }
 
-        if (getIntent().hasExtra("groupID")) {
-            isGroup = getIntent().getExtras().getBoolean("isGroup");
-            groupID = getIntent().getExtras().getInt("groupID");
-            conversationID = getIntent().getExtras().getInt("conversationID");
-        }
         mProfilePresenter.onCreate();
         if (AppHelper.isAndroid5()) {
             containerProfileInfo.post(() -> AnimationsUtil.show(containerProfileInfo, Duration));

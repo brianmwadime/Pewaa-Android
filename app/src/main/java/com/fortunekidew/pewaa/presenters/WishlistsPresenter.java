@@ -41,9 +41,6 @@ public class WishlistsPresenter implements Presenter {
 
         mWishlistsService = new WishlistsService(realm, wishlistsFragmentView.getActivity(), mApiService);
         mWishlistsService.getWishlists().subscribe(wishlistsFragmentView::ShowWishlist, wishlistsFragmentView::onErrorLoading, wishlistsFragmentView::onHideLoading);
-//        loadDataLocal();
-
-
     }
 
     public void updateWishlistList() {
@@ -75,6 +72,13 @@ public class WishlistsPresenter implements Presenter {
 
     @Override
     public void onRefresh() {
+        APIService mApiService = APIService.with(wishlistsFragmentView.getActivity());
+
+        if (!EventBus.getDefault().isRegistered(wishlistsFragmentView))
+            EventBus.getDefault().register(wishlistsFragmentView);
+
+        mWishlistsService = new WishlistsService(realm, wishlistsFragmentView.getActivity(), mApiService);
+        mWishlistsService.getWishlists().subscribe(wishlistsFragmentView::ShowWishlist, wishlistsFragmentView::onErrorLoading, wishlistsFragmentView::onHideLoading);
     }
 
     @Override

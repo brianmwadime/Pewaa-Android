@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
  */
 
 public class NewContactsActivity extends AppCompatActivity {
+    public static final String RESULT_EXTRA_WISHLIST_ID = "RESULT_EXTRA_WISHLIST_ID";
     @Bind(R.id.ContactsList)
     RecyclerView ContactsList;
     @Bind(R.id.fastscroller)
@@ -56,7 +57,7 @@ public class NewContactsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.title_select_contacts));
+            getSupportActionBar().setTitle(getString(R.string.title_select_contributor));
 
         }
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());

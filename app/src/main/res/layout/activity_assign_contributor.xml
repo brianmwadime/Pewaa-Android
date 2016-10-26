@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2015 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="dismiss"
+    tools:context=".activities.contributors.AssignContributor">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:paddingStart="@dimen/padding_normal"
+        android:paddingTop="@dimen/padding_dialog"
+        android:paddingEnd="@dimen/padding_dialog"
+        android:paddingBottom="@dimen/padding_normal"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:elevation="@dimen/z_fab"
+        android:background="@drawable/dialog_background"
+        android:clickable="true"
+        android:transitionName="@string/transition_contributor_add">
+
+        <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginBottom="@dimen/dialog_title_spacing"
+            android:text="Add Contributor"
+            style="@style/Widget.Pewaa.DialogTitle" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/contributor_dropdown_arrays"
+            android:padding="5dp" />
+
+        <FrameLayout
+            android:id="@+id/actions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_normal">
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/cancel_contributor_button_label"
+                android:textColor="?android:colorAccent"
+                android:onClick="dismiss"
+                style="?android:borderlessButtonStyle" />
+
+            <Button
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/add_contributor_button_label"
+                android:textAppearance="@style/TextAppearance.DarkButton"
+                android:onClick="doAdd" />
+
+        </FrameLayout>
+
+        <include layout="@layout/loading" />
+
+    </LinearLayout>
+
+</FrameLayout>

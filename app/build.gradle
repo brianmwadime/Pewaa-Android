@@ -4,6 +4,7 @@ apply plugin: 'realm-android'
 
 repositories {
     jcenter()
+    mavenCentral()
     maven { url "https://jitpack.io" }
 }
 
@@ -66,13 +67,14 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     def supportLibsVer = "24.2.1"
-    def supportLibsAdsVer = "9.6.1"
+    def supportLibsFirebaseVer = "9.8.0"
     compile "com.android.support:appcompat-v7:$supportLibsVer"
     compile "com.android.support:cardview-v7:$supportLibsVer"
     compile "com.android.support:design:$supportLibsVer"
     compile "com.android.support:recyclerview-v7:$supportLibsVer"
     compile "com.android.support:palette-v7:$supportLibsVer"
-    compile "com.google.android.gms:play-services-ads:$supportLibsAdsVer"
+    compile "com.google.firebase:firebase-core:$supportLibsFirebaseVer"
+    compile "com.google.firebase:firebase-messaging:$supportLibsFirebaseVer"
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.bumptech.glide:glide:3.6.1'
@@ -98,3 +100,5 @@ dependencies {
     compile 'joda-time:joda-time:2.9.4'
     compile 'nl.littlerobots.rxlint:rxlint:1.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

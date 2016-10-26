@@ -6,7 +6,6 @@ import com.fortunekidew.pewaa.api.APIService;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.interfaces.Presenter;
 import com.fortunekidew.pewaa.services.apiServices.ContactsService;
-import com.fortunekidew.pewaa.services.apiServices.GroupsService;
 
 import io.realm.Realm;
 
@@ -34,7 +33,6 @@ public class ProfilePreviewPresenter implements Presenter {
     onCreate() {
         APIService mApiService = APIService.with(view);
         ContactsService mContactsService = new ContactsService(realm, view, mApiService);
-        GroupsService mGroupsService = new GroupsService(realm, view, mApiService);
         if (view.getIntent().hasExtra("userID")) {
             String userID = view.getIntent().getExtras().getString("userID");
 
@@ -46,16 +44,6 @@ public class ProfilePreviewPresenter implements Presenter {
             mContactsService.getContactInfo(userID).subscribe(view::ShowContact, view::onErrorLoading);
 
 
-        }
-
-        if (view.getIntent().hasExtra("groupID")) {
-            int groupID = view.getIntent().getExtras().getInt("groupID");
-            try {
-                mGroupsService.getGroup(groupID).subscribe(view::ShowGroup, AppHelper::LogCat);
-                mGroupsService.getGroupInfo(groupID).subscribe(view::ShowGroup, view::onErrorLoading);
-            } catch (Exception e) {
-                AppHelper.LogCat("Null group info " + e.getMessage());
-            }
         }
     }
 

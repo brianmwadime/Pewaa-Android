@@ -3,8 +3,8 @@ package com.fortunekidew.pewaa.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
 import com.fortunekidew.pewaa.models.groups.MembersGroupModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,6 @@ public class PreferenceManager {
     private static final String MEMBERS_SELECTED = "MEMBERS_SELECTED";
     private static final String USER_PREF = "USER_PREF";
     private static final String ADS_PREF = "ADS_PREF";
-
 
     /**
      * method to set token

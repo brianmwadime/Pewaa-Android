@@ -46,10 +46,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:textAppearance="@style/TextAppearance.PaymentTimestamp"
+        android:textAppearance="@style/TextAppearance.ContributorTimestamp"
         tools:text="3 hours ago" />
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaa.ui.widget.AuthorTextView
         android:id="@+id/contributor_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
         android:layout_marginEnd="@dimen/spacing_normal"
         android:lines="1"
         android:ellipsize="end"
-        android:textAppearance="@style/TextAppearance.PaymentAuthor.Pewaa"
+        android:textAppearance="@style/TextAppearance.ContributorAuthor.Pewaa"
         tools:text="Nick B" />
 
     <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView

@@ -281,6 +281,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
                 WishlistsModel newWishlist = new WishlistsModel();
                 newWishlist.setName(pusher.getWishlistObject().getName());
                 newWishlist.setName(pusher.getWishlistObject().getDescription());
+                newWishlist.setCategory(pusher.getWishlistObject().getCategory());
+                newWishlist.setRecipients(pusher.getWishlistObject().getRecipients());
                 newWishlist.setId(pusher.getWishlistObject().getId());
                 mWishlistsAdapter.addItem(0, newWishlist);
                 break;

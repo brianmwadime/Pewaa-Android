@@ -11,6 +11,7 @@ import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -63,6 +64,8 @@ import static com.fortunekidew.pewaa.services.MainService.mSocket;
 @SuppressLint("SetTextI18n")
 public class WishlistActivity extends Activity implements LoadingData {
 
+    @Bind(R.id.swipeContainer)
+    SwipeRefreshLayout SwipeToRefresh;
     @Bind(R.id.GiftsList)
     RecyclerView GiftsList;
     @Bind(android.R.id.empty)
@@ -120,6 +123,13 @@ public class WishlistActivity extends Activity implements LoadingData {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        SwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mGiftsPresenter.onRefresh();
+            }
+        });
 
     }
 
@@ -200,7 +210,7 @@ public class WishlistActivity extends Activity implements LoadingData {
      * @param giftsModels this is parameter for ShowGifts method
      */
     public void ShowGifts(List<GiftsModel> giftsModels) {
-
+        SwipeToRefresh.setRefreshing(false);
         if (giftsModels.size() != 0) {
             RealmList<GiftsModel> mGiftsList = new RealmList<GiftsModel>();
             for (GiftsModel giftsModel : giftsModels) {
@@ -250,6 +260,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
     @Override
     public void onErrorLoading(Throwable throwable) {
+        SwipeToRefresh.setRefreshing(false);
         loading.setVisibility(View.GONE);
         GiftsList.setVisibility(View.GONE);
         EmptyGiftslists.setVisibility(View.VISIBLE);

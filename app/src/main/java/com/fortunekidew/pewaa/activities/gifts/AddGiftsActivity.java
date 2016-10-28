@@ -215,7 +215,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
         RequestBody newName = RequestBody.create(MediaType.parse("multipart/form-data"), EditName.getText().toString().trim());
         RequestBody newDescription = RequestBody.create(MediaType.parse("multipart/form-data"), EditDescription.getText().toString().trim());
-
+//        RequestBody newDescription = RequestBody.create(MediaType.parse("multipart/form-data"), EditDescription.getText().toString().trim());
         float newPrice = Float.parseFloat(EditPrice.getText().toString().trim());
 
         APIGifts mApiGift = mApiService.RootService(APIGifts.class, PreferenceManager.getToken(AddGiftsActivity.this), EndPoints.BASE_URL);

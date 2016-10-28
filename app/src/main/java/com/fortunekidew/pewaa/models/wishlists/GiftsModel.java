@@ -1,7 +1,10 @@
 package com.fortunekidew.pewaa.models.wishlists;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+import io.realm.GiftsModelRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -9,25 +12,34 @@ import io.realm.annotations.PrimaryKey;
  * Created by Brian Mwakima on 10/6/16.
  */
 
+@Parcel(implementations = { GiftsModelRealmProxy.class },
+        value = Parcel.Serialization.BEAN,
+        analyze = { GiftsModel.class })
 public class GiftsModel extends RealmObject {
     @PrimaryKey
-    private String id;
+    public String id;
 
-    private String name;
+    public String name;
 
-    private float price;
+    public float price;
 
-    private String wishlist_id;
+    public String wishlist_id;
 
-    private  String description;
+    public  String description;
 
-    private  String avatar;
+    public  String avatar;
 
-    private String code;
+    public String code;
 
-    private Date created_on;
+    public Date created_on;
 
-    private Date updated_on;
+    public Date updated_on;
+
+    private String creator_name;
+
+    private String creator_avatar;
+
+    private String creator_phone;
 
     public Date getUpdatedOn() {
         return updated_on;
@@ -99,5 +111,29 @@ public class GiftsModel extends RealmObject {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getCreatorName() {
+        return creator_name;
+    }
+
+    public void setCreatorName(String name) {
+        this.creator_name = name;
+    }
+
+    public String getCreatorAvatar() {
+        return creator_avatar;
+    }
+
+    public void setCreatorAvatar(String avatar) {
+        this.creator_avatar = avatar;
+    }
+
+    public String getCreatorPhone() {
+        return creator_phone;
+    }
+
+    public void setCreatorPhone(String phone) {
+        this.creator_phone = phone;
     }
 }

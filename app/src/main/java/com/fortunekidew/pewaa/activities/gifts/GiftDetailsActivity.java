@@ -37,6 +37,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaa.BuildConfig;
 import com.fortunekidew.pewaa.R;
+import com.fortunekidew.pewaa.activities.profile.ProfileActivity;
 import com.fortunekidew.pewaa.api.APIContributor;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.app.PewaaApplication;
@@ -44,6 +45,7 @@ import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.interfaces.LoadingData;
 import com.fortunekidew.pewaa.models.payments.EditPayments;
 import com.fortunekidew.pewaa.models.wishlists.ContributorsModel;
+import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaa.ui.recyclerview.InsetDividerDecoration;
 import com.fortunekidew.pewaa.ui.recyclerview.SlideInItemAnimator;
 import com.fortunekidew.pewaa.ui.widget.AuthorTextView;
@@ -55,6 +57,8 @@ import com.fortunekidew.pewaa.util.TransitionUtils;
 import com.fortunekidew.pewaa.util.ViewUtils;
 import com.fortunekidew.pewaa.util.glide.CircleTransform;
 import com.fortunekidew.pewaa.util.glide.GlideUtils;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +75,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.fortunekidew.pewaa.app.EndPoints.ASSETS_BASE_URL;
 import static com.fortunekidew.pewaa.app.EndPoints.BASE_URL;
 import static com.fortunekidew.pewaa.util.AnimUtils.getFastOutSlowInInterpolator;
 
@@ -81,6 +86,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     public final static String RESULT_EXTRA_GIFT_DESC = "RESULT_EXTRA_GIFT_DESC";
     public final static String RESULT_EXTRA_GIFT_IMAGE = "RESULT_EXTRA_GIFT_IMAGE";
     public static final String RESULT_EXTRA_GIFT_PRICE = "RESULT_EXTRA_GIFT_PRICE";
+    public static final String EXTRA_GIFT = "EXTRA_GIFT";
     private static final float SCRIM_ADJUSTMENT = 0.075f;
 
     @Bind(R.id.draggable_frame)
@@ -105,6 +111,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     private View contributorFooter;
     private APIContributor api;
     private ContributorsAdapter adapter;
+    private GiftsModel gift;
 
     private CircleTransform circleTransform;
     private ElasticDragDismissFrameLayout.SystemChromeFader chromeFader;
@@ -138,6 +145,10 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_DESC)) {
                 giftDesc = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_DESC);
+            }
+
+            if (getIntent().hasExtra(EXTRA_GIFT)) {
+                gift = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_GIFT));
             }
         }
 
@@ -199,6 +210,50 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             description.setVisibility(View.GONE);
         }
 
+        if (gift != null) {
+            if (gift.getCreatorName() != null) {
+                ownerName.setText(gift.getCreatorName().toLowerCase());
+            } else {
+                ownerName.setText("N/A");
+            }
+
+
+            Glide.with(this)
+                    .load(ASSETS_BASE_URL + gift.getCreatorAvatar())
+                    .transform(circleTransform)
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .override(largeAvatarSize, largeAvatarSize)
+                    .into(ownerAvatar);
+            View.OnClickListener playerClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent player = new Intent(GiftDetailsActivity.this, ProfileActivity.class);
+//                    if (shot.user.shots_count > 0) { // legit user object
+//                        player.putExtra(PlayerActivity.EXTRA_PLAYER, shot.user);
+//                    } else {
+//                        // search doesn't fully populate the user object,
+//                        // in this case send the ID not the full user
+//                        player.putExtra(PlayerActivity.EXTRA_PLAYER_NAME, shot.user.username);
+//                        player.putExtra(PlayerActivity.EXTRA_PLAYER_ID, shot.user.id);
+//                    }
+//                    ActivityOptions options =
+//                            ActivityOptions.makeSceneTransitionAnimation(GiftDetailsActivity.this,
+//                                    playerAvatar, getString(R.string.transition_player_avatar));
+//                    startActivity(player, options.toBundle());
+                }
+            };
+//            playerAvatar.setOnClickListener(playerClick);
+//            playerName.setOnClickListener(playerClick);
+            if (gift.getCreatedOn() != null) {
+                giftTimeAgo.setText(DateUtils.getRelativeTimeSpanString(gift.getCreatedOn().getTime(),
+                        System.currentTimeMillis(),
+                        DateUtils.SECOND_IN_MILLIS).toString().toLowerCase());
+            }
+        } else {
+            ownerName.setVisibility(View.GONE);
+            ownerAvatar.setVisibility(View.GONE);
+            giftTimeAgo.setVisibility(View.GONE);
+        }
 
         ContributorAnimator contributorAnimator = new ContributorAnimator();
         contributorsList.setItemAnimator(contributorAnimator);

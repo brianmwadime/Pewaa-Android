@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton AddWishlistFab;
     @Bind(R.id.toolbar_progress_bar)
     ProgressBar toolbarProgressBar;
-    private EventBus eventBus = EventBus.getDefault();
     // authority for sync adapter's content provider
     private static final String AUTHORITY = "com.android.contacts";
     // sync interval
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupAccountInstance();
         startPeriodicSync();
-        eventBus.register(this);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         initializerView();
         setupToolbar();
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        eventBus.unregister(this);
+        EventBus.getDefault().unregister(this);
 //        DisConnectFromServer();
     }
 

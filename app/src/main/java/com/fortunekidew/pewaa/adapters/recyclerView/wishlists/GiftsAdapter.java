@@ -45,6 +45,8 @@ import com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView;
 import com.fortunekidew.pewaa.util.ObservableColorMatrix;
 import com.fortunekidew.pewaa.util.glide.PewaaTarget;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -234,6 +236,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_TITLE, GiftsModel.getName());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_DESC, GiftsModel.getDescription());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_PRICE, GiftsModel.getPrice());
+                    gift.putExtra(GiftDetailsActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, GiftsModel));
 
                     ActivityOptions options =
                             ActivityOptions.makeSceneTransitionAnimation(mActivity,

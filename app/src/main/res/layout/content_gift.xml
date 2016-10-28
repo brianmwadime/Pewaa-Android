@@ -7,20 +7,23 @@
     android:orientation="vertical"
     android:background="@color/viewBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity"
-    tools:showIn="@layout/activity_gift">
+    tools:context="com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity">
 
-    <include layout="@layout/gift_title" />
+    <include layout="@layout/content_gift_description" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/avatar_margin" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/gift_contributors"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/padding_normal"
         android:clipToPadding="false"
-        android:scrollbars="vertical" />
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
 </LinearLayout>

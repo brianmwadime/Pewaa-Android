@@ -9,10 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.fortunekidew.pewaa.R;
@@ -29,6 +31,7 @@ import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
 import com.fortunekidew.pewaa.models.wishlists.EditWishlist;
 import com.fortunekidew.pewaa.presenters.EditWishlistPresenter;
+import com.fortunekidew.pewaa.ui.LabelledSpinner;
 
 import java.io.File;
 
@@ -47,19 +50,30 @@ import retrofit2.Response;
  */
 
 @SuppressLint("SetTextI18n")
-public class AddWishlistsActivity extends AppCompatActivity implements LoadingData {
+public class AddWishlistsActivity extends AppCompatActivity implements LoadingData, LabelledSpinner.OnItemChosenListener {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    @Bind(R.id.spinner)
+    LabelledSpinner CategorySpinner;
     @Bind(R.id.edit_wishlist_name)
     EditText EditName;
+    @Bind(R.id.edit_name_wrapper)
+    TextInputLayout name_wrapper;
 
     @Bind(R.id.edit_wishlist_description)
     EditText EditDescription;
+    @Bind(R.id.edit_description_wrapper)
+    TextInputLayout description_wrapper;
+
+    @Bind(R.id.edit_wishlist_recipient)
+    EditText EditRecipients;
+    @Bind(R.id.edit_recipient_wrapper)
+    TextInputLayout recipientWrapper;
 
     private ActionMode actionMode;
-    private String FileImagePath, FileSize;
+    private String FileImagePath, FileSize, mCategory;
     private APIService mApiService;
 
     private EditWishlistPresenter mEditWishlistPresenter = new EditWishlistPresenter(this);
@@ -82,8 +96,34 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
      * method to initialize the view
      */
     private void initializerView() {
-
+        CategorySpinner.setItemsArray(R.array.wishlist_categories_arrays);
+        CategorySpinner.setDefaultErrorEnabled(true);
+        CategorySpinner.setDefaultErrorText("Please select a category.");  // Displayed when first item remains selected
+        CategorySpinner.setOnItemChosenListener(this);
         mApiService = new APIService(this);
+
+        CategorySpinner.requestFocus();
+
+        EditName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                name_wrapper.setErrorEnabled(false);
+            }
+        });
+
+        EditRecipients.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                recipientWrapper.setErrorEnabled(false);
+            }
+        });
+
+        EditDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                description_wrapper.setErrorEnabled(false);
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -203,15 +243,35 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
     @OnClick(R.id.action_save)
     public void saveWishlist(View view) {
         String newName = EditName.getText().toString().trim();
+        String newRecipients = EditRecipients.getText().toString().trim();
         String newDescription = EditDescription.getText().toString().trim();
 
-        if (newName.isEmpty())
+        if (newName.isEmpty()) {
+            name_wrapper.setError("Please enter a name");
             return;
+        }
+
+
+        if (newRecipients.isEmpty()) {
+            recipientWrapper.setError("Please enter recipient(s)");
+            return;
+        }
+
+
+        if (newDescription.isEmpty()) {
+            name_wrapper.setError("Please add a description");
+            return;
+        }
+
+
+
 
         APIWishlists mApiWishlists = mApiService.RootService(APIWishlists.class, PreferenceManager.getToken(AddWishlistsActivity.this), EndPoints.BASE_URL);
         AddWishlistsActivity.this.runOnUiThread(() -> AppHelper.showDialog(AddWishlistsActivity.this, "Adding Wishlist..."));
         EditWishlist newWishlist = new EditWishlist();
         newWishlist.setName(newName);
+        newWishlist.setRecipients(newRecipients);
+        newWishlist.setCategory(mCategory);
         newWishlist.setDescription(newDescription);
         Call<StatusResponse> statusResponseCall = mApiWishlists.editWishlist(newWishlist);
         statusResponseCall.enqueue(new Callback<StatusResponse>() {
@@ -223,6 +283,9 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
                     newWishlist.setId(response.body().getId());
 
                     EventBus.getDefault().post(new Pusher("new_wishlist", newWishlist));
+
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
                 } else {
                     AppHelper.CustomToast(AddWishlistsActivity.this, response.message());
@@ -242,6 +305,16 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
     @OnClick(R.id.action_discard)
     public void onBackPress(View view) {
         onBackPressed();
+    }
+
+    @Override
+    public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
+        mCategory = adapterView.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
+
     }
 }
 

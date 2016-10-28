@@ -8,10 +8,16 @@ public class EditWishlist {
     private String name;
     private String id;
     private String description;
+    private String recipient;
+    private String category;
 
 
     public String getName() {
         return name;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public String getId() {
@@ -26,12 +32,24 @@ public class EditWishlist {
         this.name = name;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRecipients() {
+        return recipient;
+    }
+
+    public void setRecipients(String recipients) {
+        this.recipient = recipients;
     }
 
 }

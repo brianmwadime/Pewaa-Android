@@ -23,8 +23,6 @@ import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;
 import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.util.List;
@@ -190,35 +188,19 @@ public class MediaProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         void setMediaVideoThumbnail(String ImageUrl, String userId, String name) {
             if (FilesManager.isFileImagesOtherExists(FilesManager.getOthersSentImage(userId, name))) {
-                Picasso.with(mActivity)
+                Glide.with(mActivity)
                         .load(FilesManager.getFileImageOther(userId, name))
-                        .resize(100, 100)
+                        .override(100, 100)
                         .centerCrop()
                         .into(mediaVideoThumbnail);
             } else {
-                Target target = new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        mediaVideoThumbnail.setImageBitmap(bitmap);
-                        FilesManager.downloadFilesToDevice(mActivity, ImageUrl, userId, name, "other");
-                    }
 
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        mediaVideoThumbnail.setImageDrawable(errorDrawable);
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        mediaVideoThumbnail.setImageDrawable(placeHolderDrawable);
-                    }
-                };
-                Picasso.with(mActivity)
+                Glide.with(mActivity)
                         .load(EndPoints.BASE_URL + ImageUrl)
-                        .resize(100, 100)
+                        .override(100, 100)
                         .centerCrop()
                         .placeholder(mediaVideoThumbnail.getDrawable())
-                        .into(target);
+                        .into(mediaVideoThumbnail);
             }
 
         }

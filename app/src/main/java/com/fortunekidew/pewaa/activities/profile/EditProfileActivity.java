@@ -30,10 +30,6 @@ import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
 import com.fortunekidew.pewaa.presenters.EditProfilePresenter;
-import com.fortunekidew.pewaa.ui.CropSquareTransformation;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -162,22 +158,22 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
         }
         if (mContactsModel.getImage() != null) {
             if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))) {
-                Picasso.with(this)
-                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))
-                        .transform(new CropSquareTransformation())
-                        .resize(200, 200)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .into(userAvatar);
+//                Picasso.with(this)
+//                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))
+//                        .transform(new CropSquareTransformation())
+//                        .resize(200, 200)
+//                        .networkPolicy(NetworkPolicy.NO_CACHE)
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                        .into(userAvatar);
             } else {
 
-                Picasso.with(this)
-                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-                        .transform(new CropSquareTransformation())
-                        .resize(200, 200)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .into(userAvatar);
+//                Picasso.with(this)
+//                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
+//                        .transform(new CropSquareTransformation())
+//                        .resize(200, 200)
+//                        .networkPolicy(NetworkPolicy.NO_CACHE)
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                        .into(userAvatar);
             }
         } else {
 
@@ -295,14 +291,14 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
      */
     public void setImage(String path) {
         if (path != null) {
-            Picasso.with(this)
-                    .load(path)
-                    .transform(new CropSquareTransformation())
-                    .resize(400, 400)
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .centerCrop()
-                    .into(userAvatar);
+//            Picasso.with(this)
+//                    .load(path)
+//                    .transform(new CropSquareTransformation())
+//                    .resize(400, 400)
+//                    .networkPolicy(NetworkPolicy.NO_CACHE)
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                    .centerCrop()
+//                    .into(userAvatar);
         } else {
             userAvatar.setPadding(2, 2, 2, 2);
             userAvatar.setImageResource(R.drawable.ic_user_holder_white_48dp);

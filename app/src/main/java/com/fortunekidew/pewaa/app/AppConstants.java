@@ -37,15 +37,12 @@ public class AppConstants {
     public static final int PERMISSION_REQUEST_CODE = 0x009;
 
     /**
-     * Chat socket constants (be careful if u want to change them !!)
+     * Contributor constants
      */
 
-    //user socket constants:
-    public static final int STATUS_USER_TYPING = 0x010;
-    public static final int STATUS_USER_STOP_TYPING = 0x011;
-    public static final int STATUS_USER_CONNECTED = 0x012;
-    public static final int STATUS_USER_DISCONNECTED = 0x013;
-    public static final int STATUS_USER_LAST_SEEN = 0x014;
+    //contributor constants:
+    public static final int STATUS_CONTRIBUTOR_ADDED = 0x010;
+    public static final int STATUS_CONTRIBUTOR_ADDED_SUCCESS = 0x011;
 
 
     //single user socket constants:

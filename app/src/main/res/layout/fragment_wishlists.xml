@@ -66,17 +66,4 @@
             tools:listitem="@layout/row_wishlist" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addWishlistFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end|right"
-        pressedTranslationZ="6dp"
-        app:backgroundTint="@color/colorPinkDark"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

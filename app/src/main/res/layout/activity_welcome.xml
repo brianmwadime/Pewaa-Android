@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        app:popupTheme="@style/Pewaa.PopupOverlay">
 
         <TextView
             android:layout_width="0dp"

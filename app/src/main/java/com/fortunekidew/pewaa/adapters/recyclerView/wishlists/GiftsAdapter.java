@@ -1,11 +1,17 @@
 package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.SharedElementCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -17,6 +23,7 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +31,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaa.api.APIService;
@@ -31,11 +42,15 @@ import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView;
+import com.fortunekidew.pewaa.util.ObservableColorMatrix;
 import com.fortunekidew.pewaa.util.glide.PewaaTarget;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,11 +59,14 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.socket.client.Socket;
 
+import static com.fortunekidew.pewaa.util.AnimUtils.getFastOutSlowInInterpolator;
+
 /**
  * Created by Abderrahim El imame on 20/02/2016.
  * Email : abderrahim.elimame@gmail.com
  */
 public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int REQUEST_CODE_VIEW_GIFT = 5407;
     protected final Activity mActivity;
     private RealmList<GiftsModel> mGifts;
     private Realm realm;
@@ -207,23 +225,25 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 GiftViewHolder.setGiftDate(GiftsModel.getCreatedOn());
 
-                GiftViewHolder.setGiftImage(GiftsModel.getAvatar());
+                GiftViewHolder.setGiftImage(GiftsModel.getAvatar(), position);
 
                 GiftViewHolder.setOnClickListener(view -> {
 
-                    Intent gift = new Intent(mActivity, GiftDetailsActivity.class);
+                    Intent gift = new Intent();
+                    gift.setClass(mActivity, GiftDetailsActivity.class);
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID, GiftsModel.getId());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_IMAGE, GiftsModel.getAvatar());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_TITLE, GiftsModel.getName());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_DESC, GiftsModel.getDescription());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_PRICE, GiftsModel.getPrice());
+                    gift.putExtra(GiftDetailsActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, GiftsModel));
 
                     ActivityOptions options =
                             ActivityOptions.makeSceneTransitionAnimation(mActivity,
-                                    GiftViewHolder.GiftImage, mActivity.getString(R.string.transition_gift_avatar));
+                                    Pair.create(view, mActivity.getString(R.string.transition_gift_avatar)),
+                                    Pair.create(view, mActivity.getString(R.string.transition_gift_background)));
 
-                    mActivity.startActivity(gift, options.toBundle());
-//                    mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    mActivity.startActivityForResult(gift, REQUEST_CODE_VIEW_GIFT, options.toBundle());
                 });
             } catch (Exception e) {
                 AppHelper.LogCat("Gifts Adapter  Exception" + e.getMessage());
@@ -305,15 +325,60 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
 
-        void setGiftImage(String ImageUrl) {
+        void setGiftImage(String ImageUrl, int position) {
 
             Glide.with(mActivity)
                     .load(EndPoints.ASSETS_BASE_URL + ImageUrl)
-                    .placeholder(giftLoadingPlaceholders[3 % giftLoadingPlaceholders.length])
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource,
+                                                       String model,
+                                                       Target<GlideDrawable> target,
+                                                       boolean isFromMemoryCache,
+                                                       boolean isFirstResource) {
+//                            if (!shot.hasFadedIn) {
+                                GiftImage.setHasTransientState(true);
+                                final ObservableColorMatrix cm = new ObservableColorMatrix();
+                                final ObjectAnimator saturation = ObjectAnimator.ofFloat(
+                                        cm, ObservableColorMatrix.SATURATION, 0f, 1f);
+                                saturation.addUpdateListener(valueAnimator -> {
+                                    // just animating the color matrix does not invalidate the
+                                    // drawable so need this update listener.  Also have to create a
+                                    // new CMCF as the matrix is immutable :(
+                                    GiftImage.setColorFilter(new ColorMatrixColorFilter(cm));
+                                });
+                                saturation.setDuration(2000L);
+                                saturation.setInterpolator(getFastOutSlowInInterpolator(mActivity));
+                                saturation.addListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        GiftImage.clearColorFilter();
+                                        GiftImage.setHasTransientState(false);
+                                    }
+                                });
+                                saturation.start();
+//                                shot.hasFadedIn = true;
+//                            }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable>
+                                target, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .placeholder(giftLoadingPlaceholders[position % giftLoadingPlaceholders.length])
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .fitCenter()
                     .override(NORMAL_IMAGE_SIZE[0], NORMAL_IMAGE_SIZE[1])
 
                     .into(new PewaaTarget(GiftImage, false));
+            // need both placeholder & background to prevent seeing through shot as it fades in
+            GiftImage.setBackground(
+                    giftLoadingPlaceholders[position % giftLoadingPlaceholders.length]);
+            // need a unique transition name per shot, let's use it's url
+            GiftImage.setTransitionName(EndPoints.ASSETS_BASE_URL + ImageUrl);
 
         }
 
@@ -343,5 +408,34 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GiftImage.setOnClickListener(listener);
         }
 
+    }
+
+    public static SharedElementCallback createSharedElementReenterCallback(
+            @NonNull Context context) {
+        final String giftTransitionName = context.getString(R.string.transition_gift_avatar);
+        final String giftBackgroundTransitionName =
+                context.getString(R.string.transition_gift_background);
+        return new SharedElementCallback() {
+
+            /**
+             * We're performing a slightly unusual shared element transition i.e. from one view
+             * (image in the grid) to two views (the image & also the background of the details
+             * view, to produce the expand effect). After changing orientation, the transition
+             * system seems unable to map both shared elements (only seems to map the shot, not
+             * the background) so in this situation we manually map the background to the
+             * same view.
+             */
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                if (sharedElements.size() != names.size()) {
+                    // couldn't map all shared elements
+                    final View sharedGift = sharedElements.get(giftTransitionName);
+                    if (sharedGift != null) {
+                        // has shot so add shot background, mapped to same view
+                        sharedElements.put(giftBackgroundTransitionName, sharedGift);
+                    }
+                }
+            }
+        };
     }
 }

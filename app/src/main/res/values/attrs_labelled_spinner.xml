@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<declare-styleable name="LabelledSpinner" >
+
+    <!-- The text that is displayed on the floating label -->
+    <attr name="labelText" format="string" />
+    <!-- Specifies the color of the label and the bottom line -->
+    <attr name="widgetColor" format="color" />
+
+    <!-- Sets the array to be displayed on the Spinner -->
+    <attr name="spinnerEntries" format="reference" />
+
+    <!-- Controls whether an error is shown if the first item (which
+    would be a prompt) is selected and has not been changed -->
+    <attr name="defaultErrorEnabled" format="boolean" />
+
+</declare-styleable>
+</resources>

@@ -2,8 +2,6 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
-    android:layout_gravity="top"
-    android:layout_marginBottom="10dp"
     app:cardCornerRadius="0dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -16,8 +14,8 @@
         <com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView
             android:id="@+id/gift_image"
             android:layout_width="match_parent"
-            android:layout_gravity="top"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:transitionName="@string/transition_gift_avatar"
             android:stateListAnimator="@animator/raise"
             android:foreground="@drawable/mid_grey_ripple"/>

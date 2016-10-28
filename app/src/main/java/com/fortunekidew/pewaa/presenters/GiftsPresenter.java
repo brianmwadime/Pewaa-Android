@@ -69,6 +69,14 @@ public class GiftsPresenter implements Presenter {
 
     @Override
     public void onRefresh() {
+        APIService mApiService = APIService.with(view.getApplicationContext());
+
+        if (view.getIntent().hasExtra("wishlistID")) {
+            wishlistID = view.getIntent().getExtras().getString("wishlistID");
+        }
+
+        mWishlistsService = new WishlistsService(realm, view.getApplicationContext(), mApiService);
+        mWishlistsService.getGifts(wishlistID).subscribe(view::ShowGifts, view::onErrorLoading, view::onHideLoading);
     }
 
     @Override

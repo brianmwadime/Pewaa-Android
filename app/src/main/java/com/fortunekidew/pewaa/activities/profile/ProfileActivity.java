@@ -5,8 +5,6 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,7 +16,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,9 +30,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fortunekidew.pewaa.R;
+import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.activities.groups.AddNewMembersToGroupActivity;
 import com.fortunekidew.pewaa.activities.main.MainActivity;
-import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.adapters.recyclerView.MediaProfileAdapter;
 import com.fortunekidew.pewaa.adapters.recyclerView.groups.GroupMembersAdapter;
 import com.fortunekidew.pewaa.animations.AnimationsUtil;
@@ -53,14 +50,12 @@ import com.fortunekidew.pewaa.helpers.UtilsTime;
 import com.fortunekidew.pewaa.models.groups.GroupResponse;
 import com.fortunekidew.pewaa.models.groups.GroupsModel;
 import com.fortunekidew.pewaa.models.groups.MembersGroupModel;
-import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
-import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
 import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
+import com.fortunekidew.pewaa.models.wishlists.MessagesModel;
+import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
 import com.fortunekidew.pewaa.presenters.ProfilePresenter;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.joda.time.DateTime;
 
@@ -308,7 +303,7 @@ public class ProfileActivity extends AppCompatActivity {
                 enterTrans.setDuration(300);
             }
             finish();
-        } else if (item.getItemId() == R.id.add_contact) {
+        } else if (item.getItemId() == R.id.add_contributor) {
             Intent mIntent = new Intent(this, AddNewMembersToGroupActivity.class);
             mIntent.putExtra("groupID", groupID);
             mIntent.putExtra("profileAdd", "add");
@@ -383,102 +378,102 @@ public class ProfileActivity extends AppCompatActivity {
                 if (mGroupsModel.getGroupImage() != null) {
                     String groupId = String.valueOf(mGroupsModel.getId());
                     if (FilesManager.isFileImagesGroupExists(FilesManager.getGroupImage(groupId, mGroupsModel.getGroupName()))) {
-                        Target target = new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-                                Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
-                                    UserCover.setImageBitmap(bitmap);
-                                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                                    Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-                                    if (vibrantSwatch != null)
-                                        mutedColor = vibrantSwatch.getRgb();
-                                    else
-                                        mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
-                                    collapsingToolbar.setContentScrimColor(mutedColor);
-                                    if (darkVibrantSwatch != null)
-                                        mutedColorStatusBar = darkVibrantSwatch.getRgb();
-                                    else
-                                        mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
-
-                                    if (AppHelper.isAndroid5()) {
-                                        getWindow().setStatusBarColor(mutedColorStatusBar);
-                                    }
-
-
-                                });
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-                                UserCover.setImageDrawable(errorDrawable);
-                                mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
-                                collapsingToolbar.setContentScrimColor(mutedColor);
-                                mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
-                                if (AppHelper.isAndroid5()) {
-                                    getWindow().setStatusBarColor(mutedColorStatusBar);
-                                }
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                UserCover.setImageDrawable(placeHolderDrawable);
-                            }
-                        };
-                        Picasso.with(this)
-                                .load(FilesManager.getFileImageGroup(groupId, mGroupsModel.getGroupName()))
-                                .resize(500, 500)
-                                .centerCrop()
-                                .into(target);
+//                        Target target = new Target() {
+//                            @Override
+//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//
+//                                Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
+//                                    UserCover.setImageBitmap(bitmap);
+//                                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+//                                    Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+//                                    if (vibrantSwatch != null)
+//                                        mutedColor = vibrantSwatch.getRgb();
+//                                    else
+//                                        mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
+//                                    collapsingToolbar.setContentScrimColor(mutedColor);
+//                                    if (darkVibrantSwatch != null)
+//                                        mutedColorStatusBar = darkVibrantSwatch.getRgb();
+//                                    else
+//                                        mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
+//
+//                                    if (AppHelper.isAndroid5()) {
+//                                        getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                    }
+//
+//
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onBitmapFailed(Drawable errorDrawable) {
+//                                UserCover.setImageDrawable(errorDrawable);
+//                                mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
+//                                collapsingToolbar.setContentScrimColor(mutedColor);
+//                                mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
+//                                if (AppHelper.isAndroid5()) {
+//                                    getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                UserCover.setImageDrawable(placeHolderDrawable);
+//                            }
+//                        };
+//                        Picasso.with(this)
+//                                .load(FilesManager.getFileImageGroup(groupId, mGroupsModel.getGroupName()))
+//                                .resize(500, 500)
+//                                .centerCrop()
+//                                .into(target);
 
                     } else {
                         if (mGroupsModel.getGroupImage() != null) {
 
-                            Target target = new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
-                                        UserCover.setImageBitmap(bitmap);
-                                        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                                        Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-                                        if (vibrantSwatch != null)
-                                            mutedColor = vibrantSwatch.getRgb();
-                                        else
-                                            mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
-                                        collapsingToolbar.setContentScrimColor(mutedColor);
-                                        if (darkVibrantSwatch != null)
-                                            mutedColorStatusBar = darkVibrantSwatch.getRgb();
-                                        else
-                                            mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
-                                        if (AppHelper.isAndroid5()) {
-                                            getWindow().setStatusBarColor(mutedColorStatusBar);
-                                        }
-
-
-                                    });
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    UserCover.setImageDrawable(errorDrawable);
-                                    mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
-                                    collapsingToolbar.setContentScrimColor(mutedColor);
-                                    mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
-                                    if (AppHelper.isAndroid5()) {
-                                        getWindow().setStatusBarColor(mutedColorStatusBar);
-                                    }
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                    UserCover.setImageDrawable(placeHolderDrawable);
-                                }
-                            };
-                            Picasso.with(this)
-                                    .load(EndPoints.BASE_URL + mGroupsModel.getGroupImage())
-                                    .resize(500, 500)
-                                    .centerCrop()
-                                    .into(target);
+//                            Target target = new Target() {
+//                                @Override
+//                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                    Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
+//                                        UserCover.setImageBitmap(bitmap);
+//                                        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+//                                        Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+//                                        if (vibrantSwatch != null)
+//                                            mutedColor = vibrantSwatch.getRgb();
+//                                        else
+//                                            mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
+//                                        collapsingToolbar.setContentScrimColor(mutedColor);
+//                                        if (darkVibrantSwatch != null)
+//                                            mutedColorStatusBar = darkVibrantSwatch.getRgb();
+//                                        else
+//                                            mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
+//                                        if (AppHelper.isAndroid5()) {
+//                                            getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                        }
+//
+//
+//                                    });
+//                                }
+//
+//                                @Override
+//                                public void onBitmapFailed(Drawable errorDrawable) {
+//                                    UserCover.setImageDrawable(errorDrawable);
+//                                    mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
+//                                    collapsingToolbar.setContentScrimColor(mutedColor);
+//                                    mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
+//                                    if (AppHelper.isAndroid5()) {
+//                                        getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                    UserCover.setImageDrawable(placeHolderDrawable);
+//                                }
+//                            };
+//                            Picasso.with(this)
+//                                    .load(EndPoints.BASE_URL + mGroupsModel.getGroupImage())
+//                                    .resize(500, 500)
+//                                    .centerCrop()
+//                                    .into(target);
                         } else {
                             UserCover.setPadding(100, 100, 100, 100);
                             UserCover.setBackground(AppHelper.getDrawable(ProfileActivity.this, R.drawable.bg_rect_group_image_holder));
@@ -532,100 +527,100 @@ public class ProfileActivity extends AppCompatActivity {
                     String userId = String.valueOf(mContactsModel.getId());
                     if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(userId, mContactsModel.getUsername()))) {
 
-                        Target target = new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
-                                    UserCover.setImageBitmap(bitmap);
-                                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                                    Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-                                    if (vibrantSwatch != null)
-                                        mutedColor = vibrantSwatch.getRgb();
-                                    else
-                                        mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
-                                    collapsingToolbar.setContentScrimColor(mutedColor);
-                                    if (darkVibrantSwatch != null)
-                                        mutedColorStatusBar = darkVibrantSwatch.getRgb();
-                                    else
-                                        mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
-
-                                    if (AppHelper.isAndroid5()) {
-                                        getWindow().setStatusBarColor(mutedColorStatusBar);
-                                    }
-
-
-                                });
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-                                UserCover.setImageDrawable(errorDrawable);
-                                mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
-                                collapsingToolbar.setContentScrimColor(mutedColor);
-                                mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
-                                if (AppHelper.isAndroid5()) {
-                                    getWindow().setStatusBarColor(mutedColorStatusBar);
-                                }
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                UserCover.setImageDrawable(placeHolderDrawable);
-                            }
-                        };
-                        Picasso.with(this)
-                                .load(FilesManager.getFileImageProfile(userId, mContactsModel.getUsername()))
-                                .resize(500, 500)
-                                .centerCrop()
-                                .into(target);
+//                        Target target = new Target() {
+//                            @Override
+//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
+//                                    UserCover.setImageBitmap(bitmap);
+//                                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+//                                    Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+//                                    if (vibrantSwatch != null)
+//                                        mutedColor = vibrantSwatch.getRgb();
+//                                    else
+//                                        mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
+//                                    collapsingToolbar.setContentScrimColor(mutedColor);
+//                                    if (darkVibrantSwatch != null)
+//                                        mutedColorStatusBar = darkVibrantSwatch.getRgb();
+//                                    else
+//                                        mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
+//
+//                                    if (AppHelper.isAndroid5()) {
+//                                        getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                    }
+//
+//
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onBitmapFailed(Drawable errorDrawable) {
+//                                UserCover.setImageDrawable(errorDrawable);
+//                                mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
+//                                collapsingToolbar.setContentScrimColor(mutedColor);
+//                                mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
+//                                if (AppHelper.isAndroid5()) {
+//                                    getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                }
+//
+//                            }
+//
+//                            @Override
+//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                UserCover.setImageDrawable(placeHolderDrawable);
+//                            }
+//                        };
+//                        Picasso.with(this)
+//                                .load(FilesManager.getFileImageProfile(userId, mContactsModel.getUsername()))
+//                                .resize(500, 500)
+//                                .centerCrop()
+//                                .into(target);
 
                     } else {
                         if (mContactsModel.getImage() != null) {
-                            Target target = new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
-                                        UserCover.setImageBitmap(bitmap);
-                                        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                                        Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-                                        if (vibrantSwatch != null)
-                                            mutedColor = vibrantSwatch.getRgb();
-                                        else
-                                            mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
-                                        collapsingToolbar.setContentScrimColor(mutedColor);
-                                        if (darkVibrantSwatch != null)
-                                            mutedColorStatusBar = darkVibrantSwatch.getRgb();
-                                        else
-                                            mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
-
-                                        if (AppHelper.isAndroid5()) {
-                                            getWindow().setStatusBarColor(mutedColorStatusBar);
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    UserCover.setImageDrawable(errorDrawable);
-                                    mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
-                                    collapsingToolbar.setContentScrimColor(mutedColor);
-                                    mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
-                                    if (AppHelper.isAndroid5()) {
-                                        getWindow().setStatusBarColor(mutedColorStatusBar);
-                                    }
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                    UserCover.setImageDrawable(placeHolderDrawable);
-                                }
-                            };
-                            Picasso.with(this)
-                                    .load(EndPoints.BASE_URL + mContactsModel.getImage())
-                                    .resize(500, 500)
-                                    .centerCrop()
-                                    .into(target);
+//                            Target target = new Target() {
+//                                @Override
+//                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                    Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
+//                                        UserCover.setImageBitmap(bitmap);
+//                                        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+//                                        Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+//                                        if (vibrantSwatch != null)
+//                                            mutedColor = vibrantSwatch.getRgb();
+//                                        else
+//                                            mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
+//                                        collapsingToolbar.setContentScrimColor(mutedColor);
+//                                        if (darkVibrantSwatch != null)
+//                                            mutedColorStatusBar = darkVibrantSwatch.getRgb();
+//                                        else
+//                                            mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
+//
+//                                        if (AppHelper.isAndroid5()) {
+//                                            getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                        }
+//                                    });
+//                                }
+//
+//                                @Override
+//                                public void onBitmapFailed(Drawable errorDrawable) {
+//                                    UserCover.setImageDrawable(errorDrawable);
+//                                    mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
+//                                    collapsingToolbar.setContentScrimColor(mutedColor);
+//                                    mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
+//                                    if (AppHelper.isAndroid5()) {
+//                                        getWindow().setStatusBarColor(mutedColorStatusBar);
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                    UserCover.setImageDrawable(placeHolderDrawable);
+//                                }
+//                            };
+//                            Picasso.with(this)
+//                                    .load(EndPoints.BASE_URL + mContactsModel.getImage())
+//                                    .resize(500, 500)
+//                                    .centerCrop()
+//                                    .into(target);
                         } else {
 
                             UserCover.setPadding(100, 100, 100, 100);
@@ -823,53 +818,53 @@ public class ProfileActivity extends AppCompatActivity {
     private void setImage(String path, String groupID) {
         AnimationsUtil.expandToolbar(containerProfile, AppBarLayout);
         FilesManager.downloadFilesToDevice(this, path, groupID, mGroupsModel.getGroupName(), "group");
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-                Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
-                    UserCover.setImageBitmap(bitmap);
-                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                    Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-                    if (vibrantSwatch != null)
-                        mutedColor = vibrantSwatch.getRgb();
-                    else
-                        mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
-                    collapsingToolbar.setContentScrimColor(mutedColor);
-                    if (darkVibrantSwatch != null)
-                        mutedColorStatusBar = darkVibrantSwatch.getRgb();
-                    else
-                        mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
-
-                    if (AppHelper.isAndroid5()) {
-                        getWindow().setStatusBarColor(mutedColorStatusBar);
-                    }
-
-
-                });
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                UserCover.setImageDrawable(errorDrawable);
-                mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
-                collapsingToolbar.setContentScrimColor(mutedColor);
-                mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
-                if (AppHelper.isAndroid5()) {
-                    getWindow().setStatusBarColor(mutedColorStatusBar);
-                }
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                UserCover.setImageDrawable(placeHolderDrawable);
-            }
-        };
-        Picasso.with(this)
-                .load(EndPoints.BASE_URL + path)
-                .resize(500, 500)
-                .centerCrop()
-                .into(target);
+//        Target target = new Target() {
+//            @Override
+//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//
+//                Palette.from(bitmap).maximumColorCount(numberOfColors).generate(palette -> {
+//                    UserCover.setImageBitmap(bitmap);
+//                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+//                    Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+//                    if (vibrantSwatch != null)
+//                        mutedColor = vibrantSwatch.getRgb();
+//                    else
+//                        mutedColor = palette.getVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary));
+//                    collapsingToolbar.setContentScrimColor(mutedColor);
+//                    if (darkVibrantSwatch != null)
+//                        mutedColorStatusBar = darkVibrantSwatch.getRgb();
+//                    else
+//                        mutedColorStatusBar = palette.getDarkVibrantColor(AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark));
+//
+//                    if (AppHelper.isAndroid5()) {
+//                        getWindow().setStatusBarColor(mutedColorStatusBar);
+//                    }
+//
+//
+//                });
+//            }
+//
+//            @Override
+//            public void onBitmapFailed(Drawable errorDrawable) {
+//                UserCover.setImageDrawable(errorDrawable);
+//                mutedColor = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimary);
+//                collapsingToolbar.setContentScrimColor(mutedColor);
+//                mutedColorStatusBar = AppHelper.getColor(ProfileActivity.this, R.color.colorPrimaryDark);
+//                if (AppHelper.isAndroid5()) {
+//                    getWindow().setStatusBarColor(mutedColorStatusBar);
+//                }
+//            }
+//
+//            @Override
+//            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                UserCover.setImageDrawable(placeHolderDrawable);
+//            }
+//        };
+//        Picasso.with(this)
+//                .load(EndPoints.BASE_URL + path)
+//                .resize(500, 500)
+//                .centerCrop()
+//                .into(target);
 
     }
 

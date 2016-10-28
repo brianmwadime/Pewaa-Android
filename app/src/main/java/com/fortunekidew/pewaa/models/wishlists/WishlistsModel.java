@@ -15,6 +15,8 @@ public class WishlistsModel extends RealmObject {
     private String id;
     private String name;
     private String description;
+    private String recipients;
+    private String category;
     private String avatar;
     private RealmList<GiftsModel> gifts;
 
@@ -34,7 +36,13 @@ public class WishlistsModel extends RealmObject {
         this.createdOnline = createdOnline;
     }
 
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getName() {
         return name;
@@ -80,6 +88,14 @@ public class WishlistsModel extends RealmObject {
 
     public void setAvatar(String avatar) {
         avatar = avatar;
+    }
+
+    public String getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(String recipients) {
+        this.recipients = recipients;
     }
 
 }

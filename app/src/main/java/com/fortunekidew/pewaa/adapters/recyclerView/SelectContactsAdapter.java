@@ -14,15 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.github.rockerhieu.emojicon.EmojiconTextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaa.R;
-import com.fortunekidew.pewaa.activities.groups.AddMembersToGroupActivity;
-import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaa.activities.profile.ProfilePreviewActivity;
 import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
@@ -35,8 +31,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.github.rockerhieu.emojicon.EmojiconTextView;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.fortunekidew.pewaa.app.AppConstants.STATUS_CONTRIBUTOR_ADDED;
 import static com.fortunekidew.pewaa.helpers.UtilsString.unescapeJava;
 
 /**
@@ -61,25 +59,13 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_HEADER;
-        } else {
-            return TYPE_ITEM;
-        }
-
+        return TYPE_ITEM;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_HEADER) {
-
-            View itemView = LayoutInflater.from(mActivity).inflate(R.layout.header_contacts, parent, false);
-            return new ContactsHeaderViewHolder(itemView);
-        } else {
-
-            View itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_contacts, parent, false);
-            return new ContactsViewHolder(itemView);
-        }
+        View itemView = LayoutInflater.from(mActivity).inflate(R.layout.row_contacts, parent, false);
+        return new ContactsViewHolder(itemView);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -87,7 +73,7 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ContactsViewHolder) {
             final ContactsViewHolder contactsViewHolder = (ContactsViewHolder) holder;
-            final ContactsModel contactsModel = this.mContactsModel.get(position - 1);
+            final ContactsModel contactsModel = this.mContactsModel.get(position);
             try {
                 contactsViewHolder.setUsername(contactsModel.getUsername(), contactsModel.getPhone());
 
@@ -115,14 +101,13 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if (view.getId() == R.id.wishlist_image) {
                     Intent mIntent = new Intent(mActivity, ProfilePreviewActivity.class);
                     mIntent.putExtra("userID", contactsModel.getId());
-                    mIntent.putExtra("isGroup", false);
                     mActivity.startActivity(mIntent);
                 } else {
-                    Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
-                    messagingIntent.putExtra("conversationID", 0);
-                    messagingIntent.putExtra("recipientID", contactsModel.getId());
-                    messagingIntent.putExtra("isGroup", false);
-                    mActivity.startActivity(messagingIntent);
+
+                    Intent intentMessage=new Intent();
+
+                    intentMessage.putExtra("EXTRA_CONTRIBUTOR_ID", contactsModel.getId());
+                    mActivity.setResult(STATUS_CONTRIBUTOR_ADDED, intentMessage);
                     mActivity.finish();
                 }
 
@@ -134,33 +119,14 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        if (mContactsModel != null) return mContactsModel.size() + 1;
-        return 1;
+        if (mContactsModel != null) return mContactsModel.size();
+        return 0;
     }
 
     @Override
     public String getTextToShowInBubble(int pos) {
         return Character.toString(mContactsModel.get(pos).getUsername().charAt(0));
     }
-
-
-    class ContactsHeaderViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.imageHeader)
-        ImageView imageHeader;
-
-        ContactsHeaderViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            imageHeader.setPadding(5, 5, 5, 5);
-            imageHeader.setImageResource(R.drawable.ic_group_holder_white_opacity_48dp);
-            itemView.setOnClickListener(v -> {
-                mActivity.startActivity(new Intent(mActivity, AddMembersToGroupActivity.class));
-                mActivity.finish();
-            });
-        }
-    }
-
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.wishlist_image)

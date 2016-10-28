@@ -3,8 +3,6 @@ package com.fortunekidew.pewaa.adapters.recyclerView.wishlists;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -20,26 +18,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.github.rockerhieu.emojicon.EmojiconTextView;
 import com.fortunekidew.pewaa.R;
 import com.fortunekidew.pewaa.activities.gifts.WishlistActivity;
-import com.fortunekidew.pewaa.app.EndPoints;
 import com.fortunekidew.pewaa.helpers.AppHelper;
 import com.fortunekidew.pewaa.helpers.Files.FilesManager;
 import com.fortunekidew.pewaa.helpers.UtilsPhone;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
-import com.fortunekidew.pewaa.ui.CropSquareTransformation;
 import com.fortunekidew.pewaa.ui.RecyclerViewFastScroller;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.github.rockerhieu.emojicon.EmojiconTextView;
 
 import static com.fortunekidew.pewaa.helpers.UtilsString.unescapeJava;
 
@@ -194,41 +186,41 @@ public class TransferMessageContactsAdapter extends RecyclerView.Adapter<Recycle
 
             if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(userId, name))) {
 
-                Picasso.with(mActivity)
-                        .load(FilesManager.getFileImageProfile(userId, name))
-                        .transform(new CropSquareTransformation())
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .resize(100, 100)
-                        .centerCrop()
-                        .into(userImage);
+//                Picasso.with(mActivity)
+//                        .load(FilesManager.getFileImageProfile(userId, name))
+//                        .transform(new CropSquareTransformation())
+//                        .networkPolicy(NetworkPolicy.NO_CACHE)
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                        .resize(100, 100)
+//                        .centerCrop()
+//                        .into(userImage);
             } else {
 
-                Target target = new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        userImage.setImageBitmap(bitmap);
-                        FilesManager.downloadFilesToDevice(mActivity, ImageUrl, userId, name, "profile");
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        userImage.setImageDrawable(errorDrawable);
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        userImage.setImageDrawable(placeHolderDrawable);
-                    }
-                };
-                Picasso.with(mActivity)
-                        .load(EndPoints.BASE_URL + ImageUrl)
-                        .transform(new CropSquareTransformation())
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .resize(100, 100)
-                        .centerCrop()
-                        .into(target);
+//                Target target = new Target() {
+//                    @Override
+//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                        userImage.setImageBitmap(bitmap);
+//                        FilesManager.downloadFilesToDevice(mActivity, ImageUrl, userId, name, "profile");
+//                    }
+//
+//                    @Override
+//                    public void onBitmapFailed(Drawable errorDrawable) {
+//                        userImage.setImageDrawable(errorDrawable);
+//                    }
+//
+//                    @Override
+//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                        userImage.setImageDrawable(placeHolderDrawable);
+//                    }
+//                };
+//                Picasso.with(mActivity)
+//                        .load(EndPoints.BASE_URL + ImageUrl)
+//                        .transform(new CropSquareTransformation())
+//                        .networkPolicy(NetworkPolicy.NO_CACHE)
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                        .resize(100, 100)
+//                        .centerCrop()
+//                        .into(target);
             }
 
         }

@@ -43,7 +43,7 @@
     <string name="settings">Settings</string>
     <string name="refresh_contacts">Refresh</string>
     <string name="search">Search</string>
-    <string name="add_contact">addContact</string>
+    <string name="add_contributor">Add Contributor</string>
     <string name="new_message">New Message</string>
     <string name="use_whats_clone">hey i\'m using …</string>
     <string name="title_activity_add_members_to_group">New group</string>
@@ -83,7 +83,7 @@
     <string name="no_username">** no username **</string>
     <string name="edit_status_activity_title">Edit Your Status</string>
     <string name="title_activity_edit_name">Enter your name</string>
-    <string name="title_select_contacts">Select  contact</string>
+    <string name="title_select_contributor">Select contributor</string>
     <string name="success_response_contacts">Your contacts has been  updated successfully</string>
     <string name="images_directory">Images</string>
     <string name="videos_directory">Vidoes</string>
@@ -109,7 +109,7 @@
     <string name="date_format">d/M/yy</string>
     <string name="call">Call</string>
     <string name="attach">Attach</string>
-    <string name="app_service_name">main service</string>
+    <string name="app_service_name">pewaa service</string>
     <string name="search_">Search …</string>
     <string name="add_new_member">Add</string>
     <string name="type_group_subject_here">Type group subject here …</string>
@@ -284,7 +284,32 @@
     <string name="backdrop_title">Gift Title</string>
     <string name="backdrop_subtitle">Some interesting text</string>
     <string name="transition_gift_avatar" translatable="false">transition_gift_avatar</string>
+    <string name="transition_gift_background" translatable="false">transition_gift_background</string>
+    <string name="transition_gift" translatable="false">gift</string>
 
     <string name="action_undo">UNDO</string>
+    <string name="transition_contributor_add" translatable="false">transition_contributor_add</string>
+    <string name="add_contributor_button_label">ADD</string>
+    <string name="cancel_contributor_button_label">CANCEL</string>
+    <string name="hintRecipients">Recipient(s)</string>
+    <string name="fab_scrolling_behavior">com.fortunekidew.pewaa.ui.fab.ScrollOffBottomBehaviour</string>
 
+    <string-array name="contributor_dropdown_arrays">
+        <item>CONTRIBUTOR</item>
+        <item>ADMINISTRATOR</item>
+    </string-array>
+
+    <string-array name="wishlist_categories_arrays">
+        <item>Select Wishlist Category</item>
+        <item>House Warming</item>
+        <item>Baby Shower</item>
+        <item>Wedding</item>
+        <item>Birthday</item>
+        <item>Graduation</item>
+        <item>Baby Shower</item>
+    </string-array>
+
+    <string name="widget_labelled_spinner_errorText">You must choose an item.</string>
+    <string name="no_contributors">No contributors yet.</string>
+    <string name="add_contribution">Contribute</string>
 </resources>

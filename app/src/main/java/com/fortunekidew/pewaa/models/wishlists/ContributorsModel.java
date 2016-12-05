@@ -20,9 +20,39 @@ public class ContributorsModel extends RealmObject {
     private String avatar;
     private  String permissions;
 
+    private  String status;
+
+    private  double amount;
+
+    private String reference;
+
     private Date created_on;
 
     private Date updated_on;
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getName() {
         return name;

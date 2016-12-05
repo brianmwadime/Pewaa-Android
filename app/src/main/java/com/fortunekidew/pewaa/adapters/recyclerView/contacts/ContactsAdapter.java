@@ -48,7 +48,7 @@ import static com.fortunekidew.pewaa.helpers.UtilsString.unescapeJava;
  * Created by Abderrahim El imame on 20/02/2016.
  * Email : abderrahim.elimame@gmail.com
  */
-public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecyclerViewFastScroller.BubbleTextGetter {
+public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected final Activity mActivity;
     private List<ContactsModel> mContactsModel;
     private String SearchQuery;
@@ -252,17 +252,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return mContactsModel.size() > 0 ? mContactsModel.size() + 1 : 1;
-    }
-
-    @Override
-    public String getTextToShowInBubble(int pos) {
-        try {
-            return Character.toString(mContactsModel.get(pos).getUsername().charAt(0));
-        } catch (Exception e) {
-            AppHelper.LogCat(e.getMessage());
-            return e.getMessage();
-        }
-
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {

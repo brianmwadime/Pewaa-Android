@@ -114,6 +114,11 @@
             android:name="com.fortunekidew.pewaa.activities.wishlists.AddWishlistsActivity"
             android:parentActivityName=".activities.gifts.WishlistActivity" />
 
+        <!--  ContributeActivity -->
+        <activity
+            android:name="com.fortunekidew.pewaa.activities.gifts.ContributeActivity"
+            android:parentActivityName=".activities.gifts.GiftDetailsActivity" />
+
         <!--  AddGiftsActivity -->
         <activity android:name="com.fortunekidew.pewaa.activities.gifts.AddGiftsActivity" />
 

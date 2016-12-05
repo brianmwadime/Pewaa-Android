@@ -73,7 +73,7 @@
         android:ellipsize="end"
         android:textColorLink="@color/colorBeauBlue"
         android:textColorHighlight="@color/colorBlueLight"
-        tools:text="Blah blah blah blah blah blah blah blah blah blah blah blah blah"
+        tools:text="Contributed KES 10"
         style="@style/Widget.Pewaa.Description" />
 
 </com.fortunekidew.pewaa.ui.widget.ForegroundRelativeLayout>

@@ -1,6 +1,7 @@
 package com.fortunekidew.pewaa.api;
 
 import com.fortunekidew.pewaa.app.EndPoints;
+import com.fortunekidew.pewaa.models.payments.ConfirmPaymentResponse;
 import com.fortunekidew.pewaa.models.wishlists.GiftResponse;
 import com.fortunekidew.pewaa.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaa.models.wishlists.WishlistsModel;
@@ -55,4 +56,7 @@ public interface APIGifts {
      */
     @GET(EndPoints.GIFT)
     Observable<WishlistsModel> getGift(@Path("giftId") String giftId);
+
+    @GET(EndPoints.GIFT_CONTRIBUTORS)
+    Call<ConfirmPaymentResponse> getContributors(@Path("id") String giftId);
 }

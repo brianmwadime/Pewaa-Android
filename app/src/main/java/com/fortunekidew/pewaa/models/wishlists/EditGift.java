@@ -13,7 +13,8 @@ public class EditGift {
     private String avatar;
     private String wishlist_id;
     private Date created_on;
-    private float price;
+    private double price;
+    private double contributed;
 
     public Date getCreatedOn() {
         return created_on;
@@ -23,11 +24,19 @@ public class EditGift {
         this.created_on = created_on;
     }
 
-    public float getPrice() {
+    public double getContributed() {
+        return contributed;
+    }
+
+    public void setContributed(double contributed) {
+        this.contributed = contributed;
+    }
+
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

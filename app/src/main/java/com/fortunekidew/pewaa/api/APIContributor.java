@@ -25,7 +25,7 @@ public interface APIContributor {
      * @return this is return value
      */
     @GET(EndPoints.GIFT_CONTRIBUTORS)
-    Call<List<ContributorsModel>> contributors(@Path("giftId") String giftId); // , @Path("page") int page, @Path("count") int giftCount
+    Call<List<ContributorsModel>> contributors(@Path("id") String giftId); // , @Path("page") int page, @Path("count") int giftCount
 
     /**
      * method to add contributor

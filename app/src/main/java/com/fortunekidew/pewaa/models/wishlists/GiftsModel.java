@@ -21,7 +21,9 @@ public class GiftsModel extends RealmObject {
 
     public String name;
 
-    public float price;
+    public double price;
+
+    public double contributed;
 
     public String wishlist_id;
 
@@ -73,11 +75,19 @@ public class GiftsModel extends RealmObject {
         this.code = code;
     }
 
-    public float getPrice() {
+    public double getContributed() {
+        return contributed;
+    }
+
+    public void setContributed(double contributed) {
+        this.contributed = contributed;
+    }
+
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

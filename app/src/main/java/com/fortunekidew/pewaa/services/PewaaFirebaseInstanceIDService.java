@@ -2,7 +2,9 @@ package com.fortunekidew.pewaa.services;
 
 import com.fortunekidew.pewaa.BuildConfig;
 import com.fortunekidew.pewaa.api.APIPush;
+import com.fortunekidew.pewaa.app.PewaaApplication;
 import com.fortunekidew.pewaa.helpers.AppHelper;
+import com.fortunekidew.pewaa.helpers.PreferenceManager;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
@@ -38,7 +40,7 @@ public class PewaaFirebaseInstanceIDService extends FirebaseInstanceIdService {
             // Customize the request
             Request request = original.newBuilder()
                     .header("Accept", "application/json")
-//                    .header("token", PreferenceManager.getToken(PewaaApplication.getAppContext()))
+                    .header("token", PreferenceManager.getToken(PewaaApplication.getAppContext()))
                     .method(original.method(), original.body())
                     .build();
             // Customize or return the response

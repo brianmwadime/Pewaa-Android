@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/ContributeParentLayout"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/spacing_large"
+        android:paddingEnd="@dimen/padding_normal"
+        android:paddingStart="@dimen/padding_normal"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/amount"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_marginBottom="@dimen/TitleMarginBottom"
+            android:layout_width="match_parent"
+            android:text="0.0"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textSize="@dimen/display_2_text_size"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/contribute"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addContribution"
+            android:text="@string/add_contribution"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

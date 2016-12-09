@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -62,6 +63,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -103,8 +105,11 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     private View giftSpacer;
     private View title;
     private View description;
+    private View giftProgress;
+    private View contributedAmount;
+    private View targetAmount;
     private LinearLayout shotActions;
-    private Button giftContribute;
+    private Button contribute;
     private TextView ownerName;
     private ImageView ownerAvatar;
     private TextView giftTimeAgo;
@@ -117,7 +122,8 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     private ElasticDragDismissFrameLayout.SystemChromeFader chromeFader;
     private List<EditPayments> paymentList;
     private String giftID, giftTitle, giftImage, giftDesc;
-    private float giftPrice;
+    private double giftPrice;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +146,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             }
 
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_PRICE)) {
-                giftPrice = getIntent().getExtras().getFloat(RESULT_EXTRA_GIFT_PRICE);
+                giftPrice = getIntent().getExtras().getDouble(RESULT_EXTRA_GIFT_PRICE);
             }
 
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_DESC)) {
@@ -157,11 +163,15 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
         giftSpacer = giftDescription.findViewById(R.id.gift_spacer);
         title = giftDescription.findViewById(R.id.gift_title);
+        contributedAmount = giftDescription.findViewById(R.id.contributed_amount);
+        giftProgress = giftDescription.findViewById(R.id.gift_progress);
         description = giftDescription.findViewById(R.id.gift_description);
+        targetAmount = giftDescription.findViewById(R.id.target_amount);
 
 
         ownerName = (TextView) giftDescription.findViewById(R.id.owner_name);
         ownerAvatar = (ImageView) giftDescription.findViewById(R.id.owner_avatar);
+
         giftTimeAgo = (TextView) giftDescription.findViewById(R.id.time_ago);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -179,10 +189,36 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         };
 
         setupContributing();
-
+        contributorsList.addOnScrollListener(scrollListener);
+        contributorsList.setOnFlingListener(flingListener);
         bindGift(false);
 
     }
+
+    private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            final int scrollY = giftDescription.getTop();
+            GiftCover.setOffset(scrollY);
+        }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            // as we animate the main image's elevation change when it 'pins' at it's min height
+            // a fling can cause the title to go over the image before the animation has a chance to
+            // run. In this case we short circuit the animation and just jump to state.
+            GiftCover.setImmediatePin(newState == RecyclerView.SCROLL_STATE_SETTLING);
+        }
+    };
+
+    private RecyclerView.OnFlingListener flingListener = new RecyclerView.OnFlingListener() {
+        @Override
+        public boolean onFling(int velocityX, int velocityY) {
+            GiftCover.setImmediatePin(true);
+            return false;
+        }
+    };
 
 
     public void addContribution(View view) {
@@ -217,6 +253,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                 ownerName.setText("N/A");
             }
 
+            ((TextView) targetAmount).setText(String.format(Locale.ENGLISH, "Target: %1$,.2f", gift.getPrice()));
 
             Glide.with(this)
                     .load(ASSETS_BASE_URL + gift.getCreatorAvatar())
@@ -280,8 +317,24 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             @Override
             public void onResponse(Call<List<ContributorsModel>> call, Response<List<ContributorsModel>> response) {
                 final List<ContributorsModel> contributors = response.body();
+
+
                 if (contributors != null && !contributors.isEmpty()) {
+                    ((TextView)contributedAmount).setText(String.valueOf(0.0));
                     adapter.addContributors(contributors);
+                    double amount = 0;
+//                    contributors.forEach(contributor -> {
+//                        amount += contributor.getAmount();
+//                    });
+                    for (int i=0; i < contributors.size(); i++) {
+                        amount += contributors.get(i).getAmount();
+                    }
+
+                    ((TextView)contributedAmount).setText(String.valueOf(amount));
+                    double progress =  ((amount/ gift.getPrice()) * 100);
+
+                    ((ProgressBar) giftProgress).setProgress((int)progress);
+
                 }
             }
 
@@ -324,7 +377,18 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
         contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_contribute,
                 contributorsList, false);
-        giftContribute = (Button) contributorFooter.findViewById(R.id.contribute);
+        contribute = (Button) contributorFooter.findViewById(R.id.contribute);
+
+        contribute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent contribute = new Intent();
+                contribute.setClass(GiftDetailsActivity.this, ContributeActivity.class);
+                contribute.putExtra(ContributeActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, gift));
+
+                startActivity(contribute);
+            }
+        });
     }
 
     @Override
@@ -525,7 +589,6 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mProfilePresenter.onDestroy();
     }
 
     /* package */ class ContributorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -564,7 +627,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
                 @Override
                 public void onTransitionEnd(Transition transition) {
-                    contributorAnimator.setAnimateMoves(true);
+//                    contributorAnimator.setAnimateMoves(true);
                     contributorsList.setOnTouchListener(null);
                 }
             });
@@ -659,7 +722,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
                     final ContributorsModel contributor = getContributor(position);
                     TransitionManager.beginDelayedTransition(contributorsList, expandCollapse);
-                    contributorAnimator.setAnimateMoves(false);
+//                    contributorAnimator.setAnimateMoves(false);
 
                     // collapse any currently expanded items
                     if (expandedContributorPosition != RecyclerView.NO_POSITION) {
@@ -817,13 +880,17 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             final int position = holder.getAdapterPosition();
             final boolean isExpanded = position == expandedContributorPosition;
             Glide.with(GiftDetailsActivity.this)
-                    .load(contributor.getAvatar())
+                    .load(ASSETS_BASE_URL + contributor.getAvatar())
                     .transform(circleTransform)
                     .placeholder(R.drawable.avatar_placeholder)
                     .override(largeAvatarSize, largeAvatarSize)
                     .into(holder.avatar);
-            holder.author.setText(contributor.getName().toLowerCase());
-//            holder.author.setOriginalPoster(isOP(contributor.user.id));
+
+            if (contributor.getName() != null)
+                holder.author.setText(contributor.getName().toLowerCase());
+
+            holder.contributorBody.setText(String.format("Contributed %1$,.2f", contributor.getAmount()));
+
             holder.timeAgo.setText(contributor.getCreatedOn() == null ? "" :
                     DateUtils.getRelativeTimeSpanString(contributor.getCreatedOn().getTime(),
                             System.currentTimeMillis(),

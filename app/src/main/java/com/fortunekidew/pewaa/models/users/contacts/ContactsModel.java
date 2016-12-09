@@ -17,6 +17,7 @@ public class ContactsModel extends RealmObject {
     private boolean Exist;
     private String image;
     private String status;
+    private String name;
     private String status_date;
     private String userState;
 
@@ -80,6 +81,14 @@ public class ContactsModel extends RealmObject {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setStatus(String status) {

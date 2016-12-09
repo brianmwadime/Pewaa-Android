@@ -37,6 +37,51 @@
 
     <include layout="@layout/gift_title" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/gift_actions"
+        android:layout_columnSpan="3"
+        android:layout_width="match_parent"
+        android:paddingStart="@dimen/padding_normal"
+        android:paddingTop="@dimen/spacing_large"
+        android:paddingEnd="@dimen/padding_normal"
+        android:clipToPadding="false">
+        <TextView
+            android:id="@+id/contributed_amount"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:textSize="@dimen/backdrop_title"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:layout_centerHorizontal="true"
+            />
+
+        <ProgressBar
+            android:id="@+id/gift_progress"
+            android:background="@color/colorWhiteLight"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/album_title_padding"
+            android:paddingRight="@dimen/album_title_padding"
+            android:max="100"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+            />
+
+        <TextView
+            android:id="@+id/target_amount"
+            android:layout_columnSpan="3"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:paddingRight="@dimen/album_title_padding"
+            android:background="@color/colorWhiteLight"
+            android:textSize="@dimen/backdrop_subtitle"
+            android:layout_height="wrap_content"
+            android:text="Target 50000"
+            />
+    </LinearLayout>
+
     <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
         android:id="@+id/owner_name"
         android:layout_gravity="end"

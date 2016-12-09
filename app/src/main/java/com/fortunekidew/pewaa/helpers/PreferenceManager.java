@@ -64,6 +64,31 @@ public class PreferenceManager {
     }
 
     /**
+     * method to setNumber
+     *
+     * @param Number   this is the first parameter for setID  method
+     * @param mContext this is the second parameter for setID  method
+     * @return return value
+     */
+    public static boolean setNumber(String Number, Context mContext) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString("number", Number);
+        return editor.commit();
+    }
+
+    /**
+     * method to getNumber
+     *
+     * @param mContext this is  parameter for getNumber  method
+     * @return return value
+     */
+    public static String getNumber(Context mContext) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        return mSharedPreferences.getString("number", null);
+    }
+
+    /**
      * method to getID
      *
      * @param mContext this is  parameter for getID  method

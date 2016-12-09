@@ -39,7 +39,12 @@ public class EndPoints {
      */
     public static final String GIFTS = "gifts";
     public static final String GIFT = "gifts/{giftId}";
-    public static final String GIFT_CONTRIBUTORS = "gifts/{giftId}/contributors";
+    public static final String GIFT_CONTRIBUTORS = "gifts/{id}/contributors";
+
+    public static final String Payments = "payments/create";
+    public static final String Payment = "payments/update/{trx_id}";
+    public static final String PAYMENT_REQUEST = "payments/request";
+    public static final String PAYMENT_CONFIRM = "payments/confirm/{trx_id}";
 
     /**
      * Contributors

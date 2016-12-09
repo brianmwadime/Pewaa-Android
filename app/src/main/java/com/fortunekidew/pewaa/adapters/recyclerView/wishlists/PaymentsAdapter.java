@@ -55,11 +55,11 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         EditPayments payment = paymentList.get(position);
-        holder.title.setText(payment.getName());
-        holder.count.setText(payment.getNumOfSongs() + " songs");
-
-        // loading payment cover using Glide library
-        Glide.with(mContext).load(payment.getThumbnail()).into(holder.thumbnail);
+//        holder.title.setText(payment.getName());
+//        holder.count.setText(payment.getNumOfSongs() + " songs");
+//
+//        // loading payment cover using Glide library
+//        Glide.with(mContext).load(payment.getThumbnail()).into(holder.thumbnail);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override

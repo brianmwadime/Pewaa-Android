@@ -67,7 +67,7 @@ public class ContributorsModel extends RealmObject {
     }
 
     public void setAvatar(String avatar) {
-        avatar = avatar;
+        this.avatar = avatar;
     }
 
     public Date getUpdatedOn() {

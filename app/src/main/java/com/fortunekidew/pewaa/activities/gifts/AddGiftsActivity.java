@@ -235,6 +235,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
                     gift.setWishlistId(response.body().getWishlistId());
                     gift.setDescription(response.body().getDescription());
                     gift.setPrice(response.body().getPrice());
+                    gift.setContributed(response.body().getContributed());
 
                     EventBus.getDefault().post(new Pusher("new_gift", gift));
                     finish();

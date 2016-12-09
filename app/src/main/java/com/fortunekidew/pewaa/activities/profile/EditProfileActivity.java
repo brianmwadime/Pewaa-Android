@@ -30,6 +30,10 @@ import com.fortunekidew.pewaa.models.users.Pusher;
 import com.fortunekidew.pewaa.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaa.models.users.status.StatusResponse;
 import com.fortunekidew.pewaa.presenters.EditProfilePresenter;
+import com.fortunekidew.pewaa.ui.CropSquareTransformation;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -131,7 +135,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     @OnClick(R.id.editUsernameBtn)
     public void launchEditUsername() {
         Intent mIntent = new Intent(this, EditUsernameActivity.class);
-        mIntent.putExtra("currentUsername", mContactsModel.getUsername());
+        mIntent.putExtra("currentUsername", mContactsModel.getName());
         startActivity(mIntent);
     }
 
@@ -151,29 +155,29 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
         } else {
             status.setText(getString(R.string.no_status));
         }
-        if (mContactsModel.getUsername() != null) {
-            username.setText(mContactsModel.getUsername());
+        if (mContactsModel.getName() != null) {
+            username.setText(mContactsModel.getName());
         } else {
             username.setText(getString(R.string.no_username));
         }
         if (mContactsModel.getImage() != null) {
-            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))) {
-//                Picasso.with(this)
-//                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))
-//                        .transform(new CropSquareTransformation())
-//                        .resize(200, 200)
-//                        .networkPolicy(NetworkPolicy.NO_CACHE)
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                        .into(userAvatar);
+            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))) {
+                Picasso.with(this)
+                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))
+                        .transform(new CropSquareTransformation())
+                        .resize(200, 200)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .into(userAvatar);
             } else {
 
-//                Picasso.with(this)
-//                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-//                        .transform(new CropSquareTransformation())
-//                        .resize(200, 200)
-//                        .networkPolicy(NetworkPolicy.NO_CACHE)
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                        .into(userAvatar);
+                Picasso.with(this)
+                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
+                        .transform(new CropSquareTransformation())
+                        .resize(200, 200)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .into(userAvatar);
             }
         } else {
 

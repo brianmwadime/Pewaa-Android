@@ -40,7 +40,8 @@ public interface APIPayments {
                                         @Field("wishlist_item_id") String giftId,
                                         @Field("reference") String payment_reference,
                                         @Field("status") String status,
-                                        @Field("description") String description);
+                                        @Field("description") String description,
+                                        @Field("trx_id") String transaction_id);
 
 
     @POST(EndPoints.PAYMENT_REQUEST)

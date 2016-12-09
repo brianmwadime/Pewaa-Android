@@ -180,9 +180,7 @@ public class ContactsService {
      * @return return  value
      */
     public Observable<StatusResponse> editUsername(String newName) {
-        EditStatus editUsername = new EditStatus();
-        editUsername.setNewStatus(newName);
-        return initializeApiContact().editUsername(editUsername)
+        return initializeApiContact().editUsername(newName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(statusResponse -> statusResponse);

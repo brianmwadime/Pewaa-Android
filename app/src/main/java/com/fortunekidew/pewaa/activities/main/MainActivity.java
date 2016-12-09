@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @Bind(R.id.app_bar)
     Toolbar toolbar;
-//    @Bind(R.id.main_view)
-//    LinearLayout MainView;
     @Bind(R.id.addWishlistFab)
     FloatingActionButton AddWishlistFab;
     @Bind(R.id.toolbar_progress_bar)
@@ -74,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     // Account type and auth token type
     public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaa";
     private Account mAccount;
-//    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             AppHelper.LogCat("IntentData is null MainActivity ");
         }
 
-        loadCounter();
         new Handler().postDelayed(this::Permissions, 5000);
 
     }
@@ -300,9 +296,6 @@ public class MainActivity extends AppCompatActivity {
             case "stopRefresh":
                 toolbarProgressBar.setVisibility(View.GONE);
                 break;
-            case "MessagesCounter":
-                loadCounter();
-                break;
             case "startConversation":
                 if (viewPager.getCurrentItem() == 1)
                     viewPager.setCurrentItem(0);
@@ -343,25 +336,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * methdo to load number of unread gifts
-     */
-    private void loadCounter() {
-//        Realm realm = Realm.getDefaultInstance();
-//        List<WishlistsModel> wishlistsModel1 = realm.where(WishlistsModel.class)
-//                .equalTo("Status", AppConstants.IS_WAITING)
-//                .equalTo("RecipientID", PreferenceManager.getID(this))
-//                .findAll();
-//        if (wishlistsModel1.size() == 0) {
-//            findViewById(R.id.counterTabMessages).setVisibility(View.GONE);
-//        } else {
-//            findViewById(R.id.counterTabMessages).setVisibility(View.VISIBLE);
-//            ((TextView) findViewById(R.id.counterTabMessages)).setText(String.valueOf(wishlistsModel1.size()));
-//
-//        }
-//        realm.close();
-    }
-
-    /**
      * method to disconnect from socket server
      */
     private void DisConnectFromServer() {
@@ -380,6 +354,5 @@ public class MainActivity extends AppCompatActivity {
             AppHelper.LogCat("User is offline  Exception MainActivity" + e.getMessage());
         }
     }
-
 
 }

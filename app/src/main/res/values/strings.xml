@@ -80,7 +80,7 @@
     <string name="deleteALL">Delete All</string>
     <string name="oops_something">Oops something went wrong</string>
     <string name="no_status">** no status **</string>
-    <string name="no_username">** no username **</string>
+    <string name="no_username">** no name **</string>
     <string name="edit_status_activity_title">Edit Your Status</string>
     <string name="title_activity_edit_name">Enter your name</string>
     <string name="title_select_contributor">Select contributor</string>
@@ -97,11 +97,10 @@
     <string name="shareContact">Share contact</string>
 
     <!--socket io -->
-    <string name="isTyping">Typing  …</string>
+    <string name="isTyping">Typing …</string>
     <string name="isOffline">Offline</string>
     <string name="isOnline">Online</string>
     <string name="lastSeen">Last seen</string>
-
 
     <!-- Date format -->
     <string name="date_format_today">HH:mm</string>
@@ -312,5 +311,5 @@
 
     <string name="widget_labelled_spinner_errorText">You must choose an item.</string>
     <string name="no_contributors">No contributors yet.</string>
-    <string name="add_contribution">CONFIRM</string>
+    <string name="add_contribution">CONTRIBUTE</string>
 </resources>

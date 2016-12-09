@@ -8,5 +8,6 @@ public class EditPayments {
     public String clientLocation;
     public String clientName;
     public String referenceID;
+    public String trxId;
     public double totalAmount;
 }

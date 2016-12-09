@@ -96,11 +96,12 @@ public interface APIContact {
     /**
      * method to edit username
      *
-     * @param editStatus this is parameter for  editUsername method
+     * @param name this is parameter for  editUsername method
      * @return this is return value
      */
+    @FormUrlEncoded
     @POST(EndPoints.EDIT_NAME)
-    Observable<StatusResponse> editUsername(@Body EditStatus editStatus);
+    Observable<StatusResponse> editUsername(@Field("name") String name);
 
     /**
      * method to edit group name

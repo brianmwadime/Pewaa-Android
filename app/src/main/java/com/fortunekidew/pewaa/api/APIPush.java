@@ -20,18 +20,9 @@ import rx.Observable;
 
 public interface APIPush {
     /**
-     * method to get all devices
-     *
-     * @return this is return value
-     */
-    @GET(EndPoints.DEVICES)
-    Observable<List<ContributorsModel>> devices();
-
-    /**
      * method to create group
      *
      * @param deviceId this is the first parameter for  registerDevice method
-     * @param userId this is the first parameter for  registerDevice method
      * @param platform  this is the thirded parameter for  registerDevice method
      * @return this is return value
      */
@@ -40,12 +31,4 @@ public interface APIPush {
      Call<StatusResponse> registerDevice(@Field("device_id") String deviceId,
                                          @Field("platform") String platform);
 
-    /**
-     * method to get a device's information
-     *
-     * @param deviceId this is  parameter for  getDevice method
-     * @return this is return value
-     */
-    @GET(EndPoints.DEVICE)
-    Observable<ContributorsModel> getDevice(@Path("deviceId") String deviceId);
 }

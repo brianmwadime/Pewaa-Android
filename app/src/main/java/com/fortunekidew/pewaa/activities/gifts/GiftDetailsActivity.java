@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -121,7 +122,8 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     private ElasticDragDismissFrameLayout.SystemChromeFader chromeFader;
     private List<EditPayments> paymentList;
     private String giftID, giftTitle, giftImage, giftDesc;
-    private float giftPrice;
+    private double giftPrice;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +146,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             }
 
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_PRICE)) {
-                giftPrice = getIntent().getExtras().getFloat(RESULT_EXTRA_GIFT_PRICE);
+                giftPrice = getIntent().getExtras().getDouble(RESULT_EXTRA_GIFT_PRICE);
             }
 
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_DESC)) {
@@ -315,8 +317,24 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             @Override
             public void onResponse(Call<List<ContributorsModel>> call, Response<List<ContributorsModel>> response) {
                 final List<ContributorsModel> contributors = response.body();
+
+
                 if (contributors != null && !contributors.isEmpty()) {
+                    ((TextView)contributedAmount).setText(String.valueOf(0.0));
                     adapter.addContributors(contributors);
+                    double amount = 0;
+//                    contributors.forEach(contributor -> {
+//                        amount += contributor.getAmount();
+//                    });
+                    for (int i=0; i < contributors.size(); i++) {
+                        amount += contributors.get(i).getAmount();
+                    }
+
+                    ((TextView)contributedAmount).setText(String.valueOf(amount));
+                    double progress =  ((amount/ gift.getPrice()) * 100);
+
+                    ((ProgressBar) giftProgress).setProgress((int)progress);
+
                 }
             }
 
@@ -862,7 +880,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             final int position = holder.getAdapterPosition();
             final boolean isExpanded = position == expandedContributorPosition;
             Glide.with(GiftDetailsActivity.this)
-                    .load(contributor.getAvatar())
+                    .load(ASSETS_BASE_URL + contributor.getAvatar())
                     .transform(circleTransform)
                     .placeholder(R.drawable.avatar_placeholder)
                     .override(largeAvatarSize, largeAvatarSize)

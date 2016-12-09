@@ -102,21 +102,21 @@ public class SettingsActivity extends AppCompatActivity {
     public void ShowContact(ContactsModel contactsModels) {
         mContactsModel = contactsModels;
         try {
-            if (mContactsModel.getStatus() != null) {
-                String status = unescapeJavaString(mContactsModel.getStatus());
+            if (mContactsModel.getPhone() != null) {
+                String status = unescapeJavaString(mContactsModel.getPhone());
                 userStatus.setText(status);
             } else {
                 userStatus.setText(getString(R.string.no_status));
             }
-            if (mContactsModel.getUsername() != null) {
-                userName.setText(mContactsModel.getUsername());
+            if (mContactsModel.getName() != null) {
+                userName.setText(mContactsModel.getName());
             } else {
                 userName.setText(getString(R.string.no_username));
             }
             if (mContactsModel.getImage() != null) {
-                if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))) {
+                if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))) {
                     Picasso.with(this)
-                            .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getUsername()))
+                            .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))
                             .transform(new CropSquareTransformation())
                             .resize(100, 100)
                             .networkPolicy(NetworkPolicy.NO_CACHE)

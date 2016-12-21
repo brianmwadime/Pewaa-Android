@@ -20,7 +20,7 @@
             android:layout_height="234dp"
             android:layout_margin="0dp">
 
-            <com.fortunekidew.pewaa.ui.widget.BadgedFourThreeImageView
+            <com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView
                 android:id="@+id/giftAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

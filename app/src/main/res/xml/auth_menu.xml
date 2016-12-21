@@ -5,8 +5,8 @@
     <PreferenceScreen android:key="account_settings"
         android:title="Account Settings"
         android:summary="">
-        <intent android:action="com.fortunekidew.pewaa.OPEN_ACCOUNT"
-            android:targetPackage="com.fortunekidew.pewaa"
-            android:targetClass="com.fortunekidew.pewaa.activities.main.MainActivity"/>
+        <intent android:action="com.fortunekidew.pewaad.OPEN_ACCOUNT"
+            android:targetPackage="com.fortunekidew.pewaad"
+            android:targetClass="com.fortunekidew.pewaad.activities.main.MainActivity"/>
     </PreferenceScreen>
 </PreferenceScreen>

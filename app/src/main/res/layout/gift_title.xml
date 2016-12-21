@@ -22,7 +22,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:showIn="@layout/content_gift_description">
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaad.ui.widget.BaselineGridTextView
         android:id="@+id/gift_title"
         android:layout_columnSpan="3"
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         tools:text="gift title"
         style="@style/Widget.Pewaa.GiftTitle"/>
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaad.ui.widget.BaselineGridTextView
         android:id="@+id/gift_description"
         android:layout_columnSpan="3"
         android:layout_width="match_parent"

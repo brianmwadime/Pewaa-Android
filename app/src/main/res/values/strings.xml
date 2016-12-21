@@ -259,7 +259,7 @@
     <string name="updating_status">Updating status …</string>
     <string name="your_status_updated_successfully">Your status has been deleted successfully</string>
 
-    <string name="auth_type">com.fortunekidew.pewaa</string>
+    <string name="auth_type">com.fortunekidew.pewaad</string>
     <string name="reply_message">Reply</string>
 
     <string name="key_message_notifications_settings_light">message_notifications_settings_light</string>
@@ -292,7 +292,7 @@
     <string name="add_contributor_button_label">ADD</string>
     <string name="cancel_contributor_button_label">CANCEL</string>
     <string name="hintRecipients">Recipient(s)</string>
-    <string name="fab_scrolling_behavior">com.fortunekidew.pewaa.ui.fab.ScrollOffBottomBehaviour</string>
+    <string name="fab_scrolling_behavior">com.fortunekidew.pewaad.ui.fab.ScrollOffBottomBehaviour</string>
 
     <string-array name="contributor_dropdown_arrays">
         <item>CONTRIBUTOR</item>

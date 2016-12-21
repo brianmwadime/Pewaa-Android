@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Pewaa" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -44,9 +44,34 @@
         <item name="android:textColor">@drawable/bg_tabs_text_color</item>
     </style>
 
+    <style name="Pewaa.SplashTheme" parent="Pewaa">
+        <item name="actionBarStyle">@style/PewaaActionBar.Dashboard</item>
+        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/PewaaActionBar.Dashboard</item>
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
     <style name="Pewaa.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="PewaaActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:titleTextStyle" tools:ignore="NewApi">@style/PewaaActionBarTitle</item>
+        <item name="android:background" tools:ignore="NewApi">@color/colorPrimary</item>
+        <item name="background">@color/colorPrimary</item>
+    </style>
+
+    <style name="PewaaActionBar.Dashboard" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:titleTextStyle" tools:ignore="NewApi">@style/PewaaActionBarTitle.Dashboard</item>
+        <item name="android:background" tools:ignore="NewApi">@color/colorPrimary</item>
+        <item name="background">@color/colorPrimary</item>
+    </style>
+
+    <style name="PewaaActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor" tools:ignore="NewApi">@color/colorWhite</item>
+    </style>
+    <style name="PewaaActionBarTitle.Dashboard" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor" tools:ignore="NewApi">@color/colorIcons</item>
     </style>
 
     <style name="Pewaa.Translucent">

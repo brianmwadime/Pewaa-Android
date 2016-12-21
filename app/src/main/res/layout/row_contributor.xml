@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<com.fortunekidew.pewaa.ui.widget.ForegroundRelativeLayout
+<com.fortunekidew.pewaad.ui.widget.ForegroundRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,7 +29,7 @@
     android:background="@color/background_light"
     android:stateListAnimator="@animator/raise">
 
-    <com.fortunekidew.pewaa.ui.widget.CircularImageView
+    <com.fortunekidew.pewaad.ui.widget.CircularImageView
         android:id="@+id/contributor_avatar"
         android:layout_width="@dimen/avatar_bounds"
         android:layout_height="@dimen/avatar_bounds"
@@ -40,7 +40,7 @@
         android:padding="@dimen/avatar_padding"
         android:src="@drawable/avatar_placeholder" />
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaad.ui.widget.BaselineGridTextView
         android:id="@+id/time_ago"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:textAppearance="@style/TextAppearance.ContributorTimestamp"
         tools:text="3 hours ago" />
 
-    <com.fortunekidew.pewaa.ui.widget.AuthorTextView
+    <com.fortunekidew.pewaad.ui.widget.AuthorTextView
         android:id="@+id/contributor_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         android:textAppearance="@style/TextAppearance.ContributorAuthor.Pewaa"
         tools:text="Nick B" />
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaad.ui.widget.BaselineGridTextView
         android:id="@+id/player_bio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,4 +76,4 @@
         tools:text="Contributed KES 10"
         style="@style/Widget.Pewaa.Description" />
 
-</com.fortunekidew.pewaa.ui.widget.ForegroundRelativeLayout>
+</com.fortunekidew.pewaad.ui.widget.ForegroundRelativeLayout>

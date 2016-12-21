@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.fortunekidew.pewaa.ui.widget.ElasticDragDismissFrameLayout
+<com.fortunekidew.pewaad.ui.widget.ElasticDragDismissFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,7 +22,7 @@
         android:background="@color/background_light"
         android:transitionName="@string/transition_gift_background" />
 
-    <com.fortunekidew.pewaa.ui.widget.ParallaxScrimageView
+    <com.fortunekidew.pewaad.ui.widget.ParallaxScrimageView
         android:id="@+id/cover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,4 +67,4 @@
         android:scrollbarStyle="insideOverlay"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
-</com.fortunekidew.pewaa.ui.widget.ElasticDragDismissFrameLayout>
+</com.fortunekidew.pewaad.ui.widget.ElasticDragDismissFrameLayout>

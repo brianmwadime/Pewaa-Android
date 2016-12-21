@@ -30,7 +30,7 @@
     <!-- transparent background needed for the ripple on the spacer -->
 
     <!-- spacer for the image -->
-    <com.fortunekidew.pewaa.ui.widget.FourThreeView
+    <com.fortunekidew.pewaad.ui.widget.FourThreeView
         android:id="@+id/gift_spacer"
         android:layout_columnSpan="3"
         android:background="@drawable/mid_grey_bounded_ripple" />
@@ -82,7 +82,7 @@
             />
     </LinearLayout>
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaad.ui.widget.BaselineGridTextView
         android:id="@+id/owner_name"
         android:layout_gravity="end"
         android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
         android:clickable="false"
         tools:text="—Contributor" />
 
-    <com.fortunekidew.pewaa.ui.widget.CircularImageView
+    <com.fortunekidew.pewaad.ui.widget.CircularImageView
         android:id="@+id/owner_avatar"
         android:layout_width="@dimen/avatar_bounds"
         android:layout_height="@dimen/avatar_bounds"
@@ -114,7 +114,7 @@
         android:layout_width="@dimen/avatar_margin"
         android:layout_rowSpan="2" />
 
-    <com.fortunekidew.pewaa.ui.widget.BaselineGridTextView
+    <com.fortunekidew.pewaad.ui.widget.BaselineGridTextView
         android:id="@+id/time_ago"
         android:layout_gravity="end"
         android:gravity="end"

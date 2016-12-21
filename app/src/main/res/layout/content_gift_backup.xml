@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/viewBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fortunekidew.pewaa.activities.gifts.GiftDetailsActivity">
+    tools:context="com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity">
 
     <include layout="@layout/content_gift_description" />
 

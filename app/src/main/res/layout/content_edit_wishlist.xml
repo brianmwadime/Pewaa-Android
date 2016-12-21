@@ -41,7 +41,7 @@
                 <!--app:rippleColor="@color/colorWhiteLight"-->
                 <!--app:srcCompat="@drawable/ic_photo_camera_24dp" />-->
         <!--</FrameLayout>-->
-        <com.fortunekidew.pewaa.ui.LabelledSpinner
+        <com.fortunekidew.pewaad.ui.LabelledSpinner
             android:id="@+id/spinner"
             app.labelText="Select Wishlist Category"
             app.widgetColor="@color/colorGray"

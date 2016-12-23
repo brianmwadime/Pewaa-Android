@@ -175,8 +175,24 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     wishlistViewHolder.wishlist_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
                 }
 
+                switch (wishlistsModel.getCategory()) {
+                    case "Wedding":
 
-                wishlistViewHolder.setWishlistImage(wishlistsModel.getAvatar());
+                        wishlistViewHolder.setWishlistImage(R.drawable.wedding);
+                    break;
+                    case "House Warming":
+                        wishlistViewHolder.setWishlistImage(R.drawable.house_warming);
+                    break;
+                    case "Baby Shower":
+                        wishlistViewHolder.setWishlistImage(R.drawable.baby_shower);
+                    break;
+                    case "Birthday":
+                        wishlistViewHolder.setWishlistImage(R.drawable.birthday);
+                    break;
+                    case "Graduation":
+                        wishlistViewHolder.setWishlistImage(R.drawable.graduation);
+                    break;
+                }
 
                 wishlistViewHolder.setOnClickListener(view -> {
 
@@ -260,7 +276,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
 
-        void setWishlistImage(String ImageUrl) {
+        void setWishlistImage(int ImageUrl) {
 
             BitmapImageViewTarget target = new BitmapImageViewTarget(wishlistImage) {
                 @Override
@@ -286,7 +302,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             };
 
             Glide.with(mActivity)
-                    .load(EndPoints.ASSETS_BASE_URL + ImageUrl)
+                    .load(ImageUrl)
                     .asBitmap()
                     .transform(new CropCircleTransformation(mActivity))
                     .override(100, 100)

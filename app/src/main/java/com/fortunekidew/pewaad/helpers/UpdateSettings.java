@@ -12,7 +12,6 @@ import java.util.Date;
  */
 public class UpdateSettings {
     private static final String LAST_CONTACTS_UPDATE = "lastContactsUpdate";
-    private static final String LAST_CONVERSATION_UPDATE = "lastConversationUpdate";
     private final SharedPreferences preferences;
 
     public UpdateSettings(Context context) {
@@ -30,16 +29,6 @@ public class UpdateSettings {
     }
 
     /**
-     * Saves the current timestamp as last conversations update.
-     */
-    public void setLastConversationsUpdate() {
-        long time = new Date().getTime();
-        preferences.edit()
-                .putLong(LAST_CONVERSATION_UPDATE, time)
-                .apply();
-    }
-
-    /**
      * Returns the timestamp of the last contacts update.
      *
      * @return Long
@@ -47,15 +36,5 @@ public class UpdateSettings {
     public Long getLastContactsUpdate() {
         return preferences.getLong(LAST_CONTACTS_UPDATE, 0);
     }
-
-    /**
-     * Returns the timestamp of the last conversations update.
-     *
-     * @return Long
-     */
-    public Long getLastConversationsUpdate() {
-        return preferences.getLong(LAST_CONVERSATION_UPDATE, 0);
-    }
-
 
 }

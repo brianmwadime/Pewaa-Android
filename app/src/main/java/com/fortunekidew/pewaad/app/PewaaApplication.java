@@ -32,9 +32,9 @@ public class PewaaApplication extends Application {
                         .name(AppConstants.DATABASE_LOCAL_NAME)
                         .deleteRealmIfMigrationNeeded()
                         .build());
-        if (PreferenceManager.getToken(this) != null) {
-            startService(new Intent(this, MainService.class));
-        }
+//        if (PreferenceManager.getToken(this) != null) {
+//            startService(new Intent(this, MainService.class));
+//        }
     }
 
 

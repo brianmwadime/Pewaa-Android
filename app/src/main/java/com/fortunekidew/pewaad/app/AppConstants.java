@@ -16,7 +16,7 @@ public class AppConstants {
     public static final int MESSAGE_COLOR_SUCCESS = R.color.colorGreenDark;
     public static final int TEXT_COLOR = R.color.colorWhite;
     public static final String DATABASE_LOCAL_NAME = "Pewaa.realm";
-    public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application";
+    public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application https://play.google.com/apps/testing/com.fortunekidew.pewaad";
 
 
 

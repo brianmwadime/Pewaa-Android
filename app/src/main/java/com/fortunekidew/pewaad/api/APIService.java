@@ -100,6 +100,7 @@ public class APIService {
 
             // Customize the request
             Request request = original.newBuilder()
+
                     .method(original.method(), original.body())
                     .build();
 

@@ -285,29 +285,4 @@ public class ContactsService {
         return realmContact;
     }
 
-
-    /**
-     * method to get ads info
-     *
-     * @return return  value
-     */
-    public Observable<StatusResponse> getAdsInformation() {
-        return initializeApiContact().getAdsInformation()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(statusResponse -> statusResponse);
-    }
-
-    /**
-     * method to get ads info
-     *
-     * @return return  value
-     */
-    public Observable<StatusResponse> getInterstitialAdInformation() {
-        return initializeApiContact().getInterstitialAdInformation()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(statusResponse -> statusResponse);
-    }
-
 }

@@ -51,7 +51,7 @@
         android:smallScreens="true" />
 
     <application
-        android:name="com.fortunekidew.pewaad.app.PewaaApplication"
+        android:name=".app.PewaaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -59,7 +59,7 @@
         android:theme="@style/Pewaa"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name="com.fortunekidew.pewaad.activities.main.WelcomeActivity"
+            android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:noHistory="true"
@@ -72,7 +72,7 @@
         </activity>
         <!-- MainActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.main.MainActivity"
+            android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Pewaa.SplashTheme">
 
@@ -92,14 +92,14 @@
 
         <!--    WishlistActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.gifts.WishlistActivity"
+            android:name=".activities.gifts.WishlistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName="com.fortunekidew.pewaad.activities.main.MainActivity"
+            android:parentActivityName=".activities.main.MainActivity"
             android:theme="@style/Pewaa.Home"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fortunekidew.pewaad.activities.main.MainActivity" />
+                android:value=".activities.main.MainActivity" />
         </activity>
 
         <activity
@@ -109,24 +109,24 @@
             android:windowSoftInputMode="adjustResize" />
 
         <!--  AddMembersToGroupActivity -->
-        <activity android:name="com.fortunekidew.pewaad.activities.groups.AddMembersToGroupActivity" />
+        <activity android:name=".activities.groups.AddMembersToGroupActivity" />
 
         <!--  AddWishlistsActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.wishlists.AddWishlistsActivity"
+            android:name=".activities.wishlists.AddWishlistsActivity"
             android:parentActivityName=".activities.gifts.WishlistActivity" />
 
         <!--  ContributeActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.gifts.ContributeActivity"
+            android:name=".activities.gifts.ContributeActivity"
             android:parentActivityName=".activities.gifts.GiftDetailsActivity" />
 
         <!--  AddGiftsActivity -->
-        <activity android:name="com.fortunekidew.pewaad.activities.gifts.AddGiftsActivity" />
+        <activity android:name=".activities.gifts.AddGiftsActivity" />
 
         <!--  GiftActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity"
+            android:name=".activities.gifts.GiftDetailsActivity"
             android:theme="@style/Pewaa.Translucent.Wishlists.gift"
             android:parentActivityName=".activities.gifts.WishlistActivity">
             <intent-filter>
@@ -141,7 +141,7 @@
         </activity>
 
         <!--  AddNewMembersToGroupActivity -->
-        <activity android:name="com.fortunekidew.pewaad.activities.groups.AddNewMembersToGroupActivity">
+        <activity android:name=".activities.groups.AddNewMembersToGroupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -151,41 +151,41 @@
         </activity>
 
         <!--  TransferMessageContactsActivity -->
-        <activity android:name="com.fortunekidew.pewaad.activities.gifts.TransferMessageContactsActivity" />
+        <activity android:name=".activities.gifts.TransferMessageContactsActivity" />
 
         <!--  NotificationsSettingsActivity -->
-        <activity android:name="com.fortunekidew.pewaad.activities.settings.NotificationsSettingsActivity" />
+        <activity android:name=".activities.settings.NotificationsSettingsActivity" />
         <!--  AccountSettingsActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.settings.AccountSettingsActivity"
+            android:name=".activities.settings.AccountSettingsActivity"
             android:label="@string/title_activity_account_settings"
             android:theme="@style/Pewaa" />
         <!--  DeleteAccountActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.settings.DeleteAccountActivity"
+            android:name=".activities.settings.DeleteAccountActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_delete_account"
             android:theme="@style/Pewaa"
             android:windowSoftInputMode="adjustResize" />
         <!--  ChangeNumberActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.settings.ChangeNumberActivity"
+            android:name=".activities.settings.ChangeNumberActivity"
             android:label="@string/title_activity_change_number"
             android:theme="@style/Pewaa" />
 
         <!--  ChangeNumberActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.settings.AboutActivity"
+            android:name=".activities.settings.AboutActivity"
             android:theme="@style/Pewaa" />
         <!-- ProfilePreviewActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.profile.ProfilePreviewActivity"
+            android:name=".activities.profile.ProfilePreviewActivity"
             android:theme="@style/Dialog"
             android:windowActionBar="false" />
-        <activity android:name="com.fortunekidew.pewaad.activities.profile.ProfileActivity" />
+        <activity android:name=".activities.profile.ProfileActivity" />
 
         <!-- SMS Receiver -->
-        <receiver android:name="com.fortunekidew.pewaad.receivers.SmsReceiverBroadCast">
+        <receiver android:name=".receivers.SmsReceiverBroadCast">
             <intent-filter android:priority="99999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -193,11 +193,11 @@
 
         <!-- Intent service for OTP -->
         <service
-            android:name="com.fortunekidew.pewaad.services.SMSVerificationService"
+            android:name=".services.SMSVerificationService"
             android:exported="false" />
         <!-- AuthenticationService -->
         <service
-            android:name="com.fortunekidew.pewaad.sync.AuthenticatorService"
+            android:name=".sync.AuthenticatorService"
             android:exported="true"> <!--android:process=":auth"-->
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -208,61 +208,62 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <!-- ContactsSyncAdapterService for SyncAdapter -->
-
+        <!-- SyncService for SyncAdapter -->
         <service
-            android:name="com.fortunekidew.pewaad.sync.ContactsSyncAdapterService"
-            android:exported="true"> <!--android:process=":sync"-->
+            android:name=".sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_contacts" />
-
-            <meta-data
-                android:name="android.provider.CONTACTS_STRUCTURE"
-                android:resource="@xml/contacts" />
+                android:resource="@xml/sync_adapter" />
+            <!--
+                        <meta-data
+                            android:name="android.provider.CONTACTS_STRUCTURE"
+                            android:resource="@xml/sync_contacts" />
+            -->
         </service>
 
         <!-- SettingsActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.settings.SettingsActivity"
+            android:name=".activities.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/Pewaa" />
 
         <!-- SearchConversationsActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.search.SearchConversationsActivity"
+            android:name=".activities.search.SearchConversationsActivity"
             android:label="@string/title_activity_settings" />
 
         <!-- SearchContactsActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.search.SearchContactsActivity"
+            android:name=".activities.search.SearchContactsActivity"
             android:label="@string/title_activity_settings" />
 
 
         <!-- EditProfileActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.profile.EditProfileActivity"
+            android:name=".activities.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
             android:screenOrientation="portrait"
             android:theme="@style/Pewaa" />
 
         <!-- StatusActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.status.StatusActivity"
+            android:name=".activities.status.StatusActivity"
             android:label="@string/title_activity_status"
             android:theme="@style/Pewaa" />
         <!-- StatusDelete -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.popups.StatusDelete"
+            android:name=".activities.popups.StatusDelete"
             android:theme="@style/Dialog"
             android:windowActionBar="false" />
         <!-- EditStatusActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.status.EditStatusActivity"
+            android:name=".activities.status.EditStatusActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_edit_status"
             android:theme="@style/Pewaa"
@@ -270,18 +271,15 @@
 
         <!-- EditUsernameActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.profile.EditUsernameActivity"
+            android:name=".activities.profile.EditUsernameActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_edit_name"
             android:theme="@style/Pewaa"
             android:windowSoftInputMode="adjustResize" />
 
-
-        <!-- EditGroupActivity -->
-
         <!-- NewContactsActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.NewContactsActivity"
+            android:name=".activities.NewContactsActivity"
             android:label="@string/title_select_contributor"
             android:theme="@style/Pewaa" />
 
@@ -289,13 +287,13 @@
         <!-- Restart service when the user kill processor -->
 
         <service
-            android:name="com.fortunekidew.pewaad.services.BootService"
+            android:name=".services.BootService"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_service_name"
             android:process=":remote" />
 
 
-        <receiver android:name="com.fortunekidew.pewaad.receivers.NetworkChangeListener">
+        <receiver android:name=".receivers.NetworkChangeListener">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -303,7 +301,7 @@
 
         <!-- the main service  -->
         <service
-            android:name="com.fortunekidew.pewaad.services.MainService"
+            android:name=".services.MainService"
             android:enabled="true"
             android:exported="false"
             android:icon="@mipmap/ic_launcher"

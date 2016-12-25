@@ -106,6 +106,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return paymentList.size();
+        if (paymentList != null) return paymentList.size();
+        return 0;
     }
 }

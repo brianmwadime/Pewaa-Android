@@ -17,6 +17,7 @@
 package com.fortunekidew.pewaad.activities.contributors;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -37,10 +38,14 @@ import com.fortunekidew.pewaad.api.APIContributor;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
+import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
 import com.fortunekidew.pewaad.ui.transitions.FabTransform;
 import com.fortunekidew.pewaad.ui.transitions.MorphTransform;
 import com.fortunekidew.pewaad.util.TransitionUtils;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,9 +150,6 @@ public class AssignContributor extends Activity {
 
         APIContributor mApiContributor = mApiService.RootService(APIContributor.class, PreferenceManager.getToken(AssignContributor.this), EndPoints.BASE_URL);
         AssignContributor.this.runOnUiThread(() -> showLoading());
-        RequestBody wishlistID = RequestBody.create(MediaType.parse("multipart/form-data"), wishlistId);
-        RequestBody contributorID = RequestBody.create(MediaType.parse("multipart/form-data"), contributorId);
-        RequestBody permission = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(permissions.getSelectedItem()));
         Call<ContributorsResponse> statusResponseCall = mApiContributor.editContributor(contributorId, wishlistId, String.valueOf(permissions.getSelectedItem()));
         statusResponseCall.enqueue(new Callback<ContributorsResponse>() {
             @Override
@@ -158,7 +160,14 @@ public class AssignContributor extends Activity {
                     finish();
 
                 } else {
-                    Snackbar.make(container, response.message(), Snackbar.LENGTH_SHORT).show();
+
+                    try {
+                        Gson gson = new Gson();
+                        StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
+                        Snackbar.make(container, res.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     showAddContributor();
                 }
             }
@@ -175,7 +184,11 @@ public class AssignContributor extends Activity {
     public void dismiss(View view) {
         isDismissing = true;
         setResult(Activity.RESULT_CANCELED);
-        finishAfterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            finish();
+        }
     }
 
     private void showLoading() {
@@ -190,12 +203,6 @@ public class AssignContributor extends Activity {
         title.setVisibility(View.VISIBLE);
         actionsContainer.setVisibility(View.VISIBLE);
         loading.setVisibility(View.GONE);
-    }
-
-
-    private void showAddFailed() {
-        Snackbar.make(container, "Log in failed", Snackbar.LENGTH_SHORT).show();
-        showAddContributor();
     }
 
 }

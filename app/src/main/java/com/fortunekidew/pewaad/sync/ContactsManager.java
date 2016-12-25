@@ -24,7 +24,7 @@ public class ContactsManager {
         int rawContactInsertIndex = ops.size();
         ops.add(ContentProviderOperation.newInsert(addCallerIsSyncAdapterParameter(ContactsContract.RawContacts.CONTENT_URI, true))
                 .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, "Pewaa")
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, "com.fortunekidew.pewaad")
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, AuthenticatorService.ACCOUNT_TYPE)
                 .withValue(ContactsContract.RawContacts.AGGREGATION_MODE, ContactsContract.RawContacts.AGGREGATION_MODE_DEFAULT)
                 .build());
 

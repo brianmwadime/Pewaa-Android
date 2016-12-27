@@ -9,5 +9,6 @@ public class EditPayments {
     public String clientName;
     public String referenceID;
     public String trxId;
+    public String userId;
     public double totalAmount;
 }

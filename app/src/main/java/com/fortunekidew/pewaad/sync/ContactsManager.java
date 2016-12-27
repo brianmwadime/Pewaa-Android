@@ -11,11 +11,13 @@ import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
 import java.util.ArrayList;
 
 /**
- * Created by Brian Mwakima on 13/10/2016.
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class ContactsManager {
-    //this mimetype to launch a specific activity when use click on it
+    //this mimetype to launch a specific activity when user clicks on it
     private static String MIMETYPE = "vnd.android.cursor.item/vnd.com.fortunekidew.pewaad";
 
     public static void addContact(Context context,ContactsModel contact){

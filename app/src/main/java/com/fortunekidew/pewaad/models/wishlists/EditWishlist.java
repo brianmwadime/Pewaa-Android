@@ -9,8 +9,16 @@ public class EditWishlist {
     private String id;
     private String description;
     private String recipient;
+    private String permissions;
     private String category;
 
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
+    }
 
     public String getName() {
         return name;

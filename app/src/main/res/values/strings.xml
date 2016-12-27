@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pewaa</string>
+    <string name="app_name">Pewaa!</string>
     <string name="action_settings">Settings</string>
     <string name="title_home">Home</string>
     <string name="title_Friends">Friends</string>
@@ -19,7 +19,7 @@
     <string name="Password">Password</string>
     <string name="title_Sign_in">Sign in</string>
     <string name="ForgetPassword">Forget Password ?</string>
-    <string name="ConfirmPassword">Confirm the password</string>
+    <string name="ConfirmPassword">Confirm your password</string>
     <string name="Fullname">Fullname</string>
     <string name="title_sign_up">Sign up</string>
     <string name="Passwords_does_not_match">Password doesn\'t match</string>
@@ -55,7 +55,7 @@
     <string name="view_in_ad_book">View in address book</string>
     <string name="hello_welcome_to_whats_clone">Welcome</string>
     <string name="next">Next</string>
-    <string name="placeholder_sms_of_verification">You will receive an sms of verification</string>
+    <string name="placeholder_sms_of_verification">You will receive an sms with your verification code.</string>
     <string name="resend">Resend</string>
     <string name="enter_the_code_below_to_verify">Enter the code below to verify</string>
     <string name="enter_your_code">Enter your code</string>
@@ -67,7 +67,7 @@
     <string name="your_current_status">Your current status</string>
     <string name="select_your_new_status">Select your new status</string>
     <string name="title_activity_status">Status</string>
-    <string name="Make_sure_delete_status">Do you want to delete this status</string>
+    <string name="Make_sure_delete_status">Do you want to delete your status</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
     <string name="delete">Delete</string>
@@ -85,9 +85,9 @@
     <string name="title_activity_edit_name">Enter your name</string>
     <string name="title_select_contributor">Select contributor</string>
     <string name="title_contributor">Contributor</string>
-    <string name="success_response_contacts">Your contacts has been  updated successfully</string>
+    <string name="success_response_contacts">Your contacts have been updated successfully</string>
     <string name="images_directory">Images</string>
-    <string name="videos_directory">Vidoes</string>
+    <string name="videos_directory">Videos</string>
     <string name="audios_directory">Audio</string>
     <string name="documents_directory">Documents</string>
     <string name="images_profile_directory">Images Profile</string>
@@ -203,7 +203,7 @@
     <string name="key_message_notifications_settings_vibrate">message_notifications_settings_vibrate</string>
     <string name="connection_is_available">Connected</string>
     <string name="connection_is_not_available">No Internet Connection</string>
-    <string name="select_one_at_least">"At least you must select one "</string>
+    <string name="select_one_at_least">"Select at least one "</string>
     <string name="participants">Participants :</string>
     <string name="group_created_successfully">Group created successfully</string>
     <string name="create_group_failed">Create group failed</string>
@@ -211,7 +211,7 @@
     <string name="slide_to_cancel_audio">Slide To Cancel</string>
     <string name="message_is_copied">Message copied</string>
     <string name="of">" of "</string>
-    <string name="failed_upload_image">"Failed  upload your image "</string>
+    <string name="failed_upload_image">"Failed to upload your image "</string>
 
     <!--group adapters start -->
     <string name="exit_group">Exit \"</string>
@@ -257,16 +257,18 @@
     <string name="delete_all_status_dialog">Deleting All status …</string>
     <string name="deleting">Deleting …</string>
     <string name="updating_status">Updating status …</string>
-    <string name="your_status_updated_successfully">Your status has been deleted successfully</string>
+    <string name="your_status_updated_successfully">Your status has been deleted successfully.</string>
 
     <string name="auth_type">com.fortunekidew.pewaad</string>
     <string name="reply_message">Reply</string>
+    <string name="completed">Complete</string>
+    <string name="view">View</string>
 
     <string name="key_message_notifications_settings_light">message_notifications_settings_light</string>
     <string name="key_message_group_notifications_settings_tone">message_group_notifications_settings_tone</string>
     <string name="key_message_group_notifications_settings_vibrate">message_group_notifications_settings_vibrate</string>
     <string name="key_message_group_notifications_settings_light">message_group_notifications_settings_light</string>
-    <string name="message_notifications_settings_vibrate_off">Virabte Off</string>
+    <string name="message_notifications_settings_vibrate_off">Vibrate Off</string>
     <string name="message_notifications_settings_vibrate_on">Vibrate On</string>
     <string name="enjoy_it">Enjoy it!</string>
     <string name="app_version">"Version "</string>
@@ -274,7 +276,7 @@
     <string name="delete_user_account">DELETE MY ACCOUNT</string>
     <string name="delete_your_account"><![CDATA[> Delete your account and all data associated with it.]]></string>
     <string name="deleting_your_account_will">DELETING YOUR ACCOUNT WILL:</string>
-    <string name="alert_message_delete_account">Are you  sure that you want to delete your account?</string>
+    <string name="alert_message_delete_account"> ou are about to delete your account. Are you sure?</string>
     <string name="delete_account_failed_please_try_later">Failed to delete your account please try again later.</string>
     <string name="unexpected_reponse_from_server">An error has occured. Please contact support.</string>
     <string name="Settings">Settings</string>
@@ -312,4 +314,5 @@
     <string name="widget_labelled_spinner_errorText">You must choose an item.</string>
     <string name="no_contributors">No contributors yet.</string>
     <string name="add_contribution">CONTRIBUTE</string>
+    <string name="withdraw_contribution">CASH OUT</string>
 </resources>

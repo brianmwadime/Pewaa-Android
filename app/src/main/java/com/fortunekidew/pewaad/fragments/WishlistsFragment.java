@@ -45,9 +45,12 @@ import io.socket.client.Socket;
 import static com.fortunekidew.pewaad.R.id.swipeContainer;
 
 /**
- * Created by Abderrahim El imame  on 20/01/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class WishlistsFragment extends Fragment implements LoadingData, ActionMode.Callback {
 
     @BindView(R.id.WishlistsList)
@@ -282,10 +285,11 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
             case "new_wishlist":
                 WishlistsModel newWishlist = new WishlistsModel();
                 newWishlist.setName(pusher.getWishlistObject().getName());
-                newWishlist.setName(pusher.getWishlistObject().getDescription());
+                newWishlist.setDescription(pusher.getWishlistObject().getDescription());
                 newWishlist.setCategory(pusher.getWishlistObject().getCategory());
                 newWishlist.setRecipients(pusher.getWishlistObject().getRecipients());
                 newWishlist.setId(pusher.getWishlistObject().getId());
+                newWishlist.setPermissions(pusher.getWishlistObject().getPermissions());
                 mWishlistsAdapter.addItem(0, newWishlist);
                 break;
             case "deleteWishlist":

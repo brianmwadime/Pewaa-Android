@@ -20,8 +20,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Brian Mwakima on 20/04/2016.
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class WishlistsService {
     private APIWishlists mApiWishlists;

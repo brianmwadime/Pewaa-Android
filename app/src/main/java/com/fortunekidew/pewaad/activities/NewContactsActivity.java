@@ -23,8 +23,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by abderrahimelimame on 6/9/16.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class NewContactsActivity extends AppCompatActivity {
@@ -89,7 +91,6 @@ public class NewContactsActivity extends AppCompatActivity {
             getSupportActionBar().setSubtitle("" + contactsModels.size() +" of "+ PreferenceManager.getContactSize(this));
         mSelectContactsAdapter.setContacts(contactsModels);
     }
-
 
     @Override
     public void onDestroy() {

@@ -1,6 +1,5 @@
 package com.fortunekidew.pewaad.activities.gifts;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -10,19 +9,16 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.ActionMenuView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,6 +29,7 @@ import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.NewContactsActivity;
 import com.fortunekidew.pewaad.activities.contributors.AssignContributor;
 import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.GiftsAdapter;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
@@ -46,7 +43,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,13 +56,18 @@ import static com.fortunekidew.pewaad.services.MainService.mSocket;
 
 
 /**
- * Created by Brian Mwakima on 05/03/2016.
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 @SuppressLint("SetTextI18n")
 public class WishlistActivity extends Activity implements LoadingData {
 
+    public final static String RESULT_EXTRA_WISHLIST_ID = "RESULT_EXTRA_WISHLIST_ID";
+    public final static String RESULT_EXTRA_WISHLIST_TITLE = "RESULT_EXTRA_WISHLIST_TITLE";
+    public final static String RESULT_EXTRA_WISHLIST_PERMISSION = "RESULT_EXTRA_WISHLIST_PERMISSION";
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout SwipeToRefresh;
     @BindView(R.id.GiftsList)
@@ -83,16 +84,10 @@ public class WishlistActivity extends Activity implements LoadingData {
     private GiftsAdapter mGiftsAdapter;
     public Context context;
     private GiftsPresenter mGiftsPresenter = new GiftsPresenter(this);
-    private String wishlistID, wishlistTitle;
+    private String wishlistID, wishlistTitle, wishlistPermission;
 
-    private Timer TYPING_TIMER_LENGTH = new Timer();
-    private boolean isTyping = false;
-    private boolean isOpen;
     private Realm realm;
     private EventBus eventBus = EventBus.getDefault();
-    private Animator.AnimatorListener mAnimatorListenerOpen, mAnimatorListenerClose;
-    private GestureDetectorCompat gestureDetector;
-    private ActionMode actionMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,12 +103,16 @@ public class WishlistActivity extends Activity implements LoadingData {
         eventBus.register(this);
 
         if (getIntent().getExtras() != null) {
-            if (getIntent().hasExtra("wishlistID")) {
-                wishlistID = getIntent().getExtras().getString("wishlistID");
+            if (getIntent().hasExtra(RESULT_EXTRA_WISHLIST_ID)) {
+                wishlistID = getIntent().getExtras().getString(RESULT_EXTRA_WISHLIST_ID);
             }
 
-            if (getIntent().hasExtra("wishlistTitle")) {
-                wishlistTitle = getIntent().getExtras().getString("wishlistTitle");
+            if (getIntent().hasExtra(RESULT_EXTRA_WISHLIST_TITLE)) {
+                wishlistTitle = getIntent().getExtras().getString(RESULT_EXTRA_WISHLIST_TITLE);
+            }
+
+            if (getIntent().hasExtra(RESULT_EXTRA_WISHLIST_PERMISSION)) {
+                wishlistPermission = getIntent().getExtras().getString(RESULT_EXTRA_WISHLIST_PERMISSION);
             }
         }
 
@@ -143,6 +142,8 @@ public class WishlistActivity extends Activity implements LoadingData {
 
 
         getActionBar().setTitle(wishlistTitle);
+
+        if (wishlistPermission.equals(AppConstants.WISHLIST_CONTRIBUTOR)) AddGift.setVisibility(View.GONE);
 
         setExitSharedElementCallback(GiftsAdapter.createSharedElementReenterCallback(this));
 
@@ -188,6 +189,16 @@ public class WishlistActivity extends Activity implements LoadingData {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if(wishlistPermission.equals(AppConstants.WISHLIST_CONTRIBUTOR)) {
+            menu.findItem(R.id.add_contributor).setVisible(false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

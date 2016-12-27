@@ -7,9 +7,12 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class WishlistsModel extends RealmObject {
     @PrimaryKey
     private String id;
@@ -18,6 +21,7 @@ public class WishlistsModel extends RealmObject {
     private String recipients;
     private String category;
     private String avatar;
+    private String permissions;
     private RealmList<GiftsModel> gifts;
 
     /**
@@ -25,8 +29,6 @@ public class WishlistsModel extends RealmObject {
      */
     @Expose
     private boolean createdOnline;
-
-
 
     public boolean getCreatedOnline() {
         return createdOnline;
@@ -52,6 +54,13 @@ public class WishlistsModel extends RealmObject {
         this.name = name;
     }
 
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
+    }
 
     public WishlistsModel() {
 
@@ -87,7 +96,7 @@ public class WishlistsModel extends RealmObject {
     }
 
     public void setAvatar(String avatar) {
-        avatar = avatar;
+        this.avatar = avatar;
     }
 
     public String getRecipients() {

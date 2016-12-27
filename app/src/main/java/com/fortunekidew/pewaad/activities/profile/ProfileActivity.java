@@ -33,8 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fortunekidew.pewaad.R;
+import com.fortunekidew.pewaad.activities.contributors.AssignContributor;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
-import com.fortunekidew.pewaad.activities.groups.AddNewMembersToGroupActivity;
 import com.fortunekidew.pewaad.activities.main.MainActivity;
 import com.fortunekidew.pewaad.adapters.recyclerView.MediaProfileAdapter;
 import com.fortunekidew.pewaad.adapters.recyclerView.groups.GroupMembersAdapter;
@@ -62,6 +62,7 @@ import com.fortunekidew.pewaad.presenters.ProfilePresenter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -79,9 +80,12 @@ import retrofit2.Response;
 import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
 
 /**
- * Created by Abderrahim El imame on 27/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class ProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.cover)
@@ -200,7 +204,7 @@ public class ProfileActivity extends AppCompatActivity {
             participantContainer.setVisibility(View.GONE);
         }
         addNewParticipant.setOnClickListener(v -> {
-            Intent mIntent = new Intent(this, AddNewMembersToGroupActivity.class);
+            Intent mIntent = new Intent(this, AssignContributor.class);
             mIntent.putExtra("groupID", groupID);
             mIntent.putExtra("profileAdd", "add");
             startActivity(mIntent);
@@ -309,7 +313,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
             finish();
         } else if (item.getItemId() == R.id.add_contributor) {
-            Intent mIntent = new Intent(this, AddNewMembersToGroupActivity.class);
+            Intent mIntent = new Intent(this, AssignContributor.class);
             mIntent.putExtra("groupID", groupID);
             mIntent.putExtra("profileAdd", "add");
             startActivity(mIntent);
@@ -718,7 +722,7 @@ public class ProfileActivity extends AppCompatActivity {
      *
      * @param pusher this is parameter of onEventMainThread method
      */
-    @SuppressWarnings("unused")
+    @Subscribe
     public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
             case "addMember":

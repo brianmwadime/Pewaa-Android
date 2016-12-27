@@ -44,9 +44,12 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
 /**
- * Created by Brian Mwakima on 20/02/2016.
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected final Activity mActivity;
     private RealmList<WishlistsModel> mWishlists;
@@ -177,7 +180,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 switch (wishlistsModel.getCategory()) {
                     case "Wedding":
-
                         wishlistViewHolder.setWishlistImage(R.drawable.wedding);
                     break;
                     case "House Warming":
@@ -197,8 +199,9 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 wishlistViewHolder.setOnClickListener(view -> {
 
                     Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
-                    messagingIntent.putExtra("wishlistID", wishlistsModel.getId());
-                    messagingIntent.putExtra("wishlistTitle", wishlistsModel.getName());
+                    messagingIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_ID, wishlistsModel.getId());
+                    messagingIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_TITLE, wishlistsModel.getName());
+                    messagingIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_PERMISSION, wishlistsModel.getPermissions());
                     mActivity.startActivity(messagingIntent);
                     mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 });

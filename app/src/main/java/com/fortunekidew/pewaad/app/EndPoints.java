@@ -11,7 +11,7 @@ public class EndPoints {
     /**
      * Chat server URLs
      */
-    public static final String CHAT_SERVER_URL = "http://91.234.194.82:9000";
+    public static final String CHAT_SERVER_URL = "http://api.pewaa.com";
 
 ;
     /**

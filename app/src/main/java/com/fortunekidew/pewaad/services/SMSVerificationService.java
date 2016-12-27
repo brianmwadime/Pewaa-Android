@@ -16,16 +16,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Abderrahim El imame on 23/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class SMSVerificationService extends IntentService {
 
 
     public SMSVerificationService() {
         super(SMSVerificationService.class.getSimpleName());
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -46,6 +48,7 @@ public class SMSVerificationService extends IntentService {
                         AppHelper.CustomToast(getApplicationContext(), response.body().getMessage());
                         PreferenceManager.setID(response.body().getUserID(), SMSVerificationService.this);
                         PreferenceManager.setToken(response.body().getToken(), SMSVerificationService.this);
+                        PreferenceManager.setNumber(response.body().getMobile(), SMSVerificationService.this);
                         Intent intent = new Intent(SMSVerificationService.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

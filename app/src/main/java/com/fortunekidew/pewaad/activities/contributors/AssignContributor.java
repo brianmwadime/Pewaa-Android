@@ -55,6 +55,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
+ */
+
 public class AssignContributor extends Activity {
 
     public static final String EXTRA_WISHLIST_ID = "EXTRA_WISHLIST_ID";
@@ -165,11 +172,15 @@ public class AssignContributor extends Activity {
                         Gson gson = new Gson();
                         StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
                         Snackbar.make(container, res.getMessage(), Snackbar.LENGTH_SHORT).show();
+
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     showAddContributor();
                 }
+
             }
 
             @Override

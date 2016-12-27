@@ -1,29 +1,19 @@
 package com.fortunekidew.pewaad.services;
 
-import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.api.APIPush;
-import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
-import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.helpers.SignUpPreferenceManager;
-import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.fortunekidew.pewaad.app.EndPoints.BASE_URL;
 
 
 /**
- * Created by mwakima on 10/26/16.
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class PewaaFirebaseInstanceIDService extends FirebaseInstanceIdService {

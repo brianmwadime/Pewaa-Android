@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by Abderrahim El imame on 29/01/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public abstract class MessagesReceiverBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context mContext, Intent intent) {

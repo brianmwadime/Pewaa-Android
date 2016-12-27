@@ -39,8 +39,8 @@ public class GiftsPresenter implements Presenter {
         Handler handler = new Handler();
         APIService mApiService = APIService.with(view.getApplicationContext());
 
-        if (view.getIntent().hasExtra("wishlistID")) {
-            wishlistID = view.getIntent().getExtras().getString("wishlistID");
+        if (view.getIntent().hasExtra(view.RESULT_EXTRA_WISHLIST_ID)) {
+            wishlistID = view.getIntent().getExtras().getString(view.RESULT_EXTRA_WISHLIST_ID);
         }
 
         mWishlistsService = new WishlistsService(realm, view.getApplicationContext(), mApiService);

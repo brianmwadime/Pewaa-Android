@@ -108,9 +108,6 @@
             android:theme="@style/Pewaa.Translucent.AssignContributor"
             android:windowSoftInputMode="adjustResize" />
 
-        <!--  AddMembersToGroupActivity -->
-        <activity android:name=".activities.groups.AddMembersToGroupActivity" />
-
         <!--  AddWishlistsActivity -->
         <activity
             android:name=".activities.wishlists.AddWishlistsActivity"
@@ -138,16 +135,6 @@
                     android:host="pewaa.com"
                     android:pathPrefix="/gifts/"/>
             </intent-filter>
-        </activity>
-
-        <!--  AddNewMembersToGroupActivity -->
-        <activity android:name=".activities.groups.AddNewMembersToGroupActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
         </activity>
 
         <!--  TransferMessageContactsActivity -->
@@ -186,7 +173,7 @@
 
         <!-- SMS Receiver -->
         <receiver android:name=".receivers.SmsReceiverBroadCast">
-            <intent-filter android:priority="99999">
+            <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -198,7 +185,8 @@
         <!-- AuthenticationService -->
         <service
             android:name=".sync.AuthenticatorService"
-            android:exported="true"> <!--android:process=":auth"-->
+            android:exported="true"
+            android:process=":auth">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -308,8 +296,7 @@
             android:label="@string/app_service_name">
             <intent-filter>
                 <action android:name="new_wishlist_notification" />
-                <action android:name="new_payment_notification" />
-                <action android:name="payment_completed_notification" />
+                <action android:name="new_gift_notification" />
             </intent-filter>
         </service>
 

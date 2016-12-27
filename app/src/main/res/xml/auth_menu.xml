@@ -7,6 +7,6 @@
         android:summary="">
         <intent android:action="com.fortunekidew.pewaad.OPEN_ACCOUNT"
             android:targetPackage="com.fortunekidew.pewaad"
-            android:targetClass="com.fortunekidew.pewaad.activities.main.MainActivity"/>
+            android:targetClass=".activities.main.MainActivity"/>
     </PreferenceScreen>
 </PreferenceScreen>

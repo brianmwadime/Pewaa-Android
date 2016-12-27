@@ -13,9 +13,12 @@ import com.fortunekidew.pewaad.services.SMSVerificationService;
 
 
 /**
- * Created by Abderrahim El imame on 23/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class SmsReceiverBroadCast extends BroadcastReceiver {
     private static final String TAG = SmsReceiverBroadCast.class.getSimpleName();
 
@@ -25,10 +28,15 @@ public class SmsReceiverBroadCast extends BroadcastReceiver {
         final Bundle bundle = intent.getExtras();
         try {
             if (bundle != null) {
-                Object[] pdusObj = (Object[]) bundle.get("pdus");
-                for (Object aPdusObj : pdusObj) {
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                for (Object aPdusObj : pdus) {
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) aPdusObj);
+                    String senderAddress = currentMessage.getDisplayOriginatingAddress();
                     String message = currentMessage.getDisplayMessageBody();
+                    // if the SMS is not from our gateway, ignore the message
+                    if (!senderAddress.toLowerCase().contains(AppConstants.SMS_SENDER_NAME.toLowerCase())) {
+                        return;
+                    }
 
                     // verification code from sms
                     String verificationCode = getVerificationCode(message);

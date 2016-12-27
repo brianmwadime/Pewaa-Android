@@ -30,10 +30,10 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 /**
- * Created by Abderrahim El imame on 8/12/16.
+ * Created by Brian Mwakima on 12/25/16.
  *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class SearchConversationsActivity extends AppCompatActivity {

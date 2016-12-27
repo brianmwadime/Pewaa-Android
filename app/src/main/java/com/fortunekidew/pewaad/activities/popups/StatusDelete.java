@@ -12,9 +12,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Abderrahim El imame on 28/04/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class StatusDelete extends Activity {
 
     @BindView(R.id.deleteStatus)

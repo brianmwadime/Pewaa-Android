@@ -1,19 +1,16 @@
 package com.fortunekidew.pewaad.sync;
 
-import android.accounts.AbstractAccountAuthenticator;
-import android.accounts.Account;
-import android.accounts.AccountAuthenticatorResponse;
-import android.accounts.AccountManager;
-import android.accounts.NetworkErrorException;
+
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+
 import android.os.IBinder;
 
 /**
- * Created by Abderrahim El imame on 01/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class AuthenticatorService extends Service {
 

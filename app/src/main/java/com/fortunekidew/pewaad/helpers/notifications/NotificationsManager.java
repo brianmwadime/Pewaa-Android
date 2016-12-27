@@ -18,30 +18,26 @@ import android.support.v4.app.TaskStackBuilder;
 
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
+import com.fortunekidew.pewaad.activities.main.MainActivity;
 import com.fortunekidew.pewaad.activities.settings.PreferenceSettingsManager;
-import com.fortunekidew.pewaad.app.EndPoints;
-import com.fortunekidew.pewaad.helpers.AppHelper;
-import com.fortunekidew.pewaad.helpers.Files.FilesManager;
-import com.fortunekidew.pewaad.helpers.UtilsPhone;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 /**
- * Created by Abderrahim El imame on 6/19/16.
+ * Created by Brian Mwakima on 12/25/16.
  *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class NotificationsManager {
 
 
     private static NotificationManager mNotificationManager;
-    private static String username;
     private static int numMessages = 0;
+    // Sets an ID for the notification
+    static int mNotificationId = 001;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public static void showUserNotification(Context mContext, Intent resultIntent, String phone, String text, String userId, String Avatar) {
+    public static void showGiftNotification(Context mContext, Intent resultIntent, String text) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         // Adds the back stack
         stackBuilder.addParentStack(WishlistActivity.class);
@@ -50,81 +46,17 @@ public class NotificationsManager {
         // Gets a PendingIntent containing the entire back stack
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         final NotificationCompat.Builder mNotifyBuilder;
-        try {
-            String name = UtilsPhone.getContactName(mContext, phone);
-            if (name != null) {
-                username = name;
-            } else {
-                username = phone;
-            }
 
-        } catch (Exception e) {
-            AppHelper.LogCat(" " + e.getMessage());
-        }
-        ++numMessages;
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_notification, mContext.getString(R.string.reply_message), resultPendingIntent).build();
         mNotifyBuilder = new NotificationCompat.Builder(mContext)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .addAction(action)
-                .setContentTitle(username)
+                .addAction(R.drawable.ic_notification, mContext.getString(R.string.view), resultPendingIntent)
+                .setContentTitle("Pewaa!")
                 .setContentText(text)
-                .setNumber(numMessages)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(resultPendingIntent)
                 .setPriority(Notification.PRIORITY_HIGH);
-
-
-        if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(userId, username))) {
-
-            Target target = new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    mNotifyBuilder.setLargeIcon(bitmap);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(errorDrawable));
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(placeHolderDrawable));
-                }
-            };
-            Picasso.with(mContext)
-                    .load(FilesManager.getFileImageProfile(userId, username))
-                    .transform(new com.fortunekidew.pewaad.ui.CropSquareTransformation())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(target);
-
-        } else {
-
-            Target target = new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    mNotifyBuilder.setLargeIcon(bitmap);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(errorDrawable));
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(placeHolderDrawable));
-                }
-            };
-            Picasso.with(mContext)
-                    .load(EndPoints.BASE_URL + Avatar)
-                    .transform(new com.fortunekidew.pewaad.ui.CropSquareTransformation())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(target);
-        }
 
 
         if (PreferenceSettingsManager.conversation_tones(mContext)) {
@@ -163,93 +95,38 @@ public class NotificationsManager {
 
         mNotifyBuilder.setAutoCancel(true);
 
-//        mNotificationManager.notify(userId, mNotifyBuilder.build());
+        mNotificationManager.notify(mNotificationId, mNotifyBuilder.build());
 
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public static void showGroupNotification(Context mContext, Intent resultIntent, String groupName, String text, int groupId, String Avatar) {
+    public static void showWishlistNotification(Context mContext, Intent resultIntent, String text) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         // Adds the back stack
-        stackBuilder.addParentStack(WishlistActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
         // Adds the Intent to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         // Gets a PendingIntent containing the entire back stack
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         final NotificationCompat.Builder mNotifyBuilder;
 
-
-        ++numMessages;
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_notification, mContext.getString(R.string.reply_message), resultPendingIntent).build();
+
         mNotifyBuilder = new NotificationCompat.Builder(mContext)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .addAction(action)
-                .setContentTitle(groupName)
+                .addAction(R.drawable.ic_notification, mContext.getString(R.string.view), resultPendingIntent)
+                .setContentTitle("Pewaa!")
                 .setContentText(text)
-                .setNumber(numMessages)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(resultPendingIntent)
                 .setPriority(Notification.PRIORITY_HIGH);
 
-        if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(groupId), groupName))) {
-
-            Target target = new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    mNotifyBuilder.setLargeIcon(bitmap);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(errorDrawable));
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(placeHolderDrawable));
-                }
-            };
-            Picasso.with(mContext)
-                    .load(FilesManager.getFileImageProfile(String.valueOf(groupId), username))
-                    .transform(new com.fortunekidew.pewaad.ui.CropSquareTransformation())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(target);
-
-        } else {
-
-            Target target = new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    mNotifyBuilder.setLargeIcon(bitmap);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(errorDrawable));
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    mNotifyBuilder.setLargeIcon(drawableToBitmap(placeHolderDrawable));
-                }
-            };
-            Picasso.with(mContext)
-                    .load(EndPoints.BASE_URL + Avatar)
-                    .transform(new com.fortunekidew.pewaad.ui.CropSquareTransformation())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(target);
-        }
-
-        mNotifyBuilder.setAutoCancel(true);
-
 
         if (PreferenceSettingsManager.conversation_tones(mContext)) {
 
-            Uri uri = PreferenceSettingsManager.getDefault_message_group_notifications_settings_tone(mContext);
+            Uri uri = PreferenceSettingsManager.getDefault_message_notifications_settings_tone(mContext);
             if (uri != null)
                 mNotifyBuilder.setSound(uri);
             else {
@@ -261,7 +138,7 @@ public class NotificationsManager {
 
         }
 
-        if (PreferenceSettingsManager.getDefault_message_group_notifications_settings_vibrate(mContext)) {
+        if (PreferenceSettingsManager.getDefault_message_notifications_settings_vibrate(mContext)) {
             long[] vibrate = new long[]{2000, 2000, 2000, 2000, 2000};
             mNotifyBuilder.setVibrate(vibrate);
         } else {
@@ -271,7 +148,7 @@ public class NotificationsManager {
         }
 
 
-        String colorLight = PreferenceSettingsManager.getDefault_message_group_notifications_settings_light(mContext);
+        String colorLight = PreferenceSettingsManager.getDefault_message_notifications_settings_light(mContext);
         if (colorLight != null) {
             mNotifyBuilder.setLights(Color.parseColor(colorLight), 1500, 1500);
         } else {
@@ -281,7 +158,9 @@ public class NotificationsManager {
         }
 
 
-        mNotificationManager.notify(groupId, mNotifyBuilder.build());
+        mNotifyBuilder.setAutoCancel(true);
+
+        mNotificationManager.notify(mNotificationId, mNotifyBuilder.build());
 
     }
 

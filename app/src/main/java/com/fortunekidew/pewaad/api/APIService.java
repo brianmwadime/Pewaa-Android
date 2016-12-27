@@ -94,19 +94,25 @@ public class APIService {
 
     public static <S> S RootService(Class<S> serviceClass, String baseUrl) {
 
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(chain -> {
             Request original = chain.request();
 
             // Customize the request
             Request request = original.newBuilder()
-
                     .method(original.method(), original.body())
                     .build();
 
             // Customize or return the response
             return chain.proceed(request);
         });
+
+        // add logging as last interceptor
+        httpClient.addInterceptor(logging);
 
         OkHttpClient client = httpClient.build();
         Retrofit.Builder builder = new Retrofit.Builder()

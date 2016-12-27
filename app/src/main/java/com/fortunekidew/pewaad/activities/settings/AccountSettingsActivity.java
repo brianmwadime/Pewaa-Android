@@ -14,10 +14,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Abderrahim El imame on 8/17/16.
+ * Created by Brian Mwakima on 12/25/16.
  *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class AccountSettingsActivity extends AppCompatActivity {

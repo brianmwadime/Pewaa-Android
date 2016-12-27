@@ -57,9 +57,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Abderrahim El imame on 09/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class WelcomeActivity extends AccountAuthenticatorActivity implements View.OnClickListener {
     @BindView(R.id.numberPhone) TextInputEditText phoneNumberWrapper;
     @BindView(R.id.inputOtpWrapper) TextInputEditText inputOtpWrapper;
@@ -512,7 +515,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
      * @param pusher this is parameter of onEventMainThread method
      */
     @Subscribe
-    public void onEvent(Pusher pusher) {
+    public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
             case "countryCode":
                 Code = "" + pusher.getData();

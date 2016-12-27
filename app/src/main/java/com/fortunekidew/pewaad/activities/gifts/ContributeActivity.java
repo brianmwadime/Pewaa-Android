@@ -52,6 +52,7 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
@@ -64,10 +65,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 /**
- * Created by Brian Mwakima on 17/10/2016.
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 @SuppressLint("SetTextI18n")
@@ -81,7 +83,6 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
     @BindView(R.id.amount)
     EditText EditAmount;
 
-    private SignUpPreferenceManager mSignUpPreferenceManager;
     private GiftsModel gift;
 
 
@@ -108,8 +109,8 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
     private void initializeView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
 
-
-        EditAmount.setText(String.valueOf(gift.getPrice()));
+        // Minus the contributed amount from the gift price
+        EditAmount.setText(String.valueOf(gift.getPrice() - gift.getContributed()));
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -118,7 +119,6 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
 
         }
 
-        mSignUpPreferenceManager = new SignUpPreferenceManager(this);
         mApiService = new APIService(this);
     }
 
@@ -177,7 +177,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
 
     @Override
     public void onErrorLoading(Throwable throwable) {
-        AppHelper.LogCat("Wishlists " + throwable.getMessage());
+        AppHelper.LogCat("Contribute Activity " + throwable.getMessage());
     }
 
     /**
@@ -212,7 +212,21 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
 
         double newPrice = Double.parseDouble(EditAmount.getText().toString().trim());
 
-        String referenceID = UUID.fromString(gift.getId()).toString();
+        // If entered amount is greater than the gift price
+        if(newPrice > gift.getPrice()) {
+            AppHelper.Snackbar(getApplicationContext(), contributeParentLayout, "Amount entered is greater than the gift price.", AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
+            return;
+        }
+
+        if((gift.getContributed() + newPrice) > gift.getPrice()) {
+            AppHelper.Snackbar(getApplicationContext(), contributeParentLayout, "Amount entered exceeds the total gift price.", AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
+            return;
+        }
+
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        String referenceID = UUID.fromString(gift.getId()).toString() + timestamp.getTime();
 
         APIPayments mAPIPayments = mApiService.RootService(APIPayments.class, PreferenceManager.getToken(ContributeActivity.this), EndPoints.BASE_URL);
 
@@ -220,10 +234,11 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         // Create payment object
         EditPayments payment = new EditPayments();
         payment.clientLocation = "";
-        payment.clientName = mSignUpPreferenceManager.getMobileNumber();
+        payment.clientName  = PreferenceManager.getNumber(ContributeActivity.this);
         payment.referenceID = referenceID;
         payment.totalAmount = newPrice;
-        payment.phoneNumber = mSignUpPreferenceManager.getMobileNumber().replaceAll("\\D", "");
+        payment.phoneNumber = PreferenceManager.getNumber(ContributeActivity.this).replaceAll("\\D", "");
+        payment.userId      = PreferenceManager.getID(ContributeActivity.this);
 
         Call<RequestPaymentResponse> requestPayment = mAPIPayments.requestPayment(payment);
         requestPayment.enqueue(new Callback<RequestPaymentResponse>() {

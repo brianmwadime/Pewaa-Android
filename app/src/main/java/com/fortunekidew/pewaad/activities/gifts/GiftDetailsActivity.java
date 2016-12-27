@@ -81,6 +81,13 @@ import static com.fortunekidew.pewaad.app.EndPoints.ASSETS_BASE_URL;
 import static com.fortunekidew.pewaad.app.EndPoints.BASE_URL;
 import static com.fortunekidew.pewaad.util.AnimUtils.getFastOutSlowInInterpolator;
 
+/**
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
+ */
+
 public class GiftDetailsActivity extends Activity implements LoadingData {
 
     public final static String RESULT_EXTRA_GIFT_ID = "RESULT_EXTRA_GIFT_ID";
@@ -323,18 +330,22 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                     ((TextView)contributedAmount).setText(String.valueOf(0.0));
                     adapter.addContributors(contributors);
                     double amount = 0;
-//                    contributors.forEach(contributor -> {
-//                        amount += contributor.getAmount();
-//                    });
+
                     for (int i=0; i < contributors.size(); i++) {
                         amount += contributors.get(i).getAmount();
                     }
 
                     ((TextView)contributedAmount).setText(String.valueOf(amount));
                     double progress =  ((amount/ gift.getPrice()) * 100);
-
+                    // Set contributin progress
                     ((ProgressBar) giftProgress).setProgress((int)progress);
+                    // Set the total contributed amount for further calculations.
+                    gift.setContributed(amount);
 
+                    // Hide contribute button once we hit the mark!
+                    if (progress == 100) {
+                        contribute.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
 

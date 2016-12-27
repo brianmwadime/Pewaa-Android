@@ -28,9 +28,10 @@
 
 
     <android.support.v7.widget.AppCompatImageView
+        android:layout_margin="20dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_notification" />
+        android:src="@drawable/logo" />
 
     <TextView
         android:layout_width="match_parent"

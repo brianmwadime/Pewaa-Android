@@ -38,9 +38,12 @@ import static com.fortunekidew.pewaad.app.AppConstants.STATUS_CONTRIBUTOR_ADDED;
 import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
 
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecyclerViewFastScroller.BubbleTextGetter {
     private final Activity mActivity;
     private List<ContactsModel> mContactsModel;
@@ -100,11 +103,11 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             contactsViewHolder.setOnClickListener(view -> {
                 if (view.getId() == R.id.wishlist_image) {
                     Intent mIntent = new Intent(mActivity, ProfilePreviewActivity.class);
-                    mIntent.putExtra("userID", contactsModel.getId());
+                    mIntent.putExtra(ProfilePreviewActivity.EXTRA_USER_ID, contactsModel.getId());
                     mActivity.startActivity(mIntent);
                 } else {
 
-                    Intent intentMessage=new Intent();
+                    Intent intentMessage = new Intent();
 
                     intentMessage.putExtra("EXTRA_CONTRIBUTOR_ID", contactsModel.getId());
                     mActivity.setResult(STATUS_CONTRIBUTOR_ADDED, intentMessage);

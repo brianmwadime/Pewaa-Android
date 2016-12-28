@@ -262,6 +262,7 @@ public class MainService extends Service {
                     wishlistIntent.setClass(PewaaApplication.getAppContext(), WishlistActivity.class);
                     wishlistIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_ID, data.getString("wishlist_id"));
                     wishlistIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_TITLE, wishlist.getString("name"));
+                    wishlistIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_PERMISSION, data.getString("permissions"));
 
                     NotificationsManager.showWishlistNotification(PewaaApplication.getAppContext(), wishlistIntent, "You have been added to a Wishlist.");
                 }

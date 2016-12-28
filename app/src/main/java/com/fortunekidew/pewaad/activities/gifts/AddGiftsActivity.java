@@ -55,6 +55,8 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
     private static final int[] NORMAL_IMAGE_SIZE = new int[] { 400, 300 };
     private final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
 
+    public final static String RESULT_EXTRA_GIFT_ID = "RESULT_EXTRA_GIFT_ID";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -85,8 +87,8 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
         setContentView(R.layout.activity_add_gift);
 
         if (getIntent().getExtras() != null) {
-            if (getIntent().hasExtra("wishlistID")) {
-                wishlistID = getIntent().getExtras().getString("wishlistID");
+            if (getIntent().hasExtra(RESULT_EXTRA_GIFT_ID)) {
+                wishlistID = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_ID);
             }
         }
 

@@ -51,6 +51,10 @@ import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
  */
 
 public class ProfilePreviewActivity extends Activity {
+
+    public static final String EXTRA_USER_ID = "userID";
+    public static final String EXTRA_CONTRIBUTOR_ID = "EXTRA_CONTRIBUTOR_ID";
+
     @BindView(R.id.userProfileName)
     EmojiconTextView userProfileName;
     @BindView(R.id.ContactBtn)
@@ -96,9 +100,9 @@ public class ProfilePreviewActivity extends Activity {
         ButterKnife.bind(this);
         initializerView();
         setupProgressBar();
-        if (getIntent().hasExtra("userID")) {
+        if (getIntent().hasExtra(EXTRA_USER_ID)) {
             isGroup = getIntent().getExtras().getBoolean("isGroup");
-            userID = getIntent().getExtras().getInt("userID");
+            userID = getIntent().getExtras().getInt(EXTRA_USER_ID);
         }
 
         mProfilePresenter.onCreate();

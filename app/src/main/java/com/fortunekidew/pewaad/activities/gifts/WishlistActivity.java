@@ -187,7 +187,6 @@ public class WishlistActivity extends Activity implements LoadingData {
                 break;
         }
 
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -235,13 +234,12 @@ public class WishlistActivity extends Activity implements LoadingData {
             GiftsList.setVisibility(View.GONE);
             EmptyGiftslists.setVisibility(View.VISIBLE);
         }
-
     }
 
     @OnClick(R.id.addGiftFab)
     public void addGift(View view) {
         Intent wishlistIntent = new Intent(this, AddGiftsActivity.class);
-        wishlistIntent.putExtra("wishlistID", wishlistID);
+        wishlistIntent.putExtra(AddGiftsActivity.RESULT_EXTRA_GIFT_ID, wishlistID);
         this.startActivity(wishlistIntent);
         this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

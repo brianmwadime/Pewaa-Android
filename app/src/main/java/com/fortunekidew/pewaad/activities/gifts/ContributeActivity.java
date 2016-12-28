@@ -110,6 +110,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
 
         // Minus the contributed amount from the gift price
+        
         EditAmount.setText(String.valueOf(gift.getPrice() - gift.getContributed()));
 
         setSupportActionBar(toolbar);

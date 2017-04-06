@@ -3,6 +3,7 @@ package com.fortunekidew.pewaad.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,13 +23,18 @@ import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaad.models.users.contacts.PusherContacts;
 import com.fortunekidew.pewaad.presenters.ContactsPresenter;
 import com.fortunekidew.pewaad.ui.RecyclerViewFastScroller;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -48,8 +54,7 @@ public class ContactsFragment extends Fragment implements LoadingData {
 
     private List<ContactsModel> mContactsModelList;
     private ContactsAdapter mContactsAdapter;
-    private ContactsPresenter mContactsPresenter = new ContactsPresenter(this);
-
+    private ContactsPresenter mContactsPresenter;
 
     @Nullable
     @Override
@@ -57,6 +62,7 @@ public class ContactsFragment extends Fragment implements LoadingData {
         super.onCreateView(inflater, container, savedInstanceState);
         View mView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, mView);
+        mContactsPresenter = new ContactsPresenter(this);
         mContactsPresenter.onCreate();
         initializerView();
         return mView;
@@ -72,6 +78,20 @@ public class ContactsFragment extends Fragment implements LoadingData {
         setHasOptionsMenu(true);
         ContactsList.setLayoutManager(mLinearLayoutManager);
         ContactsList.setAdapter(mContactsAdapter);
+        ContactsList.setItemAnimator(new DefaultItemAnimator());
+        ContactsList.getItemAnimator().setChangeDuration(0);
+        ContactsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
+                final Picasso picasso = Picasso.with(getActivity());
+
+                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                    picasso.resumeTag(getActivity());
+                } else {
+                    picasso.pauseTag(getActivity());
+                }
+            }
+        });
         // set recycler view to fastScroller
         fastScroller.setRecyclerView(ContactsList);
         fastScroller.setViewsToUse(R.layout.contacts_fragment_fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
@@ -127,7 +147,7 @@ public class ContactsFragment extends Fragment implements LoadingData {
      *
      * @param pusher this is parameter of onEventMainThread method
      */
-    @SuppressWarnings("unused")
+    @Subscribe
     public void onEventMainThread(PusherContacts pusher) {
         mContactsPresenter.onEventMainThread(pusher);
     }

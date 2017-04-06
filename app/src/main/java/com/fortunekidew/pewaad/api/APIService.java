@@ -19,8 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
- * Created by Abderrahim El imame on 27/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class APIService {
 
@@ -63,15 +65,6 @@ public class APIService {
             // Customize or return the response
             return chain.proceed(request);
         });
-/*
-
-        RxJavaPlugins.getInstance().registerErrorHandler(new RxJavaErrorHandler() {
-            @Override
-            public void handleError(Throwable e) {
-                AppHelper.LogCat("Error RootService " + e.getMessage());
-            }
-        });
-*/
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         if (BuildConfig.DEBUG) {

@@ -84,7 +84,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_account);
         ButterKnife.bind(this);
-        realm = Realm.getDefaultInstance();
+        realm = PewaaApplication.getRealmDatabaseInstance();
         EventBus.getDefault().register(this);
         setupToolbar();
         initializerView();

@@ -4,8 +4,10 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class ContactsModel extends RealmObject {
     @PrimaryKey
@@ -13,6 +15,7 @@ public class ContactsModel extends RealmObject {
     private int contactID;
     private String username;
     private String phone;
+    private String phoneTmp;
     private boolean Linked;
     private boolean Exist;
     private String image;
@@ -20,6 +23,14 @@ public class ContactsModel extends RealmObject {
     private String name;
     private String status_date;
     private String userState;
+
+    public String getPhoneTmp() {
+        return phoneTmp;
+    }
+
+    public void setPhoneTmp(String phoneTmp) {
+        this.phoneTmp = phoneTmp;
+    }
 
     public String getUserState() {
         return userState;

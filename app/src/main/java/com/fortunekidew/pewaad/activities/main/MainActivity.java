@@ -5,13 +5,13 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
-import android.database.Cursor;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -36,14 +36,14 @@ import com.fortunekidew.pewaad.api.APIPush;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
+import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.helpers.SignUpPreferenceManager;
+import com.fortunekidew.pewaad.interfaces.NetworkListener;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.receivers.NetworkChangeListener;
-import com.fortunekidew.pewaad.services.MainService;
-import com.fortunekidew.pewaad.sync.AuthenticatorService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,14 +53,18 @@ import org.json.JSONObject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.socket.client.Socket;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Email : mwadime@fortunekidew.co.ke
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NetworkListener {
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -75,36 +79,54 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_progress_bar)
     ProgressBar toolbarProgressBar;
     // authority for sync adapter's content provider
-    private static final String AUTHORITY = "com.android.contacts";
-    // sync interval
-    private static final long SYNC_INTERVAL = 10;
-    // Account type and auth token type
-    public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";
-    private Account mAccount;
+
     private APIService mApiService;
     private SignUpPreferenceManager mPreferenceManager;
+
+    // Sync interval constants
+    public static final long SECONDS_PER_MINUTE = 60L;
+    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;//
+    public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;// 3600L
+    private Account mAccount;
+
+    private Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupAccountInstance();
-        startPeriodicSync();
-        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
+        Permissions();
         initializerView();
         setupToolbar();
-        Uri intentData = getIntent().getData();
-        if (intentData != null) {
-            Cursor cursor = managedQuery(intentData, null, null, null, null);
-            if (cursor.moveToNext()) {
-                String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            }
-        } else {
-            AppHelper.LogCat("IntentData is null MainActivity ");
-        }
+        EventBus.getDefault().register(this);
 
-        new Handler().postDelayed(this::Permissions, 5000);
+        setupAccountInstance();
+        startPeriodicSync();
+        initRequestSync();
+        connectToServer();
+
+    }
+
+    private void connectToServer() {
+
+        PewaaApplication app = (PewaaApplication) getApplication();
+        mSocket = app.getSocket();
+        if (mSocket == null) {
+            app.reConnectSocket();
+            mSocket = app.getSocket();
+        }
+        if (!mSocket.connected())
+            mSocket.connect();
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("connected", true);
+            json.put("senderId", PreferenceManager.getID(this));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
 
     }
 
@@ -228,13 +250,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        MainView.setVisibility(View.GONE);
+        PewaaApplication.getInstance().setConnectivityListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MainView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -248,24 +270,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-//        DisConnectFromServer();
-    }
-
-    /**
-     * method to setup your account
-     */
-    private void setupAccountInstance() {
-        AccountManager manager = AccountManager.get(this);
-        if (AppHelper.checkPermission(this, Manifest.permission.GET_ACCOUNTS)) {
-            AppHelper.LogCat("GET ACCOUNTS  permission already granted.");
-        } else {
-            AppHelper.LogCat("Please request GET ACCOUNTS permission.");
-            AppHelper.requestPermission(this, Manifest.permission.GET_ACCOUNTS);
-        }
-        Account[] accounts = manager.getAccountsByType(AuthenticatorService.ACCOUNT_TYPE);
-        if (accounts.length > 0) {
-            mAccount = accounts[0];
-        }
+        DisConnectFromServer();
     }
 
     private void registerDevice(String token) {
@@ -291,28 +296,39 @@ public class MainActivity extends AppCompatActivity {
      */
     private void startPeriodicSync() {
         if (mAccount != null) {
-            ContentResolver.setIsSyncable(mAccount, AUTHORITY, 1);
-            ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
-            ContentResolver.addPeriodicSync(mAccount, AUTHORITY, new Bundle(), SYNC_INTERVAL);
+            ContentResolver.setIsSyncable(mAccount, ContactsContract.AUTHORITY, 1);
+            ContentResolver.setSyncAutomatically(mAccount, ContactsContract.AUTHORITY, true);
+            ContentResolver.addPeriodicSync(mAccount, ContactsContract.AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
 
         }
     }
 
+    /**
+     * method to start a new RequestSync
+     */
+    public void initRequestSync() {
+        // Pass the settings flags by inserting them in a bundle
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        ContentResolver.requestSync(mAccount, ContactsContract.AUTHORITY, settingsBundle);
+    }
+
     private void Permissions() {
-        if (AppHelper.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (PermissionHandler.checkPermission(this, Manifest.permission.READ_CONTACTS)) {
             AppHelper.LogCat("Read contact data permission already granted.");
         } else {
             AppHelper.LogCat("Please request Read contact data permission.");
-            AppHelper.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            AppHelper.showPermissionDialog(this);
+            PermissionHandler.requestPermission(this, Manifest.permission.READ_CONTACTS);
         }
-
-
-        if (AppHelper.checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            AppHelper.LogCat("Read contact data permission already granted.");
+        if (PermissionHandler.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            AppHelper.LogCat("Read storage data permission already granted.");
         } else {
-            AppHelper.LogCat("Please request Read contact data permission.");
-            AppHelper.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            AppHelper.LogCat("Please request Read storage data permission.");
+            PermissionHandler.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         }
+
     }
 
     /**
@@ -321,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
      * @param pusher this is parameter of onEventMainThread method
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @SuppressWarnings("unused")
+    @Subscribe
     public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
             case "startRefresh":
@@ -355,20 +371,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * method of EventBus to show if there is internet connection or not
-     *
-     * @param networkChangeListener this is parameter of onEvent method
-     */
-    @Subscribe
-    public void onEvent(NetworkChangeListener networkChangeListener) {
-        if (!networkChangeListener.isUserIsConnected()) {
-            AppHelper.Snackbar(this, mView, getString(R.string.connection_is_not_available), AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
-        } else {
-            AppHelper.Snackbar(this, mView, getString(R.string.connection_is_available), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AppConstants.CONTACTS_PERMISSION_REQUEST_CODE) {
+            AppHelper.hidePermissionsDialog();
+            EventBus.getDefault().post(new Pusher("ContactsPermission"));
         }
-
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == AppConstants.CONTACTS_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                AppHelper.hidePermissionsDialog();
+                EventBus.getDefault().post(new Pusher("ContactsPermission"));
+            }
+        }
+    }
+
 
     /**
      * method to disconnect from socket server
@@ -384,9 +405,42 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            MainService.mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
+            mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
         } catch (Exception e) {
             AppHelper.LogCat("User is offline  Exception MainActivity" + e.getMessage());
+        }
+    }
+
+    /**
+     * method to setup your account
+     */
+    private void setupAccountInstance() {
+        AccountManager manager = AccountManager.get(this);
+        if (PermissionHandler.checkPermission(this, Manifest.permission.GET_ACCOUNTS)) {
+            AppHelper.LogCat("GET ACCOUNTS  permission already granted.");
+        } else {
+            AppHelper.LogCat("Please request GET ACCOUNTS permission.");
+            PermissionHandler.requestPermission(this, Manifest.permission.GET_ACCOUNTS);
+        }
+        Account[] accounts = manager.getAccountsByType(AppConstants.ACCOUNT_TYPE);
+        if (accounts.length > 0) {
+            mAccount = accounts[0];
+        }
+    }
+
+    /**
+     * Callback will be triggered when there is change in
+     * network connection
+     */
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnecting, boolean isConnected) {
+        if (!isConnecting && !isConnected) {
+            AppHelper.Snackbar(this, mView, getString(R.string.connection_is_not_available), AppConstants.MESSAGE_COLOR_ERROR, AppConstants.TEXT_COLOR);
+        } else if (isConnecting && isConnected) {
+            AppHelper.Snackbar(this, mView, getString(R.string.connection_is_available), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
+        } else {
+            AppHelper.Snackbar(this, mView, getString(R.string.waiting_for_network), AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
+
         }
     }
 

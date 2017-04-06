@@ -67,7 +67,7 @@ public class EditUsernameActivity extends AppCompatActivity {
             try {
                 mEditProfilePresenter.EditCurrentName(newUsername);
             } catch (Exception e) {
-                AppHelper.LogCat("Edit  name  Exception " + e.getMessage());
+                AppHelper.LogCat("Edit name Exception " + e.getMessage());
             }
 
         });

@@ -2,6 +2,7 @@ package com.fortunekidew.pewaad.presenters;
 
 
 import com.fortunekidew.pewaad.activities.search.SearchConversationsActivity;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 
 import io.realm.Realm;
@@ -17,7 +18,7 @@ public class SearchConversationsPresenter implements Presenter {
 
     public SearchConversationsPresenter(SearchConversationsActivity mSearchConversationsActivity) {
         this.mSearchConversationsActivity = mSearchConversationsActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
 

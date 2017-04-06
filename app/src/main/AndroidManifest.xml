@@ -39,9 +39,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <supports-screens
         android:anyDensity="true"
@@ -58,6 +57,10 @@
         android:supportsRtl="true"
         android:theme="@style/Pewaa"
         tools:ignore="UnusedAttribute">
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="dba3618bc05d496c15e51cc355c4374a853a56d0"
+        />
         <activity
             android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -87,6 +90,16 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.item/vnd.com.fortunekidew.pewaad.android.profile"/>
+            </intent-filter>
+        </activity>
+
+        <!--CrashActivity-->
+        <activity
+            android:name=".activities.CrashActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="catch_error_activity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -173,7 +186,7 @@
 
         <!-- SMS Receiver -->
         <receiver android:name=".receivers.SmsReceiverBroadCast">
-            <intent-filter>
+            <intent-filter android:priority="99999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -199,8 +212,7 @@
         <!-- SyncService for SyncAdapter -->
         <service
             android:name=".sync.SyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -272,6 +284,16 @@
             android:theme="@style/Pewaa" />
 
 
+        <receiver
+            android:name=".receivers.BootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
         <!-- Restart service when the user kill processor -->
 
         <service

@@ -42,6 +42,12 @@ public class ContactsService {
 
     }
 
+    public ContactsService(Context context, APIService mApiService) {
+        this.mContext = context;
+        this.mApiService = mApiService;
+
+    }
+
     /**
      * method to initialize the api contact
      *
@@ -49,7 +55,7 @@ public class ContactsService {
      */
     private APIContact initializeApiContact() {
         if (mApiContact == null) {
-            mApiContact = this.mApiService.RootService(APIContact.class, PreferenceManager.getToken(PewaaApplication.getAppContext()), EndPoints.BASE_URL);
+            mApiContact = this.mApiService.RootService(APIContact.class, PreferenceManager.getToken(PewaaApplication.getInstance()), EndPoints.BASE_URL);
         }
         return mApiContact;
     }
@@ -70,7 +76,7 @@ public class ContactsService {
      * @return return value
      */
     public Observable<RealmResults<ContactsModel>> getAllContacts() {
-        return realm.where(ContactsModel.class).notEqualTo("id", PreferenceManager.getID(PewaaApplication.getAppContext())).equalTo("Exist", true).findAllSorted("Linked", Sort.DESCENDING, "username", Sort.ASCENDING).asObservable();
+        return realm.where(ContactsModel.class).notEqualTo("id", PreferenceManager.getID(PewaaApplication.getInstance())).equalTo("Exist", true).findAllSorted("Linked", Sort.DESCENDING, "username", Sort.ASCENDING).asObservable();
     }
 
     /**
@@ -79,7 +85,7 @@ public class ContactsService {
      * @return return value
      */
     public Observable<RealmResults<ContactsModel>> getLinkedContacts() {
-        return realm.where(ContactsModel.class).notEqualTo("id", PreferenceManager.getID(PewaaApplication.getAppContext())).equalTo("Exist", true).equalTo("Linked", true).findAllSorted("username", Sort.ASCENDING).asObservable();
+        return realm.where(ContactsModel.class).notEqualTo("id", PreferenceManager.getID(PewaaApplication.getInstance())).equalTo("Exist", true).equalTo("Linked", true).findAllSorted("username", Sort.ASCENDING).asObservable();
     }
 
     /**
@@ -211,7 +217,7 @@ public class ContactsService {
      * @return return value
      */
     public Observable<RealmResults<StatusModel>> getAllStatus() {
-        return realm.where(StatusModel.class).equalTo("userID", PreferenceManager.getID(PewaaApplication.getAppContext())).findAllSorted("id", Sort.DESCENDING).asObservable();
+        return realm.where(StatusModel.class).equalTo("userID", PreferenceManager.getID(PewaaApplication.getInstance())).findAllSorted("id", Sort.DESCENDING).asObservable();
     }
 
     /**
@@ -220,7 +226,7 @@ public class ContactsService {
      * @return return value
      */
     public Observable<StatusModel> getCurrentStatusFromLocal() {
-        return realm.where(StatusModel.class).equalTo("userID", PreferenceManager.getID(PewaaApplication.getAppContext())).equalTo("current", 1).findFirst().asObservable();
+        return realm.where(StatusModel.class).equalTo("userID", PreferenceManager.getID(PewaaApplication.getInstance())).equalTo("current", 1).findFirst().asObservable();
     }
 
     /**
@@ -272,7 +278,7 @@ public class ContactsService {
      */
     private ContactsModel copyOrUpdateContactInfo(ContactsModel contactsModel) {
         ContactsModel realmContact;
-        if (UtilsPhone.checkIfContactExist(PewaaApplication.getAppContext(), contactsModel.getPhone())) {
+        if (UtilsPhone.checkIfContactExist(PewaaApplication.getInstance(), contactsModel.getPhone())) {
             realm.beginTransaction();
             contactsModel.setExist(true);
             realmContact = realm.copyToRealmOrUpdate(contactsModel);

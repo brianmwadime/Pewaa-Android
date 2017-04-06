@@ -62,6 +62,7 @@ import com.fortunekidew.pewaad.presenters.ProfilePresenter;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
@@ -917,7 +918,7 @@ public class ProfileActivity extends AppCompatActivity {
                         AppHelper.hideDialog();
                         if (response.body().isSuccess()) {
                             int groupId = response.body().getGroupID();
-                            Realm realm = Realm.getDefaultInstance();
+                            Realm realm = PewaaApplication.getRealmDatabaseInstance();
                             realm.executeTransactionAsync(realm1 -> {
                                         GroupsModel groupsModel = realm1.where(GroupsModel.class).equalTo("id", groupId).findFirst();
                                         groupsModel.setGroupImage(response.body().getGroupImage());

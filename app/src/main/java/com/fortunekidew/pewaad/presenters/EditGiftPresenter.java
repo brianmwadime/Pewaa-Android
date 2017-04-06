@@ -14,14 +14,16 @@ import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.fragments.BottomSheetEditGift;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
+import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.services.apiServices.WishlistsService;
 
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import io.realm.Realm;
 
 /**
@@ -30,17 +32,25 @@ import io.realm.Realm;
  */
 public class EditGiftPresenter implements Presenter {
     private AddGiftsActivity view;
+    private BottomSheetEditGift bottomSheetEditGift;
     private Realm realm;
     private WishlistsService mWishlistsService;
+    APIService mApiService;
 
     public EditGiftPresenter(AddGiftsActivity addGiftsActivity) {
         this.view = addGiftsActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
+
+    }
+
+    public EditGiftPresenter(BottomSheetEditGift bottomSheetEditGift) {
+        this.bottomSheetEditGift = bottomSheetEditGift;
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
 
     }
 
     public EditGiftPresenter() {
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
     @Override
@@ -51,9 +61,14 @@ public class EditGiftPresenter implements Presenter {
     @Override
     public void
     onCreate() {
-        APIService mApiService;
-        mApiService = APIService.with(view);
-        mWishlistsService = new WishlistsService(realm, view, mApiService);
+
+        if (view != null) {
+            this.mApiService = APIService.with(view);
+            this.mWishlistsService = new WishlistsService(this.realm, view, this.mApiService);
+        } else if (bottomSheetEditGift != null) {
+            this.mApiService = APIService.with(bottomSheetEditGift.getActivity());
+            this.mWishlistsService = new WishlistsService(this.realm, bottomSheetEditGift.getActivity(), this.mApiService);
+        }
     }
 
 
@@ -88,59 +103,55 @@ public class EditGiftPresenter implements Presenter {
     }
 
 
-    public void onActivityResult(BottomSheetEditGift bottomSheetEditGift, int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String imagePath = null;
         if (resultCode == Activity.RESULT_OK) {
-            if (AppHelper.checkPermission(bottomSheetEditGift.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                AppHelper.LogCat("Read contact data permission already granted.");
-            } else {
-                AppHelper.LogCat("Please request Read contact data permission.");
-                AppHelper.requestPermission(bottomSheetEditGift.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
+            if (PermissionHandler.checkPermission(bottomSheetEditGift.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                AppHelper.LogCat("Read storage data permission already granted.");
 
+                switch (requestCode) {
+                    case AppConstants.SELECT_PROFILE_PICTURE:
+                        imagePath = FilesManager.getPath(bottomSheetEditGift.getActivity(), data.getData());
+                        break;
+                    case AppConstants.SELECT_PROFILE_CAMERA:
+                        if (data.getData() != null) {
+                            imagePath = FilesManager.getPath(bottomSheetEditGift.getActivity(), data.getData());
+                        } else {
+                            try {
+                                String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA, MediaStore
+                                        .Images.ImageColumns.BUCKET_DISPLAY_NAME, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images
+                                        .ImageColumns.MIME_TYPE};
+                                final Cursor cursor = bottomSheetEditGift.getActivity().getContentResolver()
+                                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.ImageColumns
+                                                .DATE_TAKEN + " DESC");
 
-            if (AppHelper.checkPermission(bottomSheetEditGift.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                AppHelper.LogCat("Read contact data permission already granted.");
-            } else {
-                AppHelper.LogCat("Please request Read contact data permission.");
-                AppHelper.requestPermission(bottomSheetEditGift.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            switch (requestCode) {
-                case AppConstants.SELECT_PROFILE_PICTURE:
-                    imagePath = FilesManager.getPath(PewaaApplication.getAppContext(), data.getData());
-                    break;
-                case AppConstants.SELECT_PROFILE_CAMERA:
-                    if (data.getData() != null) {
-                        imagePath = FilesManager.getPath(PewaaApplication.getAppContext(), data.getData());
-                    } else {
-                        try {
-                            String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA, MediaStore
-                                    .Images.ImageColumns.BUCKET_DISPLAY_NAME, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images
-                                    .ImageColumns.MIME_TYPE};
-                            final Cursor cursor = PewaaApplication.getAppContext().getContentResolver()
-                                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.ImageColumns
-                                            .DATE_TAKEN + " DESC");
-
-                            if (cursor != null && cursor.moveToFirst()) {
-                                String imageLocation = cursor.getString(1);
-                                cursor.close();
-                                File imageFile = new File(imageLocation);
-                                if (imageFile.exists()) {
-                                    imagePath = imageFile.getPath();
+                                if (cursor != null && cursor.moveToFirst()) {
+                                    String imageLocation = cursor.getString(1);
+                                    cursor.close();
+                                    File imageFile = new File(imageLocation);
+                                    if (imageFile.exists()) {
+                                        imagePath = imageFile.getPath();
+                                    }
                                 }
+                            } catch (Exception e) {
+                                AppHelper.LogCat("error" + e);
                             }
-                        } catch (Exception e) {
-                            AppHelper.LogCat("error" + e);
                         }
-                    }
-                    break;
-            }
-        }
+                        break;
+                }
 
-        if (imagePath != null) {
-            EventBus.getDefault().post(new Pusher("GiftImagePath", imagePath));
-        } else {
-            AppHelper.LogCat("imagePath is null");
+
+                if (imagePath != null) {
+                    EventBus.getDefault().post(new Pusher("GiftImagePath", imagePath));
+                } else {
+                    AppHelper.LogCat("imagePath is null");
+                }
+
+            } else {
+                AppHelper.LogCat("Please request Read contact data permission.");
+                PermissionHandler.requestPermission(bottomSheetEditGift.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+
         }
     }
 }

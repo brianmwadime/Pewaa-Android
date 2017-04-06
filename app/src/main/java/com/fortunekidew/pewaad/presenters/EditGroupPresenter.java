@@ -1,6 +1,7 @@
 package com.fortunekidew.pewaad.presenters;
 
 
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 
 import io.realm.Realm;
@@ -18,12 +19,12 @@ public class EditGroupPresenter implements Presenter {
 //
 //    public EditGroupPresenter(EditGroupActivity editGroupActivity) {
 //        this.view = editGroupActivity;
-//        this.realm = Realm.getDefaultInstance();
+//        this.realm = PewaaApplication.getRealmDatabaseInstance();
 //
 //    }
 //
     public EditGroupPresenter() {
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
 

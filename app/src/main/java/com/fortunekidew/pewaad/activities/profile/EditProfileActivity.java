@@ -169,38 +169,44 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             username.setText(getString(R.string.no_username));
         }
         if (mContactsModel.getImage() != null) {
-            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))) {
-//                Picasso.with(this)
-//                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))
-//                        .transform(new CropSquareTransformation())
-//                        .resize(200, 200)
-//                        .networkPolicy(NetworkPolicy.NO_CACHE)
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                        .into(userAvatar);
-
-                Glide.with(this)
+            Glide.with(this)
                     .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
                     .transform(new CircleTransform(this))
                     .placeholder(R.drawable.avatar_placeholder)
                     .override(largeAvatarSize, largeAvatarSize)
                     .into(userAvatar);
-
-            } else {
-                Glide.with(this)
-                    .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-                    .transform(new CircleTransform(this))
-                    .placeholder(R.drawable.avatar_placeholder)
-                    .override(largeAvatarSize, largeAvatarSize)
-                    .into(userAvatar);
-
-//                Picasso.with(this)
-//                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-//                        .transform(new CropSquareTransformation())
-//                        .resize(200, 200)
-//                        .networkPolicy(NetworkPolicy.NO_CACHE)
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                        .into(userAvatar);
-            }
+//            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))) {
+////                Picasso.with(this)
+////                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))
+////                        .transform(new CropSquareTransformation())
+////                        .resize(200, 200)
+////                        .networkPolicy(NetworkPolicy.NO_CACHE)
+////                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+////                        .into(userAvatar);
+//
+//                Glide.with(this)
+//                    .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
+//                    .transform(new CircleTransform(this))
+//                    .placeholder(R.drawable.avatar_placeholder)
+//                    .override(largeAvatarSize, largeAvatarSize)
+//                    .into(userAvatar);
+//
+//            } else {
+//                Glide.with(this)
+//                    .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
+//                    .transform(new CircleTransform(this))
+//                    .placeholder(R.drawable.avatar_placeholder)
+//                    .override(largeAvatarSize, largeAvatarSize)
+//                    .into(userAvatar);
+//
+////                Picasso.with(this)
+////                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
+////                        .transform(new CropSquareTransformation())
+////                        .resize(200, 200)
+////                        .networkPolicy(NetworkPolicy.NO_CACHE)
+////                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+////                        .into(userAvatar);
+//            }
         } else {
 
             userAvatar.setPadding(2, 2, 2, 2);

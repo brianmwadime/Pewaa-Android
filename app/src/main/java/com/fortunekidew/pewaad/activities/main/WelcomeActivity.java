@@ -1,15 +1,20 @@
 package com.fortunekidew.pewaad.activities.main;
 
 import android.Manifest;
+import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.fortunekidew.pewaad.app.AppConstants;
+import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -47,6 +54,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +88,10 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     @BindView(R.id.search_input) TextInputEditText searchInput;
     @BindView(R.id.clear_btn_search_view) ImageView clearBtn;
 
+    //for account manager
+    private String mOldAccountType;
 
+    private final String DEFAULT_COUNTRY = Locale.getDefault().getCountry();
     private CountriesAdapter mCountriesAdapter;
     private String Code;
     private String Country;
@@ -89,6 +100,16 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     private long seconds, ResumeSeconds;
     private SignUpPreferenceManager mSignUpPreferenceManager;
     public static final String PARAM_AUTH_TOKEN_TYPE = "auth.token";
+    LocalBroadcastManager mLocalBroadcastManager;
+    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(getPackageName() + "closeWelcomeActivity")) {
+                finish();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +117,13 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         setContentView(R.layout.activity_welcome);
 
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
         initializerView();
+        EventBus.getDefault().register(this);
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(getPackageName() + "closeWelcomeActivity");
+        mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
+
     }
 
     /**
@@ -107,11 +133,22 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         /**
          * Checking if user already connected
          */
-        if (PreferenceManager.getToken(this) != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+        if (getIntent().hasExtra(AccountManager.KEY_ACCOUNT_TYPE)) {
+            mOldAccountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
+            AppHelper.LogCat("IntentData is not null WelcomeActivity " + mOldAccountType);
+            CreateSyncAccount();
+        } else {
+            AppHelper.LogCat("IntentData is null WelcomeActivity ");
+            /**
+             * Checking if user already connected
+             */
+
+            if (PreferenceManager.getToken(this) != null) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
 
         }
 
@@ -148,20 +185,42 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
 
         if (viewPager.getCurrentItem() == 1) {
 
-            if (AppHelper.checkPermission(this, Manifest.permission.RECEIVE_SMS)) {
+            if (PermissionHandler.checkPermission(this, Manifest.permission.RECEIVE_SMS)) {
                 AppHelper.LogCat("RECEIVE SMS permission already granted.");
             } else {
                 AppHelper.LogCat("Please request RECEIVE SMS permission.");
-                AppHelper.requestPermission(this, Manifest.permission.RECEIVE_SMS);
+                PermissionHandler.requestPermission(this, Manifest.permission.RECEIVE_SMS);
             }
-            if (AppHelper.checkPermission(this, Manifest.permission.READ_SMS)) {
+            if (PermissionHandler.checkPermission(this, Manifest.permission.READ_SMS)) {
                 AppHelper.LogCat("READ SMS permission already granted.");
             } else {
                 AppHelper.LogCat("Please request READ SMS permission.");
-                AppHelper.requestPermission(this, Manifest.permission.READ_SMS);
+                PermissionHandler.requestPermission(this, Manifest.permission.READ_SMS);
             }
 
         }
+    }
+
+    /**
+     * Create a new  account for the sync adapter
+     */
+    public Account CreateSyncAccount() {
+        if (mOldAccountType != null) {
+            // Create the account type and default account
+            Account newAccount = new Account(getString(R.string.app_name), mOldAccountType);
+            // Get an instance of the Android account manager
+            AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+
+            if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
+                AppHelper.CustomToast(this, getString(R.string.app_name) + getString(R.string.account_added_already));
+                finish();
+
+            }
+            return newAccount;
+        } else {
+            return null;
+        }
+
     }
 
     /**
@@ -336,23 +395,39 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     private void requestForSMS(String mobile, String country) {
         APIAuthentication mAPIAuthentication = APIService.RootService(APIAuthentication.class, EndPoints.BASE_URL);
         Call<JoinModel> JoinModelCall = mAPIAuthentication.join(mobile, country);
-        AppHelper.showDialog(this, getString(R.string.placeholder_sms_of_verification));
+        AppHelper.showDialog(this, getString(R.string.sms_verification));
         JoinModelCall.enqueue(new Callback<JoinModel>() {
             @Override
             public void onResponse(Call<JoinModel> call, Response<JoinModel> response) {
                 if (response.isSuccessful()) {
                     if (response.body().isSuccess()) {
                         AppHelper.hideDialog();
+                        String accountType = AppConstants.ACCOUNT_TYPE;
+                        AccountManager accountManager = AccountManager.get(WelcomeActivity.this);
+
+                        // This is the magic that add the account to the Android Account Manager
+                        final Account account = new Account(getResources().getString(R.string.app_name), accountType);
+                        accountManager.addAccountExplicitly(account, PreferenceManager.getMobileNumber(WelcomeActivity.this), null);
+
+                        // Now we tell our caller, could be the Android Account Manager or even our own application
+                        // that the process was successful
+                        final Intent intent = new Intent();
+                        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, getResources().getString(R.string.app_name));
+                        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+                        intent.putExtra(AccountManager.KEY_AUTHTOKEN, accountType);
+                        setAccountAuthenticatorResult(intent.getExtras());
+                        setResult(RESULT_OK, intent);
+
                         if (!response.body().isSmsVerification()) {
-                            mSignUpPreferenceManager.setIsWaitingForSms(true);
-                            txtEditMobile.setText(mSignUpPreferenceManager.getMobileNumber());
+                            PreferenceManager.setIsWaitingForSms(WelcomeActivity.this, false);
+                            txtEditMobile.setText(PreferenceManager.getMobileNumber(WelcomeActivity.this));
                             smsVerification(response.body().getCode());
                         } else {
                             setTimer();
                             startTimer();
-                            mSignUpPreferenceManager.setIsWaitingForSms(true);
+                            PreferenceManager.setIsWaitingForSms(WelcomeActivity.this, true);
                             viewPager.setCurrentItem(1);
-                            txtEditMobile.setText(mSignUpPreferenceManager.getMobileNumber());
+                            txtEditMobile.setText(PreferenceManager.getMobileNumber(WelcomeActivity.this));
                         }
 
                     } else {
@@ -370,9 +445,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
                 AppHelper.hideDialog();
                 AppHelper.LogCat("Failed to create your account " + t.getMessage());
                 AppHelper.CustomToast(WelcomeActivity.this, getString(R.string.unexpected_reponse_from_server));
-                //Hide the Keyboard
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(phoneNumberWrapper.getWindowToken(), 0);
+                hideKeyboard();
             }
         });
 
@@ -390,6 +463,14 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         } else {
             AppHelper.CustomToast(this, getString(R.string.please_enter_your_ver_code));
         }
+    }
+
+    /**
+     * Hide keyboard from phoneEdit field
+     */
+    public void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(phoneNumberWrapper.getWindowToken(), 0);
     }
 
     /**

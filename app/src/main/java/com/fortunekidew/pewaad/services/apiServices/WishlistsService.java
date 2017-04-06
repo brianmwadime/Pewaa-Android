@@ -37,13 +37,19 @@ public class WishlistsService {
         this.mApiService = mApiService;
     }
 
+    public WishlistsService(Context context, APIService mApiService) {
+        this.mContext = context;
+        this.mApiService = mApiService;
+
+    }
+
     /**
      * method to initialize the api wishlists
      * @return return value
      */
     private APIWishlists initializeApiWishlists() {
         if (mApiWishlists == null) {
-            mApiWishlists = this.mApiService.RootService(APIWishlists.class, PreferenceManager.getToken(PewaaApplication.getAppContext()), EndPoints.BASE_URL);
+            mApiWishlists = this.mApiService.RootService(APIWishlists.class, PreferenceManager.getToken(PewaaApplication.getInstance()), EndPoints.BASE_URL);
         }
         return mApiWishlists;
     }

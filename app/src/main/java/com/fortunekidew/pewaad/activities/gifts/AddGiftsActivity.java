@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +35,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -78,7 +78,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
     private APIService mApiService;
     private String PicturePath, wishlistID;
 
-    private EditGiftPresenter mEditGiftPresenter = new EditGiftPresenter(this);
+    private EditGiftPresenter mEditGiftPresenter;
 
 
     @Override
@@ -93,11 +93,10 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
         }
 
         ButterKnife.bind(this);
+
+        mEditGiftPresenter = new EditGiftPresenter(this);
         initializerView();
-        mEditGiftPresenter.onCreate();
         EventBus.getDefault().register(this);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
     }
 
@@ -105,7 +104,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
      * method to initialize the view
      */
     private void initializerView() {
-
+        mEditGiftPresenter.onCreate();
         addAvatar.setOnClickListener(v -> {
             BottomSheetEditGift bottomSheetEditGift = new BottomSheetEditGift();
             bottomSheetEditGift.show(getSupportFragmentManager(), bottomSheetEditGift.getTag());
@@ -205,7 +204,9 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
         if (EditPrice.getText().toString().isEmpty())
             return;
 
-        final GiftResponse statusResponse = null;
+        if (EditDescription.getText().toString().isEmpty())
+            return;
+
         RequestBody requestFile;
 
         if (PicturePath != null) {
@@ -219,8 +220,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
         RequestBody newName = RequestBody.create(MediaType.parse("multipart/form-data"), EditName.getText().toString().trim());
         RequestBody newDescription = RequestBody.create(MediaType.parse("multipart/form-data"), EditDescription.getText().toString().trim());
-//        RequestBody newDescription = RequestBody.create(MediaType.parse("multipart/form-data"), EditDescription.getText().toString().trim());
-        float newPrice = Float.parseFloat(EditPrice.getText().toString().trim());
+        double newPrice = Double.parseDouble(EditPrice.getText().toString().trim());
 
         APIGifts mApiGift = mApiService.RootService(APIGifts.class, PreferenceManager.getToken(AddGiftsActivity.this), EndPoints.BASE_URL);
         AddGiftsActivity.this.runOnUiThread(() -> AppHelper.showDialog(AddGiftsActivity.this, "Adding ... "));

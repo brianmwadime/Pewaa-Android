@@ -25,7 +25,10 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 /**
- * Created by mwakima on 10/13/16.
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public interface APIPayments {

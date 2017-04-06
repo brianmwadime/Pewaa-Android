@@ -130,7 +130,7 @@ public class TransferMessageContactsActivity extends AppCompatActivity {
      * @return this is what method will return
      */
     private List<ContactsModel> FilterList(String query) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = PewaaApplication.getRealmDatabaseInstance();;
 
         List<ContactsModel> contactsModels = realm.where(ContactsModel.class)
                 .equalTo("Linked", true)

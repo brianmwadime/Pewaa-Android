@@ -178,7 +178,7 @@ public class SearchContactsActivity extends AppCompatActivity {
      * @return this for what method will return
      */
     private List<ContactsModel> FilterList(String query) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = PewaaApplication.getRealmDatabaseInstance();
 
         List<ContactsModel> contactsModels = realm.where(ContactsModel.class)
                 .equalTo("Exist", true)

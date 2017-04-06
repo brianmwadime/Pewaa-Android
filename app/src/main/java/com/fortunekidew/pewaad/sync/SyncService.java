@@ -23,8 +23,7 @@ public class SyncService extends Service {
         AppHelper.LogCat("Sync Service created.");
         synchronized (sSyncAdapterLock) {
             if (mSyncAdapter == null) {
-                mSyncAdapter = new SyncAdapter(getApplicationContext(),
-                        true);
+                mSyncAdapter = new SyncAdapter(getApplicationContext(), true);
             }
         }
     }

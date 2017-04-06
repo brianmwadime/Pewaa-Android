@@ -22,6 +22,7 @@ import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.services.apiServices.ContactsService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import io.realm.Realm;
@@ -39,18 +40,18 @@ public class EditProfilePresenter implements Presenter {
 
     public EditProfilePresenter(EditProfileActivity editProfileActivity) {
         this.view = editProfileActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
 
     }
 
     public EditProfilePresenter() {
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
     public EditProfilePresenter(EditUsernameActivity editUsernameActivity, boolean b) {
         this.isEditUsername = b;
         this.editUsernameActivity = editUsernameActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
 
@@ -125,11 +126,11 @@ public class EditProfilePresenter implements Presenter {
             }
             switch (requestCode) {
                 case AppConstants.SELECT_PROFILE_PICTURE:
-                    imagePath = FilesManager.getPath(PewaaApplication.getAppContext(), data.getData());
+                    imagePath = FilesManager.getPath(PewaaApplication.getInstance(), data.getData());
                     break;
                 case AppConstants.SELECT_PROFILE_CAMERA:
                     if (data.getData() != null) {
-                        imagePath = FilesManager.getPath(PewaaApplication.getAppContext(), data.getData());
+                        imagePath = FilesManager.getPath(PewaaApplication.getInstance(), data.getData());
                     } else {
                         try {
                             String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA, MediaStore

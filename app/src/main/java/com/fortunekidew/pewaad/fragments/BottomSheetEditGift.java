@@ -65,7 +65,7 @@ public class BottomSheetEditGift extends BottomSheetDialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mEditGiftPresenter.onActivityResult(this,requestCode, resultCode, data);
+        mEditGiftPresenter.onActivityResult(requestCode, resultCode, data);
         dismiss();
     }
 
@@ -80,6 +80,7 @@ public class BottomSheetEditGift extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.content_bottom_sheet, container, false);
         ButterKnife.bind(this, mView);
+        mEditGiftPresenter = new EditGiftPresenter(this);
         galleryBtn.setOnClickListener(v -> setGalleryBtn());
         cameraBtn.setOnClickListener(v -> setCameraBtn());
         return mView;

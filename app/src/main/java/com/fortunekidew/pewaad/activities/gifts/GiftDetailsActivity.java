@@ -361,7 +361,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             // Customize the request
             Request request = original.newBuilder()
                     .header("Accept", "application/json")
-                    .header("token", PreferenceManager.getToken(PewaaApplication.getAppContext()))
+                    .header("token", PreferenceManager.getToken(PewaaApplication.getInstance()))
                     .method(original.method(), original.body())
                     .build();
             // Customize or return the response

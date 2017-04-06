@@ -19,6 +19,7 @@ import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.services.apiServices.WishlistsService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 
@@ -36,12 +37,12 @@ public class EditWishlistPresenter implements Presenter {
 
     public EditWishlistPresenter(AddWishlistsActivity addWishlistsActivity) {
         this.view = addWishlistsActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
 
     }
 
     public EditWishlistPresenter() {
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
     @Override

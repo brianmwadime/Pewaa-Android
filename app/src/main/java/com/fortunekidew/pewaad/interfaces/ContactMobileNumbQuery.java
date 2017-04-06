@@ -45,8 +45,12 @@ public interface ContactMobileNumbQuery {
             // a "permanent" contact URI.
             ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
 
+            ContactsContract.CommonDataKinds.Phone.PHOTO_URI,
+
             //Phone number of the contact
             ContactsContract.CommonDataKinds.Phone.NUMBER,
+            ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY,
+
     };
     // The query column numbers which map to each value in the projection
     final static int ID = 0;

@@ -14,16 +14,17 @@ public class AppConstants {
 
     /* debugging constants  for developer */
     public static final String TAG = "pewaa";
-    public static final boolean DEBUGGING_MODE = BuildConfig.DEBUG;
+    public static final boolean DEBUGGING_MODE = BuildConfig.DEBUG; // BuildConfig.DEBUG;
+    public static final boolean CRASH_LYTICS = !BuildConfig.DEBUG;//this is crashlytics if you have an account on fabric.io but don't forget to change the key on manifests file
+    static final boolean ENABLE_CRASH_HANDLER = !BuildConfig.DEBUG; // this for the crash activity  you can turn on this so when user get a crash this activity will appear instead of stop the app
 
 
     // Wishlist Permissions
     public static final String WISHLIST_ADMINISTRATOR = "ADMINISTRATOR";
     public static final String WISHLIST_CONTRIBUTOR = "CONTRIBUTOR";
 
-    public static final int MESSAGE_COLOR_WARNING = R.color.colorOrangeLight;
-    public static final int MESSAGE_COLOR_SUCCESS = R.color.colorGreenDark;
-    public static final int TEXT_COLOR = R.color.colorWhite;
+    public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";//for this you have to set you package name here we use this add the app to account manager in user phone
+
     public static final String DATABASE_LOCAL_NAME = "Pewaa.realm";
     public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application https://play.google.com/apps/testing/com.fortunekidew.pewaad";
 
@@ -44,14 +45,16 @@ public class AppConstants {
     public static final int SELECT_PROFILE_CAMERA = 0x006;
     public static final int SELECT_MESSAGES_CAMERA = 0x007;
     public static final int PERMISSION_REQUEST_CODE = 0x009;
+    public static final int CONTACTS_PERMISSION_REQUEST_CODE = 0x010;
+    public static final int SELECT_COUNTRY = 0x011;
 
     /**
      * Contributor constants
      */
 
     //contributor constants:
-    public static final int STATUS_CONTRIBUTOR_ADDED = 0x010;
-    public static final int STATUS_CONTRIBUTOR_ADDED_SUCCESS = 0x011;
+    public static final int STATUS_CONTRIBUTOR_ADDED = 0x011;
+    public static final int STATUS_CONTRIBUTOR_ADDED_SUCCESS = 0x012;
 
 
     //single user socket constants:
@@ -72,4 +75,13 @@ public class AppConstants {
 
     public static final String SOCKET_GIFT_ADDED = "added_gift";
 
+    public static final String APP_KEY_SECRET = "7d3d3b6c2d3683bf25bbb51533ec6dac";// make sure this one is the same that you put on your server side (for security reasons)
+
+    /**
+     * for toast and snackbar
+     */
+    public static final int MESSAGE_COLOR_ERROR = R.color.colorOrangeLight;
+    public static final int MESSAGE_COLOR_WARNING = R.color.colorOrange;
+    public static final int MESSAGE_COLOR_SUCCESS = R.color.colorGreenDark;
+    public static final int TEXT_COLOR = R.color.colorWhite;
 }

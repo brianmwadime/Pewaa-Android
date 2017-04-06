@@ -4,6 +4,7 @@ package com.fortunekidew.pewaad.presenters;
 import com.fortunekidew.pewaad.activities.NewContactsActivity;
 import com.fortunekidew.pewaad.activities.gifts.TransferMessageContactsActivity;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 import com.fortunekidew.pewaad.services.apiServices.ContactsService;
@@ -22,13 +23,13 @@ public class SelectContactsPresenter implements Presenter {
 
     public SelectContactsPresenter(NewContactsActivity newContactsActivity) {
         this.newContactsActivity = newContactsActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         selector = true;
     }
 
     public SelectContactsPresenter(TransferMessageContactsActivity transferMessageContactsActivity) {
         this.transferMessageContactsActivity = transferMessageContactsActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         selector = false;
     }
 

@@ -11,10 +11,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 /**
- * Created by Abderrahim El imame on 7/26/16.
+ * Created by Brian Mwakima on 12/25/16.
  *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public interface FilesUploadService {

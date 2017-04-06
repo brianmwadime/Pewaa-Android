@@ -11,8 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Abderrahim El imame on 20/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class PreferenceManager {
 
@@ -20,6 +22,8 @@ public class PreferenceManager {
     private static SharedPreferences mSharedPreferences;
     private static final String PREFS_NAME = "MEMBERS_APP";
     private static final String MEMBERS_SELECTED = "MEMBERS_SELECTED";
+    private static final String KEY_IS_WAITING_FOR_SMS = "KEY_IS_WAITING_FOR_SMS";
+    private static final String KEY_MOBILE_NUMBER = "KEY_MOBILE_NUMBER";
     private static final String USER_PREF = "USER_PREF";
     private static final String ADS_PREF = "ADS_PREF";
 
@@ -31,7 +35,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static boolean setToken(String token, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString("token", token);
         return editor.commit();
@@ -44,7 +48,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static String getToken(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         return mSharedPreferences.getString("token", null);
     }
 
@@ -57,7 +61,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static boolean setID(String ID, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString("id", ID);
         return editor.commit();
@@ -71,7 +75,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static boolean setNumber(String Number, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString("number", Number);
         return editor.commit();
@@ -84,8 +88,75 @@ public class PreferenceManager {
      * @return return value
      */
     public static String getNumber(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         return mSharedPreferences.getString("number", null);
+    }
+
+    /**
+     * method to getPhone
+     *
+     * @return return value
+     */
+    public static String getPhone(Context mContext) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
+        return mSharedPreferences.getString("phone", null);
+    }
+
+    /**
+     * method to setPhone
+     *
+     * @param Phone this is the first parameter for setID  method
+     * @return return value
+     */
+    public static boolean setPhone(Context mContext, String Phone) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString("phone", Phone);
+        return editor.commit();
+    }
+
+    /**
+     * method to set user waiting for SMS (code verification)
+     *
+     * @param isWaiting this is parameter for setIsWaitingForSms  method
+     */
+    public static boolean setIsWaitingForSms(Context mContext, Boolean isWaiting) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(KEY_IS_WAITING_FOR_SMS, isWaiting);
+        return editor.commit();
+    }
+
+    /**
+     * method to check if user is waiting for SMS
+     *
+     * @return return value
+     */
+    public static Boolean isWaitingForSms(Context mContext) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
+        return mSharedPreferences.getBoolean(KEY_IS_WAITING_FOR_SMS, false);
+    }
+
+    /**
+     * method to set mobile phone
+     *
+     * @param mobileNumber this is parameter for setMobileNumber  method
+     */
+    public static boolean setMobileNumber(Context mContext, String mobileNumber) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_MOBILE_NUMBER, mobileNumber);
+        return editor.commit();
+    }
+
+    /**
+     * method to get mobile phone
+     *
+     * @return return value
+     */
+    public static String getMobileNumber(Context mContext) {
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
+        return mSharedPreferences.getString(KEY_MOBILE_NUMBER, null);
     }
 
     /**
@@ -95,7 +166,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static String getID(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         return mSharedPreferences.getString("id", String.valueOf(0));
     }
 
@@ -108,7 +179,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static boolean setSocketID(String ID, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString("socketId", ID);
         return editor.commit();
@@ -121,7 +192,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static String getSocketID(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         return mSharedPreferences.getString("socketId", null);
     }
 
@@ -133,7 +204,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static boolean setContactSize(int size, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt("size", size);
         return editor.commit();
@@ -146,7 +217,7 @@ public class PreferenceManager {
      * @return return value
      */
     public static int getContactSize(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, 0);
+        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
         return mSharedPreferences.getInt("size", 0);
 
     }

@@ -1,8 +1,10 @@
 package com.fortunekidew.pewaad.helpers;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Context;
@@ -20,18 +22,25 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.app.AppConstants;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.models.wishlists.MessagesModel;
 
 import java.io.File;
@@ -53,6 +62,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 public class AppHelper {
 
     private static ProgressDialog mDialog;
+    private static Dialog dialog;
 
 
     /**
@@ -109,6 +119,33 @@ public class AppHelper {
      */
     public static boolean isAndroid5() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
+
+    /**
+     * method to check if android version is lollipop
+     *
+     * @return this return value
+     */
+    public static boolean isJelly17() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+    }
+
+    /**
+     * method to check if android version is Marsh
+     *
+     * @return this return value
+     */
+    public static boolean isAndroid6() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
+    /**
+     * method to check if android version is Kitkat
+     *
+     * @return this return value
+     */
+    public static boolean isKitkat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
     /**
@@ -180,30 +217,26 @@ public class AppHelper {
     private void ExportRealmDatabase(Context mContext) {
 
         // init realm
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = PewaaApplication.getRealmDatabaseInstance();
 
         File exportRealmFile = null;
-        try {
-            // get or create an "whatsClone.realm" file
-            exportRealmFile = new File(mContext.getExternalCacheDir(), AppConstants.DATABASE_LOCAL_NAME);
+        // get or create an "whatsClone.realm" file
+        exportRealmFile = new File(mContext.getExternalCacheDir(), AppConstants.DATABASE_LOCAL_NAME);
 
-            // if "whatsClone.realm" already exists, delete
-            exportRealmFile.delete();
+        // if "whatsClone.realm" already exists, delete
+        exportRealmFile.delete();
 
-            // copy current realm to "export.realm"
-            realm.writeCopyTo(exportRealmFile);
+        // copy current realm to "export.realm"
+        realm.writeCopyTo(exportRealmFile);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         realm.close();
 
         // init email intent and add export.realm as attachment
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
-        intent.putExtra(Intent.EXTRA_EMAIL, "mwadime@fortunekidew.c.ke");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Your realm database Pewaa");
-        intent.putExtra(Intent.EXTRA_TEXT, "Hello");
+        intent.putExtra(Intent.EXTRA_EMAIL, "mwadime@fortunekidew.co.ke");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "this is ur local realm database Pewaa");
+        intent.putExtra(Intent.EXTRA_TEXT, "Hi man");
         Uri u = Uri.fromFile(exportRealmFile);
         intent.putExtra(Intent.EXTRA_STREAM, u);
 
@@ -422,6 +455,50 @@ public class AppHelper {
 
             ActivityCompat.requestPermissions(mActivity, new String[]{permission}, AppConstants.PERMISSION_REQUEST_CODE);
         }
+    }
+
+    @SuppressLint("NewApi")
+    public static void showPermissionDialog(final Activity mActivity) {
+        dialog = new Dialog(mActivity);
+        if (android.os.Build.VERSION.RELEASE.startsWith("1.") || android.os.Build.VERSION.RELEASE.startsWith("2.0") || android.os.Build.VERSION.RELEASE.startsWith("2.1")) {
+            //No dialog title on pre-froyo devices
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        } else if (mActivity.getResources().getDisplayMetrics().densityDpi == DisplayMetrics.DENSITY_LOW || mActivity.getResources().getDisplayMetrics().densityDpi == DisplayMetrics.DENSITY_MEDIUM) {
+            Display display = ((WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            int rotation = display.getRotation();
+            if (rotation == 90 || rotation == 270) {
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            } else {
+                dialog.setTitle(R.string.permission_alert);
+            }
+        } else {
+            dialog.setTitle(R.string.permission_alert);
+        }
+
+        RelativeLayout layout = (RelativeLayout) LayoutInflater.from(mActivity).inflate(R.layout.custom_dialog_permissions, null);
+
+        TextView tv = (TextView) layout.findViewById(R.id.message);
+        tv.setText(R.string.permission_alert_msg);
+
+        TextView allowButton = (TextView) layout.findViewById(R.id.allow);
+        allowButton.setText(mActivity.getString(R.string.ok));
+        allowButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", mActivity.getPackageName(), null);
+            intent.setData(uri);
+            mActivity.startActivityForResult(intent, AppConstants.CONTACTS_PERMISSION_REQUEST_CODE);
+            dialog.dismiss();
+            mActivity.finish();
+        });
+        dialog.setCancelable(false);
+        dialog.setContentView(layout);
+        dialog.show();
+
+    }
+
+    public static void hidePermissionsDialog() {
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     /**

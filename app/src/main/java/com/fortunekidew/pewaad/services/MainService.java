@@ -1,5 +1,6 @@
 package com.fortunekidew.pewaad.services;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +43,7 @@ import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class MainService extends Service {
+public class MainService extends IntentService {
 
     public static Socket mSocket;
     private static String socketID;
@@ -52,7 +53,14 @@ public class MainService extends Service {
     private Intent mIntent;
     private Realm realm;
     private static Handler handler;
+    private Context mContext;
 
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     */
+    public MainService() {
+        super(AppConstants.TAG);
+    }
 
     /**
      * method to get socketId for the connected user
@@ -76,40 +84,25 @@ public class MainService extends Service {
      * method to disconnect user form server
      */
     public static void disconnectSocket() {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("connected", false);
-            json.put("senderId", PreferenceManager.getID(PewaaApplication.getAppContext()));
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+        if (mSocket != null) {
+
+            mSocket.disconnect();
+            mSocket.off(Socket.EVENT_CONNECT);
+            mSocket.off(Socket.EVENT_DISCONNECT);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT);
+            mSocket.off(Socket.EVENT_RECONNECT);
+            mSocket.off(AppConstants.SOCKET_IS_ONLINE);
+            mSocket.off(AppConstants.SOCKET_IS_LAST_SEEN);
+            mSocket.off(AppConstants.SOCKET_IS_STOP_TYPING);
+            mSocket.off(AppConstants.SOCKET_IS_TYPING);
+            mSocket.off(AppConstants.SOCKET_USER_PING);
+            mSocket.off(AppConstants.SOCKET_CONNECTED);
+
+            mSocket.close();
+            mSocket = null;
+
         }
-        mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
-        JSONObject jsonConnected = new JSONObject();
-        try {
-            jsonConnected.put("connected", false);
-            jsonConnected.put("connectedId", PreferenceManager.getID(PewaaApplication.getAppContext()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        mSocket.emit(AppConstants.SOCKET_DISCONNECTED, jsonConnected);
-        mSocket.off(Socket.EVENT_CONNECT);
-        mSocket.off(Socket.EVENT_DISCONNECT);
-        mSocket.off(AppConstants.SOCKET_IS_ONLINE);
-        mSocket.off(AppConstants.SOCKET_IS_LAST_SEEN);
-
-        mSocket.off(AppConstants.SOCKET_IS_STOP_TYPING);
-        mSocket.off(AppConstants.SOCKET_IS_TYPING);
-        mSocket.off(AppConstants.SOCKET_PAYMENT_COMPLETED);
-        mSocket.off(AppConstants.SOCKET_USER_PING);
-
-        mSocket.off(AppConstants.SOCKET_CONTRIBUTOR_ADDED);
-        mSocket.off(AppConstants.SOCKET_GIFT_ADDED);
-
-
-        mSocket.disconnect();
-        if (mSocket != null) mSocket.disconnect();
-        mSocket = null;
 
         AppHelper.LogCat("disconnect in service");
     }
@@ -117,7 +110,7 @@ public class MainService extends Service {
     /**
      * method for server connection initialization
      */
-    public static void connectToServer() {
+    public void connectToServer(Context mContext) {
         IO.Options options = new IO.Options();
         options.forceNew = true;
         options.reconnection = true;
@@ -136,24 +129,22 @@ public class MainService extends Service {
         });
 
         mSocket.on(Socket.EVENT_DISCONNECT, args -> {
-            AppHelper.LogCat("You are lost connection to chat server ");
+            AppHelper.LogCat("You have lost connection to chat server ");
 
         });
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
             AppHelper.LogCat("SOCKET TIMEOUT");
-            reconnect();
+            reconnect(mContext);
         });
         mSocket.on(Socket.EVENT_RECONNECT, args -> {
             AppHelper.LogCat("Reconnect");
-            if (!mSocket.connected()) {
-                //mSocket.connect(); TODO khasni ndir custom lhad l7abs
-            }
+            reconnect(mContext);
         });
         mSocket.connect();
         JSONObject json = new JSONObject();
         try {
             json.put("connected", true);
-            json.put("connectedId", PreferenceManager.getID(PewaaApplication.getAppContext()));
+            json.put("connectedId", PreferenceManager.getID(mContext));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -162,92 +153,96 @@ public class MainService extends Service {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("connected", true);
-            jsonObject.put("senderId", PreferenceManager.getID(PewaaApplication.getAppContext()));
+            jsonObject.put("senderId", PreferenceManager.getID(mContext));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         mSocket.emit(AppConstants.SOCKET_IS_ONLINE, jsonObject);
 
-        isUserConnected();
+        isUserConnected(mContext);
     }
 
 
     /**
      * method to reconnect sockets
      */
-    private static void reconnect() {
-        if (mSocket != null && mSocket.connected()) {
-            disconnectSocket();
-            connectToServer();
-//            updateStatusDeliveredOffline();
-        }
+    private static void reconnect(Context mContext) {
+        mContext.getApplicationContext().stopService(new Intent(mContext.getApplicationContext(), MainService.class));
+        mContext.getApplicationContext().startService(new Intent(mContext.getApplicationContext(), MainService.class));
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        realm = Realm.getDefaultInstance();
-        handler = new Handler();
-        connectToServer();
-        onCompletedPayment();
-        onGiftAdded();
-        onContributorAdded();
+        mContext = getApplicationContext();
 
-        mChangeListener = new MessagesReceiverBroadcast() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            protected void MessageReceived(Context context, Intent intent) {
-                String action = intent.getAction();
-                switch (action) {
-                    case "new_user_message_notification":
-                        String file = intent.getExtras().getString("file");
-                        String userphone = intent.getExtras().getString("phone");
-                        String messageBody = intent.getExtras().getString("message");
-                        int recipientId = intent.getExtras().getInt("recipientID");
-                        int senderId = intent.getExtras().getInt("senderId");
-                        String userImage = intent.getExtras().getString("userImage");
-                        Intent messagingIntent = new Intent(PewaaApplication.getAppContext(), WishlistActivity.class);
-                        messagingIntent.putExtra("conversationID", intent.getExtras().getInt("conversationID"));
-                        messagingIntent.putExtra("recipientID", recipientId);
-                        messagingIntent.putExtra("isGroup", false);
-                        messagingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        AppHelper.LogCat("recipient " + recipientId);
-                        AppHelper.LogCat("sender " + senderId);
-                        if (file != null) {
-//                            NotificationsManager.showUserNotification(PewaaApplication.getAppContext(), messagingIntent, userphone, file, recipientId, userImage);
-                        } else {
-//                            NotificationsManager.showUserNotification(PewaaApplication.getAppContext(), messagingIntent, userphone, messageBody, recipientId, userImage);
-                        }
+        if (PreferenceManager.getToken(mContext) != null) {
+            handler = new Handler();
+            connectToServer(mContext);
 
-                        break;
-                    case "new_group_message_notification":
-                        String File = intent.getExtras().getString("file");
-                        String userPhone = intent.getExtras().getString("senderPhone");
-                        String groupName = unescapeJava(intent.getExtras().getString("groupName"));
-                        String messageGroupBody = intent.getExtras().getString("message");
-                        int groupID = intent.getExtras().getInt("groupID");
-                        String groupImage = intent.getExtras().getString("groupImage");
-                        String memberName;
-                        String name = UtilsPhone.getContactName(PewaaApplication.getAppContext(), userPhone);
-                        if (name != null) {
-                            memberName = name;
-                        } else {
-                            memberName = userPhone;
-                        }
-                        messagingIntent = new Intent(PewaaApplication.getAppContext(), WishlistActivity.class);
-                        messagingIntent.putExtra("conversationID", intent.getExtras().getInt("conversationID"));
-                        messagingIntent.putExtra("groupID", intent.getExtras().getInt("groupID"));
-                        messagingIntent.putExtra("isGroup", true);
-                        messagingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        break;
+            if (AppConstants.CRASH_LYTICS)
+                PewaaApplication.setupCrashlytics();
+
+            onCompletedPayment();
+            onGiftAdded();
+            onContributorAdded();
+
+            mChangeListener = new MessagesReceiverBroadcast() {
+                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                @Override
+                protected void MessageReceived(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    switch (action) {
+                        case "new_user_message_notification":
+                            String file = intent.getExtras().getString("file");
+                            String userphone = intent.getExtras().getString("phone");
+                            String messageBody = intent.getExtras().getString("message");
+                            int recipientId = intent.getExtras().getInt("recipientID");
+                            int senderId = intent.getExtras().getInt("senderId");
+                            String userImage = intent.getExtras().getString("userImage");
+                            Intent messagingIntent = new Intent(mContext, WishlistActivity.class);
+                            messagingIntent.putExtra("conversationID", intent.getExtras().getInt("conversationID"));
+                            messagingIntent.putExtra("recipientID", recipientId);
+                            messagingIntent.putExtra("isGroup", false);
+                            messagingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            AppHelper.LogCat("recipient " + recipientId);
+                            AppHelper.LogCat("sender " + senderId);
+                            if (file != null) {
+//                            NotificationsManager.showUserNotification(mContext, messagingIntent, userphone, file, recipientId, userImage);
+                            } else {
+//                            NotificationsManager.showUserNotification(mContext, messagingIntent, userphone, messageBody, recipientId, userImage);
+                            }
+
+                            break;
+                        case "new_group_message_notification":
+                            String File = intent.getExtras().getString("file");
+                            String userPhone = intent.getExtras().getString("senderPhone");
+                            String groupName = unescapeJava(intent.getExtras().getString("groupName"));
+                            String messageGroupBody = intent.getExtras().getString("message");
+                            int groupID = intent.getExtras().getInt("groupID");
+                            String groupImage = intent.getExtras().getString("groupImage");
+                            String memberName;
+                            String name = UtilsPhone.getContactName(mContext, userPhone);
+                            if (name != null) {
+                                memberName = name;
+                            } else {
+                                memberName = userPhone;
+                            }
+                            messagingIntent = new Intent(mContext, WishlistActivity.class);
+                            messagingIntent.putExtra("conversationID", intent.getExtras().getInt("conversationID"));
+                            messagingIntent.putExtra("groupID", intent.getExtras().getInt("groupID"));
+                            messagingIntent.putExtra("isGroup", true);
+                            messagingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            break;
+                    }
+
                 }
-
-            }
-        };
+            };
 
 
-        getApplication().registerReceiver(mChangeListener, new IntentFilter("new_wishlist_notification"));
-        getApplication().registerReceiver(mChangeListener, new IntentFilter("new_gift_notification"));
+            getApplication().registerReceiver(mChangeListener, new IntentFilter("new_wishlist_notification"));
+            getApplication().registerReceiver(mChangeListener, new IntentFilter("new_gift_notification"));
+        }
     }
 
     private void onContributorAdded() {
@@ -257,18 +252,18 @@ public class MainService extends Service {
                 JSONObject wishlist = data.getJSONObject("wishlist");
                 String userId = data.getString("user_id");
 
-                if (userId.equals(PreferenceManager.getID(PewaaApplication.getAppContext()))) {
+                if (userId.equals(PreferenceManager.getID(mContext))) {
                     Intent wishlistIntent = new Intent();
-                    wishlistIntent.setClass(PewaaApplication.getAppContext(), WishlistActivity.class);
+                    wishlistIntent.setClass(mContext, WishlistActivity.class);
                     wishlistIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_ID, data.getString("wishlist_id"));
                     wishlistIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_TITLE, wishlist.getString("name"));
                     wishlistIntent.putExtra(WishlistActivity.RESULT_EXTRA_WISHLIST_PERMISSION, data.getString("permissions"));
 
-                    NotificationsManager.showWishlistNotification(PewaaApplication.getAppContext(), wishlistIntent, "You have been added to a Wishlist.");
+                    NotificationsManager.showWishlistNotification(mContext, wishlistIntent, "You have been added to Wishlist." + wishlist.getString("name"));
                 }
 
             } catch (Exception e) {
-                AppHelper.LogCat("User received  Contributor Added  Exception MainService" + e.getMessage());
+                AppHelper.LogCat("User received Contributor Added Exception MainService" + e.getMessage());
             }
         });
     }
@@ -280,9 +275,9 @@ public class MainService extends Service {
                 JSONArray contributors = data.getJSONArray("contributors");
 
                 for (int i=0; i < contributors.length(); i++) {
-                    if (contributors.getString(i).equals(PreferenceManager.getID(PewaaApplication.getAppContext()))) {
+                    if (contributors.getString(i).equals(PreferenceManager.getID(mContext))) {
                         Intent giftIntent = new Intent();
-                        giftIntent.setClass(PewaaApplication.getAppContext(), GiftDetailsActivity.class);
+                        giftIntent.setClass(mContext, GiftDetailsActivity.class);
                         giftIntent.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID, data.getString("id"));
                         giftIntent.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_IMAGE, data.getString("avatar"));
                         giftIntent.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_TITLE, data.getString("name"));
@@ -298,12 +293,12 @@ public class MainService extends Service {
 
                         giftIntent.putExtra(GiftDetailsActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, giftModel));
 
-                        NotificationsManager.showGiftNotification(PewaaApplication.getAppContext(), giftIntent, "New Gift Added to wishlist " + data.getString("wishlist_id"));
+                        NotificationsManager.showGiftNotification(mContext, giftIntent, "New Gift Added to wishlist " + data.getString("wishlist_name"));
                     }
                 }
 
             } catch (Exception e) {
-                AppHelper.LogCat("User received  Gift Added  Exception MainService" + e.getMessage());
+                AppHelper.LogCat("User received Gift Added Exception MainService" + e.getMessage());
             }
         });
     }
@@ -314,9 +309,9 @@ public class MainService extends Service {
             try {
                 String userId = data.getString("user_id");
 
-                if (userId.equals(PreferenceManager.getID(PewaaApplication.getAppContext()))) {
+                if (userId.equals(PreferenceManager.getID(mContext))) {
                     Intent giftIntent = new Intent();
-                    giftIntent.setClass(PewaaApplication.getAppContext(), GiftDetailsActivity.class);
+                    giftIntent.setClass(mContext, GiftDetailsActivity.class);
                     giftIntent.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID, data.getString("id"));
                     giftIntent.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_IMAGE, data.getString("avatar"));
                     giftIntent.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_TITLE, data.getString("name"));
@@ -335,11 +330,11 @@ public class MainService extends Service {
 
                     giftIntent.putExtra(GiftDetailsActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, giftModel));
 
-                    NotificationsManager.showGiftNotification(PewaaApplication.getAppContext(), giftIntent, "Your contribution of Kes " + data.getString("amount") + " for gift item - " + data.getString("name") + " completed with status " + data.getString("status"));
+                    NotificationsManager.showGiftNotification(mContext, giftIntent, "Your contribution of Kes " + data.getString("amount") + " for gift item - " + data.getString("name") + " completed with status " + data.getString("status"));
                 }
 
             } catch (Exception e) {
-                AppHelper.LogCat("User received  Payment complete  Exception MainService" + e.getMessage());
+                AppHelper.LogCat("User received Payment complete Exception MainService" + e.getMessage());
             }
         });
     }
@@ -347,14 +342,14 @@ public class MainService extends Service {
     /**
      * method to check if user is connected to server
      */
-    private static void isUserConnected() {
+    private static void isUserConnected(Context mContext) {
         mSocket.on(AppConstants.SOCKET_CONNECTED, args -> {
             final JSONObject data = (JSONObject) args[0];
             try {
                 String connectedId = data.getString("connectedId");
                 String socketId = data.getString("socketId");
                 boolean connected = data.getBoolean("connected");
-                if (connectedId != PreferenceManager.getID(PewaaApplication.getAppContext())) {
+                if (connectedId != PreferenceManager.getID(mContext)) {
                     if (connected) {
                         AppHelper.LogCat("User with id  --> " + connectedId + " is connected --> " + getSocketID() + " <---");
 //                        handler.postDelayed(() -> MainService.unSentMessages(connectedId), 1000);
@@ -365,7 +360,7 @@ public class MainService extends Service {
                 } else {
                     setSocketID(socketId);
 
-                    AppHelper.LogCat("You  are connected with socket id --> " + getSocketID() + " <---");
+                    AppHelper.LogCat("You are connected with socket id --> " + getSocketID() + " <---");
                 }
             } catch (JSONException e) {
                 AppHelper.LogCat(e);
@@ -386,12 +381,16 @@ public class MainService extends Service {
     }
 
     @Override
+    protected void onHandleIntent(Intent intent) {
+
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         // service finished
         getApplicationContext().unregisterReceiver(mChangeListener);
         disconnectSocket();
-        realm.close();
         stopSelf();
 
 

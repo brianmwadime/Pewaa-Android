@@ -18,7 +18,10 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 /**
- * Created by mwakima on 10/13/16.
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public interface APIGifts {
@@ -46,7 +49,7 @@ public interface APIGifts {
                                 @Part("name") RequestBody name,
                                 @Part("image\"; filename=\"giftImage\" ") RequestBody image,
                                 @Part("description") RequestBody description,
-                                @Part("price") float price);
+                                @Part("price") double price);
 
     /**
      * method to get a gift's information

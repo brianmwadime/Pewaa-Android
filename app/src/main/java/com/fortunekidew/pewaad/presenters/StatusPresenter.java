@@ -6,6 +6,7 @@ import com.fortunekidew.pewaad.activities.status.EditStatusActivity;
 import com.fortunekidew.pewaad.activities.status.StatusActivity;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.Presenter;
@@ -14,6 +15,7 @@ import com.fortunekidew.pewaad.models.users.status.StatusModel;
 import com.fortunekidew.pewaad.services.apiServices.ContactsService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import io.realm.Realm;
 
@@ -32,19 +34,19 @@ public class StatusPresenter implements Presenter {
 
     public StatusPresenter(StatusActivity statusActivity) {
         this.view = statusActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
 
     }
 
     public StatusPresenter(StatusDelete statusDelete) {
         this.viewDelete = statusDelete;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
 
     }
 
     public StatusPresenter(EditStatusActivity editStatusActivity) {
         this.editStatusActivity = editStatusActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.mApiService = APIService.with(this.editStatusActivity);
         this.mContactsService = new ContactsService(this.realm, this.editStatusActivity, this.mApiService);
     }

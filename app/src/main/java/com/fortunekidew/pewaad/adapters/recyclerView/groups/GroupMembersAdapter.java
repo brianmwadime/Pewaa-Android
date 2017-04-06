@@ -29,6 +29,7 @@ import com.fortunekidew.pewaad.api.APIGroups;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
@@ -39,6 +40,7 @@ import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.ui.RecyclerViewFastScroller;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class GroupMembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public GroupMembersAdapter(@NonNull Activity mActivity, APIService mApiService, boolean isAnAdmin) {
         this.mActivity = mActivity;
         this.mApiService = mApiService;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.isAnAdmin = isAnAdmin;
     }
 

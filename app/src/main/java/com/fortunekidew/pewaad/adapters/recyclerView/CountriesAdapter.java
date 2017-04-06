@@ -21,6 +21,7 @@ import com.fortunekidew.pewaad.ui.ColorGenerator;
 import com.fortunekidew.pewaad.ui.TextDrawableBubbles;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 

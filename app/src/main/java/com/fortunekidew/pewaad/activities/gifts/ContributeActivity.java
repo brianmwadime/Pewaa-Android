@@ -211,7 +211,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         imm.hideSoftInputFromWindow(EditAmount.getWindowToken(), 0);
 
 
-        double newPrice = Double.parseDouble(EditAmount.getText().toString().trim());
+        double newPrice = Integer.parseInt(EditAmount.getText().toString().trim());
 
         // If entered amount is greater than the gift price
         if(newPrice > gift.getPrice()) {

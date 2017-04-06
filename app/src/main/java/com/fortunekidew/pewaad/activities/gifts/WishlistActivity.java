@@ -99,7 +99,7 @@ public class WishlistActivity extends Activity implements LoadingData {
         if (getActionBar() != null)
             getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        realm = Realm.getDefaultInstance();
+        realm = PewaaApplication.getRealmDatabaseInstance();
         eventBus.register(this);
 
         if (getIntent().getExtras() != null) {

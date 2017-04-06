@@ -16,7 +16,7 @@ public class SignUpPreferenceManager {
     // Editor for Shared preferences
     private Editor editor;
     // Shared preferences file name
-    private static final String PREF_NAME = "WhatsClone";
+    private static final String PREF_NAME = "Pewaa";
     // All Shared Preferences Keys
     private static final String KEY_IS_WAITING_FOR_SMS = "IsWaitingForSms";
     private static final String KEY_MOBILE_NUMBER = "MobileNumber";

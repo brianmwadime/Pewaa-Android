@@ -25,7 +25,9 @@ import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
+import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
+import com.fortunekidew.pewaad.helpers.UtilsString;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
@@ -34,6 +36,7 @@ import com.fortunekidew.pewaad.presenters.EditWishlistPresenter;
 import com.fortunekidew.pewaad.ui.LabelledSpinner;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 
@@ -104,7 +107,6 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         CategorySpinner.setDefaultErrorText("Please select a category.");  // Displayed when first item remains selected
         CategorySpinner.setOnItemChosenListener(this);
         mApiService = new APIService(this);
-
         CategorySpinner.requestFocus();
 
         EditName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -134,19 +136,19 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         // Get file from file name
         File file = null;
         if (resultCode == RESULT_OK) {
-            if (AppHelper.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (PermissionHandler.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 AppHelper.LogCat("Read contact data permission already granted.");
             } else {
                 AppHelper.LogCat("Please request Read contact data permission.");
-                AppHelper.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                PermissionHandler.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
             }
 
 
-            if (AppHelper.checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (PermissionHandler.checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 AppHelper.LogCat("Read contact data permission already granted.");
             } else {
                 AppHelper.LogCat("Please request Read contact data permission.");
-                AppHelper.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                PermissionHandler.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             switch (requestCode) {
                 case AppConstants.UPLOAD_PICTURE_REQUEST_CODE:
@@ -254,20 +256,10 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
             return;
         }
 
-
-        if (newRecipients.isEmpty()) {
-            recipientWrapper.setError("Please enter recipient(s)");
+        if (UtilsString.isNullOrBlank(mCategory)) {
+            CategorySpinner.setDefaultErrorEnabled(true);
             return;
         }
-
-
-        if (newDescription.isEmpty()) {
-            name_wrapper.setError("Please add a description");
-            return;
-        }
-
-
-
 
         APIWishlists mApiWishlists = mApiService.RootService(APIWishlists.class, PreferenceManager.getToken(AddWishlistsActivity.this), EndPoints.BASE_URL);
         AddWishlistsActivity.this.runOnUiThread(() -> AppHelper.showDialog(AddWishlistsActivity.this, "Adding Wishlist..."));
@@ -276,6 +268,7 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         newWishlist.setRecipients(newRecipients);
         newWishlist.setCategory(mCategory);
         newWishlist.setDescription(newDescription);
+        newWishlist.setPermissions("ADMINISTRATOR");
         Call<StatusResponse> statusResponseCall = mApiWishlists.editWishlist(newWishlist);
         statusResponseCall.enqueue(new Callback<StatusResponse>() {
             @Override
@@ -312,6 +305,10 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
 
     @Override
     public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
+        mCategory = null;
+
+        if (position == 0) return;
+
         mCategory = adapterView.getItemAtPosition(position).toString();
     }
 

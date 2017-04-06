@@ -28,6 +28,7 @@ import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 
@@ -66,7 +67,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public WishlistsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
         this.mWishlists = new RealmList<>();
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
     }
@@ -75,7 +76,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mActivity = mActivity;
         this.mWishlists = new RealmList<>();
         this.wishlistList = wishlistList;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
         this.mSocket = mSocket;
@@ -194,6 +195,9 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     case "Graduation":
                         wishlistViewHolder.setWishlistImage(R.drawable.graduation);
                     break;
+                    case "Bridal Shower":
+                        wishlistViewHolder.setWishlistImage(R.drawable.bridal_shower);
+                        break;
                 }
 
                 wishlistViewHolder.setOnClickListener(view -> {

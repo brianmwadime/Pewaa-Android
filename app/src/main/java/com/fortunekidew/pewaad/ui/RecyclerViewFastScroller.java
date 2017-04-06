@@ -19,8 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Created by Abderrahim El imame on 04/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class RecyclerViewFastScroller extends LinearLayout {
     private static final int BUBBLE_ANIMATION_DURATION = 1000;

@@ -75,7 +75,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         super.onCreateView(inflater, container, savedInstanceState);
         View mView = inflater.inflate(R.layout.fragment_wishlists, container, false);
         ButterKnife.bind(this, mView);
-        realm = Realm.getDefaultInstance();
+        realm = PewaaApplication.getRealmDatabaseInstance();
         mWishlistsPresenter.onCreate();
         initializerView();
         return mView;
@@ -139,14 +139,14 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 
-                builder.setMessage(R.string.alert_message_delete_conversation);
+                builder.setMessage(R.string.alert_message_delete_wishlist);
 
                 builder.setPositiveButton(R.string.Yes, (dialog, whichButton) -> {
-                    Realm realm = Realm.getDefaultInstance();
+                    Realm realm = PewaaApplication.getRealmDatabaseInstance();
                     int currentPosition;
                     if (mWishlistsAdapter.getSelectedItemCount() != 0) {
 
-                        AppHelper.showDialog(getActivity(), getString(R.string.deleting_gift));
+                        AppHelper.showDialog(getActivity(), getString(R.string.deleting_wishlist));
 
                         for (int x = 0; x < mWishlistsAdapter.getSelectedItems().size(); x++) {
                             currentPosition = mWishlistsAdapter.getSelectedItems().get(x);

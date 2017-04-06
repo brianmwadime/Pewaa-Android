@@ -2,10 +2,11 @@ package com.fortunekidew.pewaad.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.fortunekidew.pewaad.app.PewaaApplication;
+import com.fortunekidew.pewaad.helpers.PreferenceManager;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -19,7 +20,11 @@ public class BootService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        startService(new Intent(PewaaApplication.getAppContext(), MainService.class));
+        new Handler().postDelayed(() -> {
+            if (PreferenceManager.getToken(BootService.this) != null) {
+                startService(new Intent(BootService.this, MainService.class));
+            }
+        }, 1000);
     }
 
     @Override

@@ -230,4 +230,9 @@ public class UtilsString {
         }
         return sb.toString();
     }
+
+    public static boolean isNullOrBlank(String s)
+    {
+        return (s==null || s.trim().equals(""));
+    }
 }

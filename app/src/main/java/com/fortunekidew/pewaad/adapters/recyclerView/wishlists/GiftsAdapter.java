@@ -39,6 +39,7 @@ import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView;
@@ -83,7 +84,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public GiftsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
         this.mGifts = new RealmList<>();
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
 
@@ -106,7 +107,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mActivity = mActivity;
         this.mGifts = new RealmList<>();
         this.wishlistList = wishlistList;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
         this.mSocket = mSocket;

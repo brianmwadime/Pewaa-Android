@@ -219,12 +219,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 } else {
                     if (contactsModel.isLinked()) {
-                        Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
-                        messagingIntent.putExtra("conversationID", 0);
-                        messagingIntent.putExtra("recipientID", contactsModel.getId());
-                        messagingIntent.putExtra("isGroup", false);
-                        mActivity.startActivity(messagingIntent);
-                        mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//                        Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
+//                        messagingIntent.putExtra("conversationID", 0);
+//                        messagingIntent.putExtra("recipientID", contactsModel.getId());
+//                        messagingIntent.putExtra("isGroup", false);
+//                        mActivity.startActivity(messagingIntent);
+//                        mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     } else {
                         String number = contactsModel.getPhone();
                         Intent smsIntent = new Intent(Intent.ACTION_VIEW);
@@ -243,6 +243,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 AnimationsUtil.animateY(holder, false);
             }
             mPreviousPosition = position;
+
+            contactsViewHolder.userImage.setTag(contactsModel);
 
         }
 

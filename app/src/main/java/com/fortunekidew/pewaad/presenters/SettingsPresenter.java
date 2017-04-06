@@ -3,6 +3,7 @@ package com.fortunekidew.pewaad.presenters;
 
 import com.fortunekidew.pewaad.activities.settings.SettingsActivity;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.Presenter;
@@ -16,10 +17,11 @@ import io.realm.Realm;
 public class SettingsPresenter implements Presenter {
     private final SettingsActivity view;
     private final Realm realm;
+    ContactsService mContactsService;
 
     public SettingsPresenter(SettingsActivity settingsActivity) {
         this.view = settingsActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
     @Override
@@ -31,13 +33,17 @@ public class SettingsPresenter implements Presenter {
     public void
     onCreate() {
         APIService mApiService = APIService.with(view);
-        ContactsService mContactsService = new ContactsService(realm, view, mApiService);
+        mContactsService = new ContactsService(realm, view, mApiService);
         try {
-            mContactsService.getContact(PreferenceManager.getID(view)).subscribe(view::ShowContact, throwable -> AppHelper.LogCat(throwable.getMessage()));
-            mContactsService.getContactInfo(PreferenceManager.getID(view)).subscribe(view::ShowContact, throwable -> AppHelper.LogCat(throwable.getMessage()));
+            loadData();
         } catch (Exception e) {
             AppHelper.LogCat("get contact settings Activity " + e.getMessage());
         }
+    }
+
+    public void loadData() {
+        mContactsService.getContact(PreferenceManager.getID(view)).subscribe(view::ShowContact, AppHelper::LogCat);
+        mContactsService.getContactInfo(PreferenceManager.getID(view)).subscribe(view::ShowContact, AppHelper::LogCat);
     }
 
 

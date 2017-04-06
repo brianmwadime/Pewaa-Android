@@ -5,6 +5,7 @@ import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.profile.ProfileActivity;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.Presenter;
@@ -18,6 +19,7 @@ import com.fortunekidew.pewaad.services.apiServices.GroupsService;
 import com.fortunekidew.pewaad.services.apiServices.MessagesService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -40,7 +42,7 @@ public class ProfilePresenter implements Presenter {
 
     public ProfilePresenter(ProfileActivity profileActivity) {
         this.view = profileActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
 
     }
 

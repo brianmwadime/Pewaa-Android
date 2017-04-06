@@ -3,11 +3,13 @@ package com.fortunekidew.pewaad.presenters;
 import android.os.Handler;
 
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.fragments.WishlistsFragment;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 import com.fortunekidew.pewaad.services.apiServices.WishlistsService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import io.realm.Realm;
 
@@ -24,7 +26,7 @@ public class WishlistsPresenter implements Presenter {
 
     public WishlistsPresenter(WishlistsFragment wishlistsFragment) {
         this.wishlistsFragmentView = wishlistsFragment;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
 

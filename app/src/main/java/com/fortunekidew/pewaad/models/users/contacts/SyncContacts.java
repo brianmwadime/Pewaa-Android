@@ -3,21 +3,14 @@ package com.fortunekidew.pewaad.models.users.contacts;
 import java.util.List;
 
 /**
- * Created by Abderrahim El imame on 27/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class SyncContacts {
 
-    private String userID;
     private List<ContactsModel> contactsModelList;
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
 
     public List<ContactsModel> getContactsModelList() {
         return contactsModelList;

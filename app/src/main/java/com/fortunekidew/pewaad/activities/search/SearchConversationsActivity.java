@@ -178,7 +178,7 @@ public class SearchConversationsActivity extends AppCompatActivity {
      * @return this is what  method will return
      */
     private List<WishlistsModel> FilterList(String query) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = PewaaApplication.getRealmDatabaseInstance();
         List<WishlistsModel> wishlistsModels = realm.where(WishlistsModel.class)
                 .contains("RecipientUsername", query, Case.INSENSITIVE)
                 .findAll();

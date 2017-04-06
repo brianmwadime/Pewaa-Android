@@ -4,10 +4,12 @@ import android.os.Handler;
 
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 import com.fortunekidew.pewaad.services.apiServices.WishlistsService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import io.realm.Realm;
 
@@ -25,7 +27,7 @@ public class GiftsPresenter implements Presenter {
 
     public GiftsPresenter(WishlistActivity wishlistActivity) {
         this.view = wishlistActivity;
-        this.realm = Realm.getDefaultInstance();
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
     }
 
 

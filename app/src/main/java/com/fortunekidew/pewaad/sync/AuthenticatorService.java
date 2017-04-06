@@ -16,8 +16,6 @@ public class AuthenticatorService extends Service {
 
     private Authenticator mAuthenticator;
 
-    public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";
-
     public AuthenticatorService() {
 
     }

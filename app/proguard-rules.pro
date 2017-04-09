@@ -16,10 +16,47 @@
 #   public *;
 #}
 
+-keepattributes *Annotation*
+
+####### ButterKnife #######
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewInjector { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
 # Realm ProGuard entries
-#-keep class io.realm.annotations.RealmModule
-#-keep @io.realm.annotations.RealmModule class *
-#-keep class io.realm.internal.Keep
-#-keep @io.realm.internal.Keep class * { *; }
-#-dontwarn javax.**
-#-dontwarn io.realm.**
+-keep class io.realm.annotations.RealmModule
+-keep @io.realm.annotations.RealmModule class *
+-keep class io.realm.internal.Keep
+-keep @io.realm.internal.Keep class * { *; }
+-dontwarn java.lang.invoke.*
+-dontwarn javax.**
+-dontwarn io.realm.**
+
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+
+####### Greenbot EventBus #######
+-keepclassmembers class ** { public void onEvent*(**); }
+
+# RxAndroid
+-dontwarn rx.internal.util.unsafe.**
+
+-keep class * implements android.os.Parcelable {
+   public static final android.os.Parcelable$Creator *;
+ }
+
+ ##---------------Begin: proguard configuration for Gson  ----------
+  # Gson uses generic type information stored in a class file when working with fields. Proguard
+  # removes such information by default, so configure it to keep all of it.
+  -keepattributes Signature

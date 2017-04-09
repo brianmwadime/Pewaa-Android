@@ -50,6 +50,7 @@ public class EndPoints {
      * Contributors
      */
     public static final String CONTRIBUTORS = "contributors";
+    public static final String SEND_CONTRIBUTORS = "contributors/addContributors";
     public static final String CONTRIBUTOR = "contributors/{contributorId}";
 
     /**

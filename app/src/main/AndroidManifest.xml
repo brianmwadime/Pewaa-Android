@@ -121,6 +121,11 @@
             android:theme="@style/Pewaa.Translucent.AssignContributor"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".activities.wishlists.ListContributors"
+            android:exported="false"
+            android:theme="@style/Pewaa.Translucent.AssignContributor"
+            android:windowSoftInputMode="adjustResize" />
         <!--  AddWishlistsActivity -->
         <activity
             android:name=".activities.wishlists.AddWishlistsActivity"

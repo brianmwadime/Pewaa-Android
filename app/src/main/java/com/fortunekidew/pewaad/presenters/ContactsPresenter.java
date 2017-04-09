@@ -2,7 +2,6 @@ package com.fortunekidew.pewaad.presenters;
 
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 
@@ -13,7 +12,6 @@ import com.fortunekidew.pewaad.fragments.ContactsFragment;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
-import com.fortunekidew.pewaad.helpers.UpdateSettings;
 import com.fortunekidew.pewaad.helpers.UtilsPhone;
 import com.fortunekidew.pewaad.interfaces.Presenter;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
@@ -24,7 +22,6 @@ import com.fortunekidew.pewaad.services.apiServices.ContactsService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;

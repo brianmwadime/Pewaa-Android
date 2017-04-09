@@ -1,17 +1,12 @@
 package com.fortunekidew.pewaad.models.users.status;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
- * Created by Abderrahim El imame on 03/05/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwadime on 09/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
-public class StatusResponse {
+public class DefaultResponse {
     private boolean success;
     private String message;
-    @SerializedName("createID")
-    private String id;
-
 
     public boolean isSuccess() {
         return success;
@@ -27,14 +22,6 @@ public class StatusResponse {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
 }

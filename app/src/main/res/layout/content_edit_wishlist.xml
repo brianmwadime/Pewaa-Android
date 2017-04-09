@@ -14,33 +14,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-
-        <!--<FrameLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="234dp"-->
-            <!--android:layout_margin="0dp">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/wishlistAvatar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:background="@color/colorGray"-->
-                <!--android:scaleType="fitCenter"-->
-                <!--android:layout_height="234dp"-->
-                <!--app:srcCompat="@drawable/ic_file_upload_white_24dp"-->
-                <!--android:transitionName="userAvatar" />-->
-
-            <!--<android.support.design.widget.FloatingActionButton-->
-                <!--android:id="@+id/addWishlistAvatar"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="bottom|right"-->
-                <!--android:layout_margin="20dp"-->
-                <!--android:clickable="true"-->
-                <!--app:elevation="2dp"-->
-                <!--app:fabSize="normal"-->
-                <!--app:rippleColor="@color/colorWhiteLight"-->
-                <!--app:srcCompat="@drawable/ic_photo_camera_24dp" />-->
-        <!--</FrameLayout>-->
         <com.fortunekidew.pewaad.ui.LabelledSpinner
             android:id="@+id/spinner"
             app.labelText="Select Wishlist Category"
@@ -65,21 +38,48 @@
                 android:hint="@string/hintName"/>
         </android.support.design.widget.TextInputLayout>
 
-        <!--<android.support.design.widget.TextInputLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:id="@+id/edit_recipient_wrapper">-->
-            <!--<EditText-->
-                <!--android:id="@+id/edit_wishlist_recipient"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:ems="10"-->
-                <!--android:lines="3"-->
-                <!--android:gravity="top|start"-->
-                <!--android:inputType="textMultiLine"-->
-                <!--android:hint="@string/hintRecipients"/>-->
-        <!--</android.support.design.widget.TextInputLayout>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/contributors_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/add_contributors"
+                    android:textColor="@color/colorGrayDark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:background="@color/colorGray" />
+
+                <ImageView
+                    android:id="@+id/edit_contributors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_item_round_ripple"
+                    android:contentDescription="@string/app_name"
+                    android:padding="10dp"
+                    app:srcCompat="@drawable/ic_person_add_gray_24dp" />
+            </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:background="@color/colorGrayDark" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

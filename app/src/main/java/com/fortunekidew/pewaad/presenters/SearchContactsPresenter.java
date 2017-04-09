@@ -1,7 +1,10 @@
 package com.fortunekidew.pewaad.presenters;
 
 
+import android.app.Activity;
+
 import com.fortunekidew.pewaad.activities.search.SearchContactsActivity;
+import com.fortunekidew.pewaad.activities.wishlists.ListContributors;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.interfaces.Presenter;
@@ -37,7 +40,7 @@ public class SearchContactsPresenter implements Presenter {
         loadLocalData();
     }
 
-    private void loadLocalData() {
+    public void loadLocalData() {
         mContactsService.getAllContacts().subscribe(mSearchContactsActivity::ShowContacts, mSearchContactsActivity::onErrorLoading);
     }
 

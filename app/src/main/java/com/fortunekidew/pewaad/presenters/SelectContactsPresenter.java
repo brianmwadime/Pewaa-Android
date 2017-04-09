@@ -2,6 +2,7 @@ package com.fortunekidew.pewaad.presenters;
 
 
 import com.fortunekidew.pewaad.activities.NewContactsActivity;
+import com.fortunekidew.pewaad.activities.wishlists.ListContributors;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
@@ -16,6 +17,7 @@ import io.realm.Realm;
  */
 public class SelectContactsPresenter implements Presenter {
     private NewContactsActivity newContactsActivity;
+    private ListContributors newListContributor;
 
     private Realm realm;
     private boolean selector;
@@ -24,6 +26,12 @@ public class SelectContactsPresenter implements Presenter {
         this.newContactsActivity = newContactsActivity;
         this.realm = PewaaApplication.getRealmDatabaseInstance();
         selector = true;
+    }
+
+    public SelectContactsPresenter(ListContributors newListContributor) {
+        this.newListContributor = newListContributor;
+        this.realm = PewaaApplication.getRealmDatabaseInstance();
+        selector = false;
     }
 
 
@@ -43,11 +51,11 @@ public class SelectContactsPresenter implements Presenter {
             });
 
         } else {
-//            APIService mApiService = APIService.with(this.transferMessageContactsActivity);
-//            ContactsService mContactsService = new ContactsService(realm, this.transferMessageContactsActivity, mApiService);
-//            mContactsService.getLinkedContacts().subscribe(transferMessageContactsActivity::ShowContacts, throwable -> {
-//                AppHelper.LogCat("Error contacts selector " + throwable.getMessage());
-//            });
+            APIService mApiService = APIService.with(this.newListContributor);
+            ContactsService mContactsService = new ContactsService(realm, this.newListContributor, mApiService);
+            mContactsService.getLinkedContacts().subscribe(newListContributor::ShowContacts, throwable -> {
+                AppHelper.LogCat("Error contacts selector " + throwable.getMessage());
+            });
         }
     }
 

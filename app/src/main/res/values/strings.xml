@@ -337,4 +337,6 @@
     <string name="waiting_for_network">Waiting for network..</string>
     <string name="sms_verification">You will receive a verification sms shortly.</string>
     <string name="crash_error_message">Sorry! something went wrong. Please send this error report to the developer.</string>
+    <string name="add_contributors">Add Contributors</string>
+    <string name="select_contributor_button_label">Select</string>
 </resources>

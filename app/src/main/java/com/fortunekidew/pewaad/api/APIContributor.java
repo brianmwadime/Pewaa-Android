@@ -1,12 +1,15 @@
 package com.fortunekidew.pewaad.api;
 
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -43,6 +46,10 @@ public interface APIContributor {
      Call<ContributorsResponse> editContributor(@Field("user_id") String contributorId,
                                                 @Field("wishlist_id") String wishlistId,
                                                 @Field("permissions") String permissions);
+
+    @FormUrlEncoded
+    @POST(EndPoints.SEND_CONTRIBUTORS)
+    Call<StatusResponse> addContributors(@Field("contributors[]") ArrayList<String> listString, @Field("wishlist") String wishlist);
 
     /**
      * method to get a contributor's information

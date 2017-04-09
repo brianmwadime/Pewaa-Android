@@ -22,7 +22,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "com.fortunekidew.pewaa"
+        applicationId "com.fortunekidew.pewaad"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode gitCommitCount
@@ -80,7 +80,7 @@ dependencies {
     compile "com.google.firebase:firebase-core:$supportLibsFirebaseVer"
     compile "com.google.firebase:firebase-messaging:$supportLibsFirebaseVer"
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'jp.wasabeef:glide-transformations:1.3.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'jp.wasabeef:picasso-transformations:2.1.0'
@@ -106,7 +106,7 @@ dependencies {
         transitive = true;
     }
 
-    compile 'joda-time:joda-time:2.9.4'
+    compile 'joda-time:joda-time:2.9.9'
     compile 'nl.littlerobots.rxlint:rxlint:1.0'
     compile 'com.orhanobut:logger:1.15'
 

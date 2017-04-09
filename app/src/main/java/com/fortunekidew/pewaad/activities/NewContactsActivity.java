@@ -37,6 +37,7 @@ public class NewContactsActivity extends AppCompatActivity {
     RecyclerViewFastScroller fastScroller;
     @BindView(R.id.app_bar)
     Toolbar toolbar;
+
     private List<ContactsModel> mContactsModelList;
     private SelectContactsAdapter mSelectContactsAdapter;
     private SelectContactsPresenter mContactsPresenter = new SelectContactsPresenter(this);

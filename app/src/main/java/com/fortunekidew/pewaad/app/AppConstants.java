@@ -55,6 +55,7 @@ public class AppConstants {
     //contributor constants:
     public static final int STATUS_CONTRIBUTOR_ADDED = 0x011;
     public static final int STATUS_CONTRIBUTOR_ADDED_SUCCESS = 0x012;
+    public static final int STATUS_SELECTED_CONTRIBUTORS_SUCCESS = 0x013;
 
 
     //single user socket constants:

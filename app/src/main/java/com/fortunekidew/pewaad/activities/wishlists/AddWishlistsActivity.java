@@ -4,11 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,29 +14,32 @@ import android.view.ActionMode;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.fortunekidew.pewaad.R;
+import com.fortunekidew.pewaad.api.APIContributor;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.api.APIWishlists;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
-import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
-import com.fortunekidew.pewaad.helpers.Files.FilesManager;
 import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.helpers.UtilsString;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
+import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
 import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
 import com.fortunekidew.pewaad.presenters.EditWishlistPresenter;
 import com.fortunekidew.pewaad.ui.LabelledSpinner;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +47,8 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.fortunekidew.pewaad.app.AppConstants.STATUS_SELECTED_CONTRIBUTORS_SUCCESS;
 
 
 /**
@@ -73,14 +76,12 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
     @BindView(R.id.edit_description_wrapper)
     TextInputLayout description_wrapper;
 
-//    @BindView(R.id.edit_wishlist_recipient)
-//    EditText EditRecipients;
-//    @BindView(R.id.edit_recipient_wrapper)
-//    TextInputLayout recipientWrapper;
+    @BindView(R.id.contributors_description)
+    TextView contributors_description;
 
-    private ActionMode actionMode;
-    private String FileImagePath, FileSize, mCategory;
+    private String mCategory;
     private APIService mApiService;
+    private ArrayList<String> selectedContributors = new ArrayList<>();
 
     private EditWishlistPresenter mEditWishlistPresenter = new EditWishlistPresenter(this);
 
@@ -116,13 +117,6 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
             }
         });
 
-//        EditRecipients.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                recipientWrapper.setErrorEnabled(false);
-//            }
-//        });
-
         EditDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -132,68 +126,11 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File fileVideo = null;
-        // Get file from file name
-        File file = null;
         if (resultCode == RESULT_OK) {
-            if (PermissionHandler.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                AppHelper.LogCat("Read contact data permission already granted.");
-            } else {
-                AppHelper.LogCat("Please request Read contact data permission.");
-                PermissionHandler.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-
-
-            if (PermissionHandler.checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                AppHelper.LogCat("Read contact data permission already granted.");
-            } else {
-                AppHelper.LogCat("Please request Read contact data permission.");
-                PermissionHandler.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
             switch (requestCode) {
-                case AppConstants.UPLOAD_PICTURE_REQUEST_CODE:
-                    FileImagePath = FilesManager.getPath(PewaaApplication.getAppContext(), data.getData());
-
-                    if (FileImagePath != null) {
-                        file = new File(FileImagePath);
-                    }
-                    if (file != null) {
-                        FileSize = String.valueOf(file.length());
-
-                    }
-                    break;
-                case AppConstants.SELECT_MESSAGES_CAMERA:
-                    if (data.getData() != null) {
-                        FileImagePath = FilesManager.getPath(PewaaApplication.getAppContext(), data.getData());
-                        if (FileImagePath != null) {
-                            file = new File(FileImagePath);
-                        }
-                        if (file != null) {
-                            FileSize = String.valueOf(file.length());
-                        }
-                    } else {
-                        try {
-                            String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA, MediaStore
-                                    .Images.ImageColumns.BUCKET_DISPLAY_NAME, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images
-                                    .ImageColumns.MIME_TYPE};
-                            final Cursor cursor = PewaaApplication.getAppContext().getContentResolver()
-                                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.ImageColumns
-                                            .DATE_TAKEN + " DESC");
-
-                            if (cursor != null && cursor.moveToFirst()) {
-                                String imageLocation = cursor.getString(1);
-                                cursor.close();
-                                File imageFile = new File(imageLocation);
-                                if (imageFile.exists()) {
-                                    FileImagePath = imageFile.getPath();
-                                    file = new File(FileImagePath);
-                                    FileSize = String.valueOf(file.length());
-                                }
-                            }
-                        } catch (Exception e) {
-                            AppHelper.LogCat("error" + e);
-                        }
-                    }
+                case AppConstants.STATUS_SELECTED_CONTRIBUTORS_SUCCESS:
+                    selectedContributors = (ArrayList<String>) data.getSerializableExtra("SELECTED_LIST");
+                    contributors_description.setText(selectedContributors.size() + " Contributors");
                     break;
             }
 
@@ -241,14 +178,9 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         AppHelper.LogCat("Wishlists " + throwable.getMessage());
     }
 
-    private int convertToDp(float value) {
-        return (int) Math.ceil(1 * value);
-    }
-
     @OnClick(R.id.action_save)
     public void saveWishlist(View view) {
         String newName = EditName.getText().toString().trim();
-//        String newRecipients = EditRecipients.getText().toString().trim();
         String newDescription = EditDescription.getText().toString().trim();
 
         if (newName.isEmpty()) {
@@ -265,7 +197,6 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         AddWishlistsActivity.this.runOnUiThread(() -> AppHelper.showDialog(AddWishlistsActivity.this, "Adding Wishlist..."));
         EditWishlist newWishlist = new EditWishlist();
         newWishlist.setName(newName);
-//        newWishlist.setRecipients(newRecipients);
         newWishlist.setCategory(mCategory);
         newWishlist.setDescription(newDescription);
         newWishlist.setPermissions("ADMINISTRATOR");
@@ -278,10 +209,9 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
 
                     newWishlist.setId(response.body().getId());
 
-                    EventBus.getDefault().post(new Pusher("new_wishlist", newWishlist));
-
-                    finish();
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    if (selectedContributors.size() > 0) {
+                        saveContributor(newWishlist, selectedContributors);
+                    }
 
                 } else {
                     AppHelper.CustomToast(AddWishlistsActivity.this, response.message());
@@ -298,9 +228,50 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
 
     }
 
+    private void saveContributor(EditWishlist wishlist, ArrayList<String> userIds) {
+
+        APIContributor mApiContributor = mApiService.RootService(APIContributor.class, PreferenceManager.getToken(AddWishlistsActivity.this), EndPoints.BASE_URL);
+        AddWishlistsActivity.this.runOnUiThread(() -> showLoading());
+        Call<StatusResponse> statusResponseCall = mApiContributor.addContributors(userIds, wishlist.getId());
+        statusResponseCall.enqueue(new Callback<StatusResponse>() {
+            @Override
+            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+                if (response.isSuccessful()) {
+
+                    EventBus.getDefault().post(new Pusher("new_wishlist", wishlist));
+
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+                } else {
+                    AppHelper.CustomToast(AddWishlistsActivity.this, response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StatusResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void showLoading() {
+
+    }
+
     @OnClick(R.id.action_discard)
     public void onBackPress(View view) {
         onBackPressed();
+    }
+
+    @OnClick(R.id.edit_contributors)
+    public void selectcontributors() {
+        Intent intent = new Intent(this, ListContributors.class);
+
+        intent.putExtra(ListContributors.EXTRA_CONTRIBUTORS, selectedContributors);
+
+        startActivityForResult(intent, STATUS_SELECTED_CONTRIBUTORS_SUCCESS);
     }
 
     @Override

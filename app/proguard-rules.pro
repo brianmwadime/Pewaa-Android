@@ -56,7 +56,10 @@
    public static final android.os.Parcelable$Creator *;
  }
 
- ##---------------Begin: proguard configuration for Gson  ----------
-  # Gson uses generic type information stored in a class file when working with fields. Proguard
-  # removes such information by default, so configure it to keep all of it.
-  -keepattributes Signature
+### JODA ####
+-dontwarn org.joda.convert.**
+
+##---------------Begin: proguard configuration for Gson  ----------
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature

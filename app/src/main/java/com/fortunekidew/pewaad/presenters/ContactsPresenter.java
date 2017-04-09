@@ -151,11 +151,9 @@ public class ContactsPresenter implements Presenter {
         switch (pusher.getAction()) {
             case "updatedContactsList":
                 contactsFragmentView.updateContacts(pusher.getContactsModelList());
-//                new Handler().postDelayed(this::checkAppVersion, 2000);
                 break;
             case "updatedContactsListThrowable":
                 contactsFragmentView.onErrorLoading(pusher.getThrowable());
-//                new Handler().postDelayed(this::checkAppVersion, 2000);
                 break;
             case "ContactsPermission":
                 onRefresh();

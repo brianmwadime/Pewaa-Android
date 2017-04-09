@@ -94,6 +94,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.6.1'
     compile 'io.github.rockerhieu:emojicon:1.4.1'
+    compile 'io.realm:android-adapters:2.0.0'
     compile('io.socket:socket.io-client:0.7.0') {
         exclude group: 'org.json', module: 'json'
     }

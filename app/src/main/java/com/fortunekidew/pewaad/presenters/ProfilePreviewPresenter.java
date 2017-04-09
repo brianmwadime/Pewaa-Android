@@ -38,7 +38,7 @@ public class ProfilePreviewPresenter implements Presenter {
             String userID = view.getIntent().getExtras().getString("userID");
 
             try {
-                mContactsService.getContact(userID).subscribe(view::ShowContact, view::onErrorLoading);
+                mContactsService.getContactInfo(userID).subscribe(view::ShowContact, view::onErrorLoading);
             } catch (Exception e) {
                 AppHelper.LogCat("Here getContact profile preview" + e.getMessage());
             }

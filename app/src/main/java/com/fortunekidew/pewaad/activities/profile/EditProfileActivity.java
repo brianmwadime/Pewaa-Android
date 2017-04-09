@@ -71,8 +71,6 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     FloatingActionButton addAvatar;
     @BindView(R.id.wishlist_name)
     TextView username;
-    @BindView(R.id.status)
-    EmojiconTextView status;
     @BindView(R.id.numberPhone)
     TextView numberPhone;
     @BindDimen(R.dimen.large_avatar_height) int largeAvatarSize;
@@ -133,13 +131,6 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     }
 
     @SuppressWarnings("unused")
-    @OnClick(R.id.statusLayout)
-    public void launchStatus() {
-        Intent mIntent = new Intent(this, StatusActivity.class);
-        startActivity(mIntent);
-    }
-
-    @SuppressWarnings("unused")
     @OnClick(R.id.editUsernameBtn)
     public void launchEditUsername() {
         Intent mIntent = new Intent(this, EditUsernameActivity.class);
@@ -156,12 +147,6 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
         this.mContactsModel = mContactsModel;
         if (mContactsModel.getPhone() != null) {
             numberPhone.setText(mContactsModel.getPhone());
-        }
-        if (mContactsModel.getStatus() != null) {
-            String state = unescapeJavaString(mContactsModel.getStatus());
-            status.setText(state);
-        } else {
-            status.setText(getString(R.string.no_status));
         }
         if (mContactsModel.getName() != null) {
             username.setText(mContactsModel.getName());

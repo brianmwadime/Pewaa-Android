@@ -17,6 +17,8 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,8 +29,6 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaad.api.APIService;
-import com.fortunekidew.pewaad.app.EndPoints;
-import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 
@@ -38,9 +38,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.socket.client.Socket;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
@@ -51,38 +48,23 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     protected final Activity mActivity;
-    private RealmList<WishlistsModel> mWishlists;
-    private Realm realm;
+    private List<WishlistsModel> mWishlists;
+    private List<WishlistsModel> mWishlistsSearch;
     private APIService mApiService;
     private String SearchQuery;
     private SparseBooleanArray selectedItems;
     private boolean isActivated = false;
-    private RecyclerView wishlistList;
-    private Socket mSocket;
-
-
 
     public WishlistsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
-        this.mWishlists = new RealmList<>();
-        this.realm = PewaaApplication.getRealmDatabaseInstance();
+        this.mWishlists = new ArrayList<>();
         this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
     }
 
-    public WishlistsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList, Socket mSocket) {
-        this.mActivity = mActivity;
-        this.mWishlists = new RealmList<>();
-        this.wishlistList = wishlistList;
-        this.realm = PewaaApplication.getRealmDatabaseInstance();
-        this.mApiService = new APIService(mActivity);
-        this.selectedItems = new SparseBooleanArray();
-        this.mSocket = mSocket;
-    }
-
-    public void setWishlists(RealmList<WishlistsModel> wishlistsModelList) {
+    public void setWishlists(List<WishlistsModel> wishlistsModelList) {
         this.mWishlists = wishlistsModelList;
         notifyDataSetChanged();
     }
@@ -262,6 +244,43 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public WishlistsModel getItem(int position) {
         return mWishlists.get(position);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                final FilterResults oReturn = new FilterResults();
+                final List<WishlistsModel> results = new ArrayList<>();
+                if (mWishlistsSearch == null) {
+                    mWishlistsSearch = mWishlists;
+                }
+                if (charSequence != null) {
+                    if (mWishlistsSearch != null && mWishlistsSearch.size() > 0) {
+                        for (final WishlistsModel wishlist : mWishlistsSearch) {
+                            if (wishlist.getName().toLowerCase().contains(charSequence.toString())) {
+                                results.add(wishlist);
+                            }
+                        }
+                    }
+                    oReturn.values = results;
+                    oReturn.count = results.size();
+                }
+                return oReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                if (filterResults.count > 0) {
+//                    MainActivity.setResultsMessage(false);
+                } else {
+//                    MainActivity.setResultsMessage(true);
+                }
+                mWishlists = (List<WishlistsModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class WishlistViewHolder extends RecyclerView.ViewHolder {

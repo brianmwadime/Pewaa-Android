@@ -64,10 +64,10 @@ public class EditGiftPresenter implements Presenter {
 
         if (view != null) {
             this.mApiService = APIService.with(view);
-            this.mWishlistsService = new WishlistsService(this.realm, view, this.mApiService);
+            this.mWishlistsService = new WishlistsService(view, this.mApiService);
         } else if (bottomSheetEditGift != null) {
             this.mApiService = APIService.with(bottomSheetEditGift.getActivity());
-            this.mWishlistsService = new WishlistsService(this.realm, bottomSheetEditGift.getActivity(), this.mApiService);
+            this.mWishlistsService = new WishlistsService(bottomSheetEditGift.getActivity(), this.mApiService);
         }
     }
 

@@ -65,21 +65,21 @@
                 android:hint="@string/hintName"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:id="@+id/edit_recipient_wrapper">
-            <EditText
-                android:id="@+id/edit_wishlist_recipient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:lines="3"
-                android:gravity="top|start"
-                android:inputType="textMultiLine"
-                android:hint="@string/hintRecipients"/>
-        </android.support.design.widget.TextInputLayout>
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:id="@+id/edit_recipient_wrapper">-->
+            <!--<EditText-->
+                <!--android:id="@+id/edit_wishlist_recipient"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:ems="10"-->
+                <!--android:lines="3"-->
+                <!--android:gravity="top|start"-->
+                <!--android:inputType="textMultiLine"-->
+                <!--android:hint="@string/hintRecipients"/>-->
+        <!--</android.support.design.widget.TextInputLayout>-->
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

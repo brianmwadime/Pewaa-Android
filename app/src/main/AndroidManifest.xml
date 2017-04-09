@@ -151,7 +151,6 @@
         </activity>
 
         <!--  TransferMessageContactsActivity -->
-        <activity android:name=".activities.gifts.TransferMessageContactsActivity" />
 
         <!--  NotificationsSettingsActivity -->
         <activity android:name=".activities.settings.NotificationsSettingsActivity" />
@@ -182,7 +181,6 @@
             android:name=".activities.profile.ProfilePreviewActivity"
             android:theme="@style/Dialog"
             android:windowActionBar="false" />
-        <activity android:name=".activities.profile.ProfileActivity" />
 
         <!-- SMS Receiver -->
         <receiver android:name=".receivers.SmsReceiverBroadCast">
@@ -234,9 +232,6 @@
             android:theme="@style/Pewaa" />
 
         <!-- SearchConversationsActivity -->
-        <activity
-            android:name=".activities.search.SearchConversationsActivity"
-            android:label="@string/title_activity_settings" />
 
         <!-- SearchContactsActivity -->
         <activity

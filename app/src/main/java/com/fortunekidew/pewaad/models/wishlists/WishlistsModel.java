@@ -2,9 +2,9 @@ package com.fortunekidew.pewaad.models.wishlists;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
+
 import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -13,8 +13,7 @@ import io.realm.annotations.PrimaryKey;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class WishlistsModel extends RealmObject {
-    @PrimaryKey
+public class WishlistsModel implements Serializable {
     private String id;
     private String name;
     private String description;
@@ -105,6 +104,10 @@ public class WishlistsModel extends RealmObject {
 
     public void setRecipients(String recipients) {
         this.recipients = recipients;
+    }
+
+    public String toString() {
+        return getName() + "##" + getName() + "##" + getDescription() + "##" + getCategory() + "##" + getPermissions();
     }
 
 }

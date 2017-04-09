@@ -71,7 +71,7 @@ public class EditProfilePresenter implements Presenter {
             mContactsService.getContactInfo(PreferenceManager.getID(view)).subscribe(view::ShowContact, view::onErrorLoading);
         }else {
             mApiService = APIService.with(editUsernameActivity);
-            this.mContactsService = new ContactsService(this.realm, editUsernameActivity, mApiService);
+            this.mContactsService = new ContactsService(editUsernameActivity, mApiService);
         }
     }
 

@@ -3,7 +3,6 @@ package com.fortunekidew.pewaad.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.fortunekidew.pewaad.models.groups.MembersGroupModel;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -222,57 +221,6 @@ public class PreferenceManager {
 
     }
 
-
-    /**
-     * method to save new members to group
-     *
-     * @param context            this is the first parameter for saveMembers  method
-     * @param membersGroupModels this is the second parameter for saveMembers  method
-     */
-    private static void saveMembers(Context context, List<MembersGroupModel> membersGroupModels) {
-        SharedPreferences settings;
-        SharedPreferences.Editor editor;
-
-        settings = context.getSharedPreferences(PREFS_NAME,
-                Context.MODE_PRIVATE);
-        editor = settings.edit();
-
-        Gson gson = new Gson();
-        String jsonMembers = gson.toJson(membersGroupModels);
-
-        editor.putString(MEMBERS_SELECTED, jsonMembers);
-
-        editor.apply();
-    }
-
-    /**
-     * method to add member
-     *
-     * @param context           this is the first parameter for addMember  method
-     * @param membersGroupModel this is the second parameter for addMember  method
-     */
-    public static void addMember(Context context, MembersGroupModel membersGroupModel) {
-        List<MembersGroupModel> membersGroupModelArrayList = getMembers(context);
-        if (membersGroupModelArrayList == null)
-            membersGroupModelArrayList = new ArrayList<MembersGroupModel>();
-        membersGroupModelArrayList.add(membersGroupModel);
-        saveMembers(context, membersGroupModelArrayList);
-    }
-
-    /**
-     * method to remove member
-     *
-     * @param context           this is the first parameter for removeMember  method
-     * @param membersGroupModel this is the second parameter for removeMember  method
-     */
-    public static void removeMember(Context context, MembersGroupModel membersGroupModel) {
-        ArrayList<MembersGroupModel> membersGroupModelArrayList = getMembers(context);
-        if (membersGroupModelArrayList != null) {
-            membersGroupModelArrayList.remove(membersGroupModel);
-            saveMembers(context, membersGroupModelArrayList);
-        }
-    }
-
     /**
      * method to clear members
      *
@@ -292,35 +240,6 @@ public class PreferenceManager {
 
         editor.apply();
     }
-
-    /**
-     * method to get all members
-     *
-     * @param context this is parameter for getMembers  method
-     * @return return value
-     */
-    public static ArrayList<MembersGroupModel> getMembers(Context context) {
-        try {
-            SharedPreferences settings;
-            List<MembersGroupModel> membersGroupModels;
-
-            settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            if (settings.contains(MEMBERS_SELECTED)) {
-                String jsonMembers = settings.getString(MEMBERS_SELECTED, null);
-                Gson gson = new Gson();
-                MembersGroupModel[] membersItems = gson.fromJson(jsonMembers, MembersGroupModel[].class);
-                membersGroupModels = Arrays.asList(membersItems);
-                return new ArrayList<>(membersGroupModels);
-            } else {
-                return null;
-            }
-
-        } catch (Exception e) {
-            AppHelper.LogCat("getMembers Exception " + e.getMessage());
-            return null;
-        }
-    }
-
 
     /**
      * method to setUnitInterstitialAdID

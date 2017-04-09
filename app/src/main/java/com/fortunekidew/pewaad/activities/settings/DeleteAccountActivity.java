@@ -89,7 +89,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
         setupToolbar();
         initializerView();
         APIService mApiServiceDelete = APIService.with(this);
-        mContactsServiceDelete = new ContactsService(realm, this, mApiServiceDelete);
+        mContactsServiceDelete = new ContactsService(this, mApiServiceDelete);
         mSignUpPreferenceManager = new SignUpPreferenceManager(this);
         deleteAccount.setOnClickListener(view -> verifyNumberPhone());
 

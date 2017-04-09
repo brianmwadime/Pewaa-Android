@@ -48,7 +48,7 @@ public class StatusPresenter implements Presenter {
         this.editStatusActivity = editStatusActivity;
         this.realm = PewaaApplication.getRealmDatabaseInstance();
         this.mApiService = APIService.with(this.editStatusActivity);
-        this.mContactsService = new ContactsService(this.realm, this.editStatusActivity, this.mApiService);
+        this.mContactsService = new ContactsService(realm, this.editStatusActivity, this.mApiService);
     }
 
 
@@ -132,7 +132,7 @@ public class StatusPresenter implements Presenter {
 
     public void DeleteStatus(int statusID) {
         APIService mApiServiceDelete = APIService.with(viewDelete);
-        ContactsService mContactsServiceDelete = new ContactsService(realm, viewDelete, mApiServiceDelete);
+        ContactsService mContactsServiceDelete = new ContactsService(viewDelete, mApiServiceDelete);
         AppHelper.showDialog(viewDelete, viewDelete.getString(R.string.deleting));
         mContactsServiceDelete.deleteStatus(statusID).subscribe(statusResponse -> {
             if (statusResponse.isSuccess()) {

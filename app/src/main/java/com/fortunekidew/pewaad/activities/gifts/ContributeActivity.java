@@ -1,66 +1,44 @@
 package com.fortunekidew.pewaad.activities.gifts;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.fortunekidew.pewaad.R;
-import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.TransferMessageContactsAdapter;
-import com.fortunekidew.pewaad.api.APIGifts;
 import com.fortunekidew.pewaad.api.APIPayments;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
-import com.fortunekidew.pewaad.app.PewaaApplication;
-import com.fortunekidew.pewaad.fragments.BottomSheetEditGift;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
-import com.fortunekidew.pewaad.helpers.SignUpPreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.payments.ConfirmPaymentResponse;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
-import com.fortunekidew.pewaad.models.payments.PaymentRequest;
 import com.fortunekidew.pewaad.models.payments.PaymentResponse;
 import com.fortunekidew.pewaad.models.payments.RequestPaymentResponse;
 import com.fortunekidew.pewaad.models.users.Pusher;
-import com.fortunekidew.pewaad.models.wishlists.EditGift;
-import com.fortunekidew.pewaad.models.wishlists.GiftResponse;
 import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
-import com.fortunekidew.pewaad.presenters.EditGiftPresenter;
-import com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -42,7 +42,7 @@ public class WishlistsPresenter implements Presenter {
         if (!EventBus.getDefault().isRegistered(wishlistsFragmentView))
             EventBus.getDefault().register(wishlistsFragmentView);
 
-        mWishlistsService = new WishlistsService(realm, wishlistsFragmentView.getActivity(), mApiService);
+        mWishlistsService = new WishlistsService(wishlistsFragmentView.getActivity(), mApiService);
         mWishlistsService.getWishlists().subscribe(wishlistsFragmentView::ShowWishlist, wishlistsFragmentView::onErrorLoading, wishlistsFragmentView::onHideLoading);
     }
 
@@ -80,7 +80,7 @@ public class WishlistsPresenter implements Presenter {
         if (!EventBus.getDefault().isRegistered(wishlistsFragmentView))
             EventBus.getDefault().register(wishlistsFragmentView);
 
-        mWishlistsService = new WishlistsService(realm, wishlistsFragmentView.getActivity(), mApiService);
+        mWishlistsService = new WishlistsService(wishlistsFragmentView.getActivity(), mApiService);
         mWishlistsService.getWishlists().subscribe(wishlistsFragmentView::ShowWishlist, wishlistsFragmentView::onErrorLoading, wishlistsFragmentView::onHideLoading);
     }
 

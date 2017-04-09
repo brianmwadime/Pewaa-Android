@@ -1,16 +1,20 @@
 package com.fortunekidew.pewaad.fragments;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import com.fortunekidew.pewaad.presenters.WishlistsPresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,7 +56,7 @@ import static com.fortunekidew.pewaad.R.id.swipeContainer;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class WishlistsFragment extends Fragment implements LoadingData, ActionMode.Callback {
+public class WishlistsFragment extends Fragment implements LoadingData, ActionMode.Callback, SearchView.OnQueryTextListener {
 
     @BindView(R.id.WishlistsList)
     RecyclerView WishlistList;
@@ -60,13 +65,13 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
     @BindView(swipeContainer)
     SwipeRefreshLayout SwipeToRefresh;
 
+    private MenuItem searchItem;
+    private SearchView searchView;
+
 
     private WishlistsAdapter mWishlistsAdapter;
     private WishlistsPresenter mWishlistsPresenter = new WishlistsPresenter(this);
-    private Realm realm;
-    private GestureDetectorCompat gestureDetector;
     private ActionMode actionMode;
-    private Socket mSocket;
 
 
     @Nullable
@@ -75,10 +80,22 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         super.onCreateView(inflater, container, savedInstanceState);
         View mView = inflater.inflate(R.layout.fragment_wishlists, container, false);
         ButterKnife.bind(this, mView);
-        realm = PewaaApplication.getRealmDatabaseInstance();
         mWishlistsPresenter.onCreate();
         initializerView();
         return mView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.wishlists_menu, menu);
+
+        searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
     }
 
     /**
@@ -89,7 +106,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mWishlistsAdapter = new WishlistsAdapter(getActivity(), WishlistList, mSocket);
+        mWishlistsAdapter = new WishlistsAdapter(getActivity());
         WishlistList.setLayoutManager(mLinearLayoutManager);
         WishlistList.setAdapter(mWishlistsAdapter);
         WishlistList.setItemAnimator(new DefaultItemAnimator());
@@ -103,7 +120,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
 
     }
 
-
     /**
      * method to toggle the selection
      *
@@ -113,9 +129,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         mWishlistsAdapter.toggleSelection(position);
         String title = String.format("%s selected", mWishlistsAdapter.getSelectedItemCount());
         actionMode.setTitle(title);
-
-
     }
+
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -142,7 +157,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
                 builder.setMessage(R.string.alert_message_delete_wishlist);
 
                 builder.setPositiveButton(R.string.Yes, (dialog, whichButton) -> {
-                    Realm realm = PewaaApplication.getRealmDatabaseInstance();
                     int currentPosition;
                     if (mWishlistsAdapter.getSelectedItemCount() != 0) {
 
@@ -160,7 +174,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
                         actionMode.finish();
                         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
                     }
-                    realm.close();
                 });
 
 
@@ -181,6 +194,22 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         this.actionMode = null;
         mWishlistsAdapter.clearSelections();
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String search) {
+        if (search.isEmpty()) {
+            ((WishlistsAdapter) WishlistList.getAdapter()).getFilter().filter("");
+        } else {
+            ((WishlistsAdapter) WishlistList.getAdapter()).getFilter().filter(search.toLowerCase());
+        }
+
+        return false;
     }
 
 
@@ -209,7 +238,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         if (wishlistsModels.size() != 0) {
             WishlistList.setVisibility(View.VISIBLE);
             EmptyWishlists.setVisibility(View.GONE);
-            RealmList<WishlistsModel> wishlistsModels1 = new RealmList<WishlistsModel>();
+            List<WishlistsModel> wishlistsModels1 = new ArrayList<>();
             for (WishlistsModel conversationsModel : wishlistsModels) {
                 wishlistsModels1.add(conversationsModel);
             }
@@ -231,7 +260,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         if (wishlistsModels.size() != 0) {
             WishlistList.setVisibility(View.VISIBLE);
             EmptyWishlists.setVisibility(View.GONE);
-            RealmList<WishlistsModel> wishlistsModels1 = new RealmList<WishlistsModel>();
+            List<WishlistsModel> wishlistsModels1 = new ArrayList<WishlistsModel>();
             for (WishlistsModel wishlistsModel : wishlistsModels) {
                 wishlistsModels1.add(wishlistsModel);
             }
@@ -246,7 +275,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
     public void onDestroy() {
         super.onDestroy();
         mWishlistsPresenter.onDestroy();
-        realm.close();
     }
 
     @Override

@@ -121,13 +121,13 @@ public class PermissionHandler {
             });
             builder.setNegativeButton(R.string.no_thanks, (dialog, which) -> {
                 if (permission.equals(Manifest.permission.READ_CONTACTS)) {
-                    Realm realm = PewaaApplication.getRealmDatabaseInstance();
-                    realm.executeTransactionAsync(realm1 -> {
-                        RealmResults<ContactsModel> contactsModel = realm1.where(ContactsModel.class).findAll();
-                        if (contactsModel.size() != 0) {
-                            contactsModel.deleteAllFromRealm();
-                        }
-                    }, dialog::dismiss, AppHelper::LogCat);
+//                    Realm realm = PewaaApplication.getRealmDatabaseInstance();
+//                    realm.executeTransactionAsync(realm1 -> {
+//                        RealmResults<ContactsModel> contactsModel = realm1.where(ContactsModel.class).findAll();
+//                        if (contactsModel.size() != 0) {
+//                            contactsModel.deleteAllFromRealm();
+//                        }
+//                    }, dialog::dismiss, AppHelper::LogCat);
                 } else {
                     dialog.dismiss();
                 }

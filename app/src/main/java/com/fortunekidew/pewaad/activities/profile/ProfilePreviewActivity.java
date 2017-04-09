@@ -32,7 +32,6 @@ import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
 import com.fortunekidew.pewaad.helpers.UtilsPhone;
-import com.fortunekidew.pewaad.models.groups.GroupsModel;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaad.presenters.ProfilePreviewPresenter;
 
@@ -143,37 +142,22 @@ public class ProfilePreviewActivity extends Activity {
             }
         });
         AboutBtn.setOnClickListener(v -> {
-            if (isGroup) {
-                if (AppHelper.isAndroid5()) {
-                    mIntent = new Intent(this, ProfileActivity.class);
-                    mIntent.putExtra("groupID", groupID);
-                    mIntent.putExtra("isGroup", true);
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, new Pair<>(userProfilePicture, getString(R.string.user_image_transition)), new Pair<>(userProfileName, getString(R.string.user_name_transition)));
-                    startActivity(mIntent, options.toBundle());
-                    finish();
-                } else {
-                    mIntent = new Intent(this, ProfileActivity.class);
-                    mIntent.putExtra("groupID", groupID);
-                    mIntent.putExtra("isGroup", true);
-                    startActivity(mIntent);
-                    finish();
-                }
-            } else {
-                if (AppHelper.isAndroid5()) {
-                    mIntent = new Intent(this, ProfileActivity.class);
-                    mIntent.putExtra("userID", userID);
-                    mIntent.putExtra("isGroup", false);
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, new Pair<>(userProfilePicture, getString(R.string.user_image_transition)), new Pair<>(userProfileName, getString(R.string.user_name_transition)));
-                    startActivity(mIntent, options.toBundle());
-                    finish();
-                } else {
-                    mIntent = new Intent(this, ProfileActivity.class);
-                    mIntent.putExtra("userID", userID);
-                    mIntent.putExtra("isGroup", false);
-                    startActivity(mIntent);
-                    finish();
-                }
-            }
+
+//                if (AppHelper.isAndroid5()) {
+//                    mIntent = new Intent(this, ProfileActivity.class);
+//                    mIntent.putExtra("userID", userID);
+//                    mIntent.putExtra("isGroup", false);
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, new Pair<>(userProfilePicture, getString(R.string.user_image_transition)), new Pair<>(userProfileName, getString(R.string.user_name_transition)));
+//                    startActivity(mIntent, options.toBundle());
+//                    finish();
+//                } else {
+//                    mIntent = new Intent(this, ProfileActivity.class);
+//                    mIntent.putExtra("userID", userID);
+//                    mIntent.putExtra("isGroup", false);
+//                    startActivity(mIntent);
+//                    finish();
+//                }
+
 
         });
         CallBtn.setOnClickListener(v -> {
@@ -237,165 +221,9 @@ public class ProfilePreviewActivity extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void ShowContact(ContactsModel contactsModels) {
         contactsModel = contactsModels;
-        UpdateUI(contactsModels, null);
+
     }
 
-    /**
-     * method to show group information
-     *
-     * @param groupsModel this is parameter for   ShowGroup method
-     */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void ShowGroup(GroupsModel groupsModel) {
-        UpdateUI(null, groupsModel);
-    }
-
-    /**
-     * method to update the UI
-     *
-     * @param mContactsModel this is the first parameter for  UpdateUI  method
-     * @param mGroupsModel   this is the second parameter for   UpdateUI  method
-     */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void UpdateUI(ContactsModel mContactsModel, GroupsModel mGroupsModel) {
-        try {
-
-
-            if (isGroup) {
-                if (mGroupsModel.getGroupName() != null) {
-                    String groupname = unescapeJava(mGroupsModel.getGroupName());
-                    if (groupname.length() > 18)
-                        userProfileName.setText(groupname.substring(0, 18) + "... " + "");
-                    else
-                        userProfileName.setText(groupname);
-
-                }
-                String userId = String.valueOf(mGroupsModel.getId());
-                if (mGroupsModel.getGroupImage() != null) {
-                    if (FilesManager.isFileImagesGroupExists(FilesManager.getGroupImage(userId, mGroupsModel.getGroupName()))) {
-                        Glide.with(this)
-                                .load(FilesManager.getFileImageGroup(userId, mGroupsModel.getGroupName()))
-                                .override(500, 500)
-                                .centerCrop()
-                                .into(userProfilePicture);
-                    } else {
-
-
-                        BitmapImageViewTarget target = new BitmapImageViewTarget(userProfilePicture) {
-                            @Override
-                            public void onLoadStarted(Drawable placeholder) {
-                                super.onLoadStarted(placeholder);
-                                userProfilePicture.setImageDrawable(placeholder);
-                            }
-
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                super.onResourceReady(resource, glideAnimation);
-                                FilesManager.downloadFilesToDevice(ProfilePreviewActivity.this, mGroupsModel.getGroupImage(), String.valueOf(mGroupsModel.getId()), mGroupsModel.getGroupName(), "group");
-                                Glide.with(ProfilePreviewActivity.this)
-                                        .load(EndPoints.BASE_URL + mGroupsModel.getGroupImage())
-                                        .override(500, 500)
-                                        .centerCrop()
-                                        .placeholder(userProfilePicture.getDrawable())
-                                        .into(userProfilePicture);
-
-                            }
-
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
-                                userProfilePicture.setImageDrawable(errorDrawable);
-                            }
-
-
-                        };
-
-                        Glide.with(this)
-                                .load(EndPoints.BASE_URL + mGroupsModel.getGroupImage())
-                                .asBitmap()
-                                .transform(new BlurTransformation(this))
-                                .override(200, 200)
-                                .centerCrop()
-                                .into(target);
-
-
-                    }
-                } else {
-                    userProfilePicture.setPadding(100, 100, 100, 100);
-                    userProfilePicture.setBackground(AppHelper.getDrawable(this, R.drawable.bg_rect_group_image_holder));
-                    //  userProfilePicture.setImageResource(R.drawable.ic_group_holder_white_opacity_48dp);
-                }
-
-                actionProfileArea.setVisibility(View.VISIBLE);
-
-            } else {
-                String name = UtilsPhone.getContactName(this, mContactsModel.getPhone());
-                if (name != null) {
-                    userProfileName.setText(name);
-                } else {
-                    userProfileName.setText(mContactsModel.getPhone());
-                }
-
-                String userId = String.valueOf(mContactsModel.getId());
-                if (mContactsModel.getImage() != null) {
-                    if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(userId, mContactsModel.getUsername()))) {
-
-                        Glide.with(this)
-                                .load(FilesManager.getFileImageProfile(userId, mContactsModel.getUsername()))
-                                .override(500, 500)
-                                .centerCrop()
-                                .into(userProfilePicture);
-                    } else {
-                        BitmapImageViewTarget target = new BitmapImageViewTarget(userProfilePicture) {
-                            @Override
-                            public void onLoadStarted(Drawable placeholder) {
-                                super.onLoadStarted(placeholder);
-                                userProfilePicture.setImageDrawable(placeholder);
-                            }
-
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                super.onResourceReady(resource, glideAnimation);
-                                FilesManager.downloadFilesToDevice(ProfilePreviewActivity.this, mContactsModel.getImage(), String.valueOf(mContactsModel.getId()), mContactsModel.getUsername(), "profile");
-                                Glide.with(ProfilePreviewActivity.this)
-                                        .load(EndPoints.BASE_URL + mContactsModel.getImage())
-                                        .override(500, 500)
-                                        .centerCrop()
-                                        .placeholder(userProfilePicture.getDrawable())
-                                        .into(userProfilePicture);
-
-                            }
-
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
-                                userProfilePicture.setImageDrawable(errorDrawable);
-                            }
-
-
-                        };
-
-                        Glide.with(this)
-                                .load(EndPoints.BASE_URL + mContactsModel.getImage())
-                                .asBitmap()
-                                .transform(new BlurTransformation(this))
-                                .override(200, 200)
-                                .centerCrop()
-                                .into(target);
-
-
-                    }
-                } else {
-
-                    userProfilePicture.setPadding(100, 100, 100, 100);
-                    userProfilePicture.setBackground(AppHelper.getDrawable(this, R.drawable.bg_rect_contact_image_holder));
-                }
-
-            }
-        } catch (Exception e) {
-            AppHelper.LogCat(" Profile preview Exception" + e.getMessage());
-        }
-    }
 
     public void onErrorLoading(Throwable throwable) {
         AppHelper.LogCat(throwable.getMessage());

@@ -45,7 +45,7 @@ public class GiftsPresenter implements Presenter {
             wishlistID = view.getIntent().getExtras().getString(view.RESULT_EXTRA_WISHLIST_ID);
         }
 
-        mWishlistsService = new WishlistsService(realm, view.getApplicationContext(), mApiService);
+        mWishlistsService = new WishlistsService(view.getApplicationContext(), mApiService);
         mWishlistsService.getGifts(wishlistID).subscribe(view::ShowGifts, view::onErrorLoading, view::onHideLoading);
 //        loadDataLocal();
     }
@@ -78,7 +78,7 @@ public class GiftsPresenter implements Presenter {
             wishlistID = view.getIntent().getExtras().getString("wishlistID");
         }
 
-        mWishlistsService = new WishlistsService(realm, view.getApplicationContext(), mApiService);
+        mWishlistsService = new WishlistsService(view.getApplicationContext(), mApiService);
         mWishlistsService.getGifts(wishlistID).subscribe(view::ShowGifts, view::onErrorLoading, view::onHideLoading);
     }
 

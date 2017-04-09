@@ -55,7 +55,7 @@ public class EditWishlistPresenter implements Presenter {
     onCreate() {
         APIService mApiService;
         mApiService = APIService.with(view);
-        mWishlistsService = new WishlistsService(realm, view, mApiService);
+        mWishlistsService = new WishlistsService(view, mApiService);
     }
 
 

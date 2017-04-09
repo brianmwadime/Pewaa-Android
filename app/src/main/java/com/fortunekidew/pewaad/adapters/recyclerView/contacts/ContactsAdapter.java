@@ -16,6 +16,8 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,8 +35,11 @@ import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
 import com.fortunekidew.pewaad.helpers.UtilsPhone;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
+import com.fortunekidew.pewaad.models.users.contacts.PewaaContact;
+import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 import com.fortunekidew.pewaad.ui.RecyclerViewFastScroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,23 +53,24 @@ import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
  * Created by Abderrahim El imame on 20/02/2016.
  * Email : abderrahim.elimame@gmail.com
  */
-public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     protected final Activity mActivity;
-    private List<ContactsModel> mContactsModel;
+    private List<PewaaContact> mContactsModel;
+    private List<PewaaContact> mContactsSearch;
     private String SearchQuery;
     private static final int HEADER_ITEM = 1;
     private static final int BASIC_ITEM = 2;
     private int mPreviousPosition = 0;
     private boolean headerAdded = false;
 
-    public ContactsAdapter(@NonNull Activity mActivity, List<ContactsModel> mContactsModel) {
+    public ContactsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
-        this.mContactsModel = mContactsModel;
+        this.mContactsModel = new ArrayList<>();
     }
 
 
-    public void setContacts(List<ContactsModel> contactsModelList) {
-        this.mContactsModel = contactsModelList;
+    public void setContacts(List<PewaaContact> contacts) {
+        this.mContactsModel = contacts;
         notifyDataSetChanged();
     }
 
@@ -74,33 +80,33 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public void animateTo(List<ContactsModel> models) {
+    public void animateTo(List<PewaaContact> models) {
         applyAndAnimateRemovals(models);
         applyAndAnimateAdditions(models);
         applyAndAnimateMovedItems(models);
     }
 
-    private void applyAndAnimateRemovals(List<ContactsModel> newModels) {
+    private void applyAndAnimateRemovals(List<PewaaContact> newModels) {
         for (int i = mContactsModel.size() - 1; i >= 0; i--) {
-            final ContactsModel model = mContactsModel.get(i);
+            final PewaaContact model = mContactsModel.get(i);
             if (!newModels.contains(model)) {
                 removeItem(i);
             }
         }
     }
 
-    private void applyAndAnimateAdditions(List<ContactsModel> newModels) {
+    private void applyAndAnimateAdditions(List<PewaaContact> newModels) {
         for (int i = 0, count = newModels.size(); i < count; i++) {
-            final ContactsModel model = newModels.get(i);
+            final PewaaContact model = newModels.get(i);
             if (!mContactsModel.contains(model)) {
                 addItem(i, model);
             }
         }
     }
 
-    private void applyAndAnimateMovedItems(List<ContactsModel> newModels) {
+    private void applyAndAnimateMovedItems(List<PewaaContact> newModels) {
         for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
-            final ContactsModel model = newModels.get(toPosition);
+            final PewaaContact model = newModels.get(toPosition);
             final int fromPosition = mContactsModel.indexOf(model);
             if (fromPosition >= 0 && fromPosition != toPosition) {
                 moveItem(fromPosition, toPosition);
@@ -108,19 +114,24 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private ContactsModel removeItem(int position) {
-        final ContactsModel model = mContactsModel.remove(position);
+    private PewaaContact removeItem(int position) {
+        final PewaaContact model = mContactsModel.remove(position);
         notifyItemRemoved(position);
         return model;
     }
 
-    private void addItem(int position, ContactsModel model) {
+    private void addItem(int position, PewaaContact model) {
         mContactsModel.add(position, model);
         notifyItemInserted(position);
     }
 
+    public void addItem(PewaaContact model) {
+        mContactsModel.add(model);
+        notifyItemInserted(mContactsModel.size() - 1);
+    }
+
     private void moveItem(int fromPosition, int toPosition) {
-        final ContactsModel model = mContactsModel.remove(fromPosition);
+        final PewaaContact model = mContactsModel.remove(fromPosition);
         mContactsModel.add(toPosition, model);
         notifyItemMoved(fromPosition, toPosition);
     }
@@ -129,11 +140,48 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-//        if (position == 0) {
-//            return HEADER_ITEM;
-//        } else {
             return BASIC_ITEM;
-//        }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                final FilterResults oReturn = new FilterResults();
+                final List<PewaaContact> results = new ArrayList<>();
+                if (mContactsSearch == null) {
+                    mContactsSearch = mContactsModel;
+                }
+                if (charSequence != null) {
+                    if (mContactsSearch != null && mContactsSearch.size() > 0) {
+                        for (final PewaaContact contact : mContactsSearch) {
+
+                            if (contact.getUsername() != null) {
+                                if (contact.getUsername().toLowerCase().contains(charSequence.toString())) {
+                                    results.add(contact);
+                                }
+                            }
+
+                        }
+                    }
+                    oReturn.values = results;
+                    oReturn.count = results.size();
+                }
+                return oReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                if (filterResults.count > 0) {
+//                    MainActivity.setResultsMessage(false);
+                } else {
+//                    MainActivity.setResultsMessage(true);
+                }
+                mContactsModel = (List<PewaaContact>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     @Override
@@ -151,7 +199,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (holder instanceof ContactsViewHolder) {
             final ContactsViewHolder contactsViewHolder = (ContactsViewHolder) holder;
-            final ContactsModel contactsModel = this.mContactsModel.get(position);
+            final PewaaContact contactsModel = this.mContactsModel.get(position);
             try {
 
                 contactsViewHolder.setUsername(contactsModel.getUsername(), contactsModel.getPhone());
@@ -253,7 +301,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return mContactsModel.size() > 0 ? mContactsModel.size() : 0;
+        if (mContactsModel != null) return mContactsModel.size();
+        return 0;
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {

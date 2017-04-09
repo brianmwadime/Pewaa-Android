@@ -19,15 +19,14 @@ import com.fortunekidew.pewaad.adapters.recyclerView.contacts.ContactsAdapter;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
+import com.fortunekidew.pewaad.models.users.contacts.PewaaContact;
 import com.fortunekidew.pewaad.presenters.SearchContactsPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmList;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -69,7 +68,7 @@ public class SearchContactsActivity extends AppCompatActivity {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         searchList.setLayoutManager(mLinearLayoutManager);
-        mContactsAdapter = new ContactsAdapter(this, null);
+        mContactsAdapter = new ContactsAdapter(this);
         searchList.setAdapter(mContactsAdapter);
         closeBtn.setOnClickListener(v -> closeSearchView());
         clearBtn.setOnClickListener(v -> clearSearchView());
@@ -77,14 +76,28 @@ public class SearchContactsActivity extends AppCompatActivity {
 
     /**
      * method to show contacts list
-     * @param contactsModelList this is parameter for  ShowContacts method
+     * @param contacts this is parameter for  ShowContacts method
      */
-    public void ShowContacts(List<ContactsModel> contactsModelList) {
-        RealmList<ContactsModel> contactsModels = new RealmList<ContactsModel>();
-        for (ContactsModel contactsModel : contactsModelList) {
-            contactsModels.add(contactsModel);
+    public void ShowContacts(List<ContactsModel> contacts) {
+
+        List<PewaaContact> contacts1 = new ArrayList<>();
+        for (ContactsModel item : contacts) {
+            PewaaContact contact = new PewaaContact();
+            contact.setId(item.getId());
+            contact.setContactID(item.getContactID());
+            contact.setUsername(item.getUsername());
+            contact.setName(item.getName());
+            contact.setPhone(item.getPhone());
+            contact.setLinked(item.isLinked());
+            contact.setExist(item.isExist());
+            contact.setImage(item.getImage());
+            contact.setStatus(item.getStatus());
+
+            contacts1.add(contact);
         }
-        mContactsAdapter.setContacts(contactsModels);
+
+        mContactsAdapter.setContacts(contacts1);
+
     }
 
     /**
@@ -137,7 +150,7 @@ public class SearchContactsActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mContactsAdapter.setString(s.toString());
-                Search(s.toString().trim());
+//                Search(s.toString().trim());
                 clearSearchBtn.setVisibility(View.VISIBLE);
             }
 
@@ -158,38 +171,4 @@ public class SearchContactsActivity extends AppCompatActivity {
         AppHelper.LogCat("Search contacts " + throwable.getMessage());
     }
 
-    /**
-     * method to start searching
-     * @param string this  is parameter for Search method
-     */
-    public void Search(String string) {
-
-         List<ContactsModel> filteredModelList;
-        filteredModelList = FilterList(string);
-        if (filteredModelList.size() != 0) {
-            mContactsAdapter.animateTo(filteredModelList);
-            searchList.scrollToPosition(0);
-        }
-    }
-
-    /**
-     * method to filter the list of contacts
-     * @param query this parameter for FilterList  method
-     * @return this for what method will return
-     */
-    private List<ContactsModel> FilterList(String query) {
-        Realm realm = PewaaApplication.getRealmDatabaseInstance();
-
-        List<ContactsModel> contactsModels = realm.where(ContactsModel.class)
-                .equalTo("Exist", true)
-                .beginGroup()
-                .contains("phone", query, Case.INSENSITIVE)
-                .or()
-                .contains("username", query, Case.INSENSITIVE)
-                .endGroup()
-                .findAll();
-
-        realm.close();
-        return contactsModels;
-    }
 }

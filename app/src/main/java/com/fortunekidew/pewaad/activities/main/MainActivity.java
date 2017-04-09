@@ -150,20 +150,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        switch (tabLayout.getSelectedTabPosition()) {
-            case 0:
-                getMenuInflater().inflate(R.menu.wishlists_menu, menu);
-                break;
-            case 1:
-                getMenuInflater().inflate(R.menu.contacts_menu, menu);
-                break;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
     /**
      * method to setup toolbar
      */
@@ -171,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setHomeButtonEnabled(false);
         }
     }

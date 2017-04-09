@@ -195,23 +195,6 @@ public class ContactsService {
     }
 
     /**
-     * method to edit group name
-     *
-     * @param newName this is the first parameter for editGroupName method
-     * @param groupID this is the second parameter for editGroupName method
-     * @return return  value
-     */
-    public Observable<StatusResponse> editGroupName(String newName, int groupID) {
-        EditStatus editGroupName = new EditStatus();
-        editGroupName.setNewStatus(newName);
-        editGroupName.setStatusID(groupID);
-        return initializeApiContact().editGroupName(editGroupName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(statusResponse -> statusResponse);
-    }
-
-    /**
      * method to get all status
      *
      * @return return value

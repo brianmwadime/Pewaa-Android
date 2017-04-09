@@ -2,7 +2,6 @@ package com.fortunekidew.pewaad.presenters;
 
 
 import com.fortunekidew.pewaad.activities.NewContactsActivity;
-import com.fortunekidew.pewaad.activities.gifts.TransferMessageContactsActivity;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
@@ -17,7 +16,7 @@ import io.realm.Realm;
  */
 public class SelectContactsPresenter implements Presenter {
     private NewContactsActivity newContactsActivity;
-    private TransferMessageContactsActivity transferMessageContactsActivity;
+
     private Realm realm;
     private boolean selector;
 
@@ -27,11 +26,6 @@ public class SelectContactsPresenter implements Presenter {
         selector = true;
     }
 
-    public SelectContactsPresenter(TransferMessageContactsActivity transferMessageContactsActivity) {
-        this.transferMessageContactsActivity = transferMessageContactsActivity;
-        this.realm = PewaaApplication.getRealmDatabaseInstance();
-        selector = false;
-    }
 
 
     @Override
@@ -49,11 +43,11 @@ public class SelectContactsPresenter implements Presenter {
             });
 
         } else {
-            APIService mApiService = APIService.with(this.transferMessageContactsActivity);
-            ContactsService mContactsService = new ContactsService(realm, this.transferMessageContactsActivity, mApiService);
-            mContactsService.getLinkedContacts().subscribe(transferMessageContactsActivity::ShowContacts, throwable -> {
-                AppHelper.LogCat("Error contacts selector " + throwable.getMessage());
-            });
+//            APIService mApiService = APIService.with(this.transferMessageContactsActivity);
+//            ContactsService mContactsService = new ContactsService(realm, this.transferMessageContactsActivity, mApiService);
+//            mContactsService.getLinkedContacts().subscribe(transferMessageContactsActivity::ShowContacts, throwable -> {
+//                AppHelper.LogCat("Error contacts selector " + throwable.getMessage());
+//            });
         }
     }
 

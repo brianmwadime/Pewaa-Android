@@ -27,15 +27,8 @@ import rx.schedulers.Schedulers;
  */
 public class WishlistsService {
     private APIWishlists mApiWishlists;
-    private Realm realm;
     private Context mContext;
     private APIService mApiService;
-
-    public WishlistsService(Realm realm, Context context, APIService mApiService) {
-        this.mContext = context;
-        this.realm = realm;
-        this.mApiService = mApiService;
-    }
 
     public WishlistsService(Context context, APIService mApiService) {
         this.mContext = context;
@@ -81,36 +74,12 @@ public class WishlistsService {
     }
 
     /**
-     * method to get single wishlist information
-     * @param wishlistID this is parameter for  getGroupWishlist method
-     * @return return value
-     */
-    public Observable<WishlistsModel> getGroupInfo(String wishlistID) {
-        return initializeApiWishlists().getWishlist(wishlistID)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(this::copyOrUpdateWishlist);
-    }
-
-    /**
-     * method to get wishlist information from local
-     * @param wishlistID this is parameter for getWishlist method
-     * @return return value
-     */
-    public Observable<WishlistsModel> getWishlist(String wishlistID) {
-        return realm.where(WishlistsModel.class).equalTo("id", wishlistID).findFirst().asObservable();
-    }
-
-    /**
      * method to copy or update wishlists list
      * @param wishlists this is parameter for copyOrUpdateWishlists method
      * @return return value
      */
     private List<WishlistsModel> copyOrUpdateWishlists(List<WishlistsModel> wishlists) {
-        realm.beginTransaction();
-        List<WishlistsModel> realmWishlists = realm.copyToRealmOrUpdate(wishlists);
-        realm.commitTransaction();
-        return realmWishlists;
+        return wishlists;
     }
 
     /**
@@ -119,22 +88,6 @@ public class WishlistsService {
      * @return return value
      */
     private List<GiftsModel> copyOrUpdateGifts(List<GiftsModel> gifts) {
-        realm.beginTransaction();
-        List<GiftsModel> realmGifts = realm.copyToRealmOrUpdate(gifts);
-        realm.commitTransaction();
-        return realmGifts;
-    }
-
-    /**
-     * methid to copy or update a single wishlist
-     * @param wishlist this is parameter for copyOrUpdateWishlist method
-     * @return return value
-     */
-    private WishlistsModel copyOrUpdateWishlist(WishlistsModel wishlist) {
-        realm.beginTransaction();
-        WishlistsModel wishlistsModel = realm.where(WishlistsModel.class).equalTo("id",wishlist.getId()).findFirst();
-        WishlistsModel realmWishlists = realm.copyToRealmOrUpdate(wishlistsModel);
-        realm.commitTransaction();
-        return realmWishlists;
+        return  gifts;
     }
 }

@@ -38,7 +38,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.R;
-import com.fortunekidew.pewaad.activities.profile.ProfileActivity;
 import com.fortunekidew.pewaad.api.APIContributor;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.app.PewaaApplication;
@@ -271,7 +270,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             View.OnClickListener playerClick = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent player = new Intent(GiftDetailsActivity.this, ProfileActivity.class);
+//                    Intent player = new Intent(GiftDetailsActivity.this, ProfileActivity.class);
 //                    if (shot.user.shots_count > 0) { // legit user object
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER, shot.user);
 //                    } else {

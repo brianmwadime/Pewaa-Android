@@ -73,10 +73,10 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
     @BindView(R.id.edit_description_wrapper)
     TextInputLayout description_wrapper;
 
-    @BindView(R.id.edit_wishlist_recipient)
-    EditText EditRecipients;
-    @BindView(R.id.edit_recipient_wrapper)
-    TextInputLayout recipientWrapper;
+//    @BindView(R.id.edit_wishlist_recipient)
+//    EditText EditRecipients;
+//    @BindView(R.id.edit_recipient_wrapper)
+//    TextInputLayout recipientWrapper;
 
     private ActionMode actionMode;
     private String FileImagePath, FileSize, mCategory;
@@ -116,12 +116,12 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
             }
         });
 
-        EditRecipients.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                recipientWrapper.setErrorEnabled(false);
-            }
-        });
+//        EditRecipients.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                recipientWrapper.setErrorEnabled(false);
+//            }
+//        });
 
         EditDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -248,7 +248,7 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
     @OnClick(R.id.action_save)
     public void saveWishlist(View view) {
         String newName = EditName.getText().toString().trim();
-        String newRecipients = EditRecipients.getText().toString().trim();
+//        String newRecipients = EditRecipients.getText().toString().trim();
         String newDescription = EditDescription.getText().toString().trim();
 
         if (newName.isEmpty()) {
@@ -265,7 +265,7 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         AddWishlistsActivity.this.runOnUiThread(() -> AppHelper.showDialog(AddWishlistsActivity.this, "Adding Wishlist..."));
         EditWishlist newWishlist = new EditWishlist();
         newWishlist.setName(newName);
-        newWishlist.setRecipients(newRecipients);
+//        newWishlist.setRecipients(newRecipients);
         newWishlist.setCategory(mCategory);
         newWishlist.setDescription(newDescription);
         newWishlist.setPermissions("ADMINISTRATOR");

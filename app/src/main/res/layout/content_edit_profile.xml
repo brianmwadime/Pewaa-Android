@@ -110,7 +110,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Name and phone"
+                        android:text="Phone"
                         android:textColor="@color/colorAccent" />
 
                     <LinearLayout
@@ -119,15 +119,18 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_item_rect_ripple">
 
-                        <io.github.rockerhieu.emojicon.EmojiconTextView
-                            android:id="@+id/status"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/numberPhone"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="** Edit name **"
-                            android:padding="16dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:gravity="left"
+                            android:text="--"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -146,17 +149,7 @@
                     android:layout_marginLeft="16dp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/numberPhone"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:gravity="left"
-                        android:text="+212633909680"/>
+
 
                 </LinearLayout>
 

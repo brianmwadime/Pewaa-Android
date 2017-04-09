@@ -1,12 +1,18 @@
 package com.fortunekidew.pewaad.fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +26,7 @@ import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
+import com.fortunekidew.pewaad.models.users.contacts.PewaaContact;
 import com.fortunekidew.pewaad.models.users.contacts.PusherContacts;
 import com.fortunekidew.pewaad.presenters.ContactsPresenter;
 import com.fortunekidew.pewaad.ui.RecyclerViewFastScroller;
@@ -28,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,7 +51,7 @@ import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCR
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class ContactsFragment extends Fragment implements LoadingData {
+public class ContactsFragment extends Fragment implements LoadingData, SearchView.OnQueryTextListener {
 
     @BindView(R.id.ContactsList)
     RecyclerView ContactsList;
@@ -52,7 +60,9 @@ public class ContactsFragment extends Fragment implements LoadingData {
     @BindView(R.id.empty)
     LinearLayout emptyContacts;
 
-    private List<ContactsModel> mContactsModelList;
+    private MenuItem searchItem;
+    private SearchView searchView;
+
     private ContactsAdapter mContactsAdapter;
     private ContactsPresenter mContactsPresenter;
 
@@ -68,13 +78,26 @@ public class ContactsFragment extends Fragment implements LoadingData {
         return mView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.contacts_menu, menu);
+
+        searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+    }
+
     /**
      * method to initialize the view
      */
     private void initializerView() {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mContactsAdapter = new ContactsAdapter(getActivity(), mContactsModelList);
+        mContactsAdapter = new ContactsAdapter(getActivity());
         setHasOptionsMenu(true);
         ContactsList.setLayoutManager(mLinearLayoutManager);
         ContactsList.setAdapter(mContactsAdapter);
@@ -98,6 +121,22 @@ public class ContactsFragment extends Fragment implements LoadingData {
     }
 
     @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String search) {
+        if (search.isEmpty()) {
+            ((ContactsAdapter) ContactsList.getAdapter()).getFilter().filter("");
+        } else {
+            ((ContactsAdapter) ContactsList.getAdapter()).getFilter().filter(search.toLowerCase());
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_contacts:
@@ -110,16 +149,35 @@ public class ContactsFragment extends Fragment implements LoadingData {
     /**
      * method to show contacts list
      *
-     * @param contactsModels this is parameter for  ShowContacts method
+     * @param contacts this is parameter for  ShowContacts method
      */
-    public void ShowContacts(List<ContactsModel> contactsModels) {
-        mContactsModelList = contactsModels;
-        if (contactsModels.size() != 0) {
+    public void ShowContacts(List<ContactsModel> contacts) {
+
+        List<PewaaContact> contacts1 = new ArrayList<>();
+        for (ContactsModel item : contacts) {
+
+            PewaaContact contact = new PewaaContact();
+            contact.setId(item.getId());
+            contact.setContactID(item.getContactID());
+            contact.setUsername(item.getUsername());
+            contact.setName(item.getName());
+            contact.setPhone(item.getPhone());
+            contact.setLinked(item.isLinked());
+            contact.setExist(item.isExist());
+            contact.setImage(item.getImage());
+            contact.setStatus(item.getStatus());
+
+            contacts1.add(contact);
+        }
+
+        mContactsAdapter.setContacts(contacts1);
+
+        if (contacts1.size() != 0) {
             fastScroller.setVisibility(View.VISIBLE);
             ContactsList.setVisibility(View.VISIBLE);
             emptyContacts.setVisibility(View.GONE);
             try {
-                PreferenceManager.setContactSize(contactsModels.size(), getActivity());
+                PreferenceManager.setContactSize(contacts1.size(), getActivity());
             } catch (Exception e) {
                 AppHelper.LogCat(" Exception size contact fragment");
             }
@@ -135,11 +193,26 @@ public class ContactsFragment extends Fragment implements LoadingData {
     /**
      * method to update contacts
      *
-     * @param contactsModels this is parameter for  updateContacts method
+     * @param contacts this is parameter for  updateContacts method
      */
-    public void updateContacts(List<ContactsModel> contactsModels) {
-        this.mContactsModelList = contactsModels;
-        mContactsAdapter.notifyDataSetChanged();
+    public void updateContacts(List<ContactsModel> contacts) {
+        List<PewaaContact> contacts1 = new ArrayList<>();
+        for (ContactsModel item : contacts) {
+            PewaaContact contact = new PewaaContact();
+            contact.setId(item.getId());
+            contact.setContactID(item.getContactID());
+            contact.setUsername(item.getUsername());
+            contact.setName(item.getName());
+            contact.setPhone(item.getPhone());
+            contact.setLinked(item.isLinked());
+            contact.setExist(item.isExist());
+            contact.setImage(item.getImage());
+            contact.setStatus(item.getStatus());
+
+            contacts1.add(contact);
+        }
+
+        mContactsAdapter.setContacts(contacts1);
     }
 
     /**

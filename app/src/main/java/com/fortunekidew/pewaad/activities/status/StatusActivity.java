@@ -76,7 +76,7 @@ public class StatusActivity extends AppCompatActivity {
      * method to initialize the view
      */
     public void initializerView() {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mStatusAdapter = new StatusAdapter(this, mStatusModelList, mStatusPresenter);
         StatusList.setLayoutManager(mLinearLayoutManager);

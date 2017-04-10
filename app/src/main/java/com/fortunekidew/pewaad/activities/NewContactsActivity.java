@@ -63,7 +63,7 @@ public class NewContactsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(getString(R.string.title_select_contributor));
 
         }
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mSelectContactsAdapter = new SelectContactsAdapter(this, mContactsModelList);
         ContactsList.setLayoutManager(mLinearLayoutManager);

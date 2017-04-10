@@ -95,7 +95,7 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
      * method to initialize the view
      */
     private void initializerView() {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mContactsAdapter = new ContactsAdapter(getActivity());
         setHasOptionsMenu(true);

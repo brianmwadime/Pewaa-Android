@@ -100,7 +100,10 @@ public class PewaaApplication extends Application {
     public void onCreate() {
         super.onCreate();
         setmInstance(this);
-//        MultiDex.install(this);
+
+        // Set the application context
+        AppContext = getApplicationContext();
+
         ButterKnife.setDebug(BuildConfig.DEBUG);
         Realm.init(this);
         startService(new Intent(this, BootService.class));
@@ -134,7 +137,7 @@ public class PewaaApplication extends Application {
 
 
     private static RealmConfiguration getRealmDatabaseConfiguration() {
-        return new RealmConfiguration.Builder().name(getInstance().getString(R.string.app_name) + PreferenceManager.getToken(getInstance()) + ".realm").deleteRealmIfMigrationNeeded().build();
+        return new RealmConfiguration.Builder().name(getInstance().getString(R.string.app_name) + ".realm").deleteRealmIfMigrationNeeded().build();
     }
 
     public static Realm getRealmDatabaseInstance() {

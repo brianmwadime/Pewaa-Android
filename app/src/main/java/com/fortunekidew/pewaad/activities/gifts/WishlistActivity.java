@@ -147,7 +147,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
         setExitSharedElementCallback(GiftsAdapter.createSharedElementReenterCallback(this));
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mGiftsAdapter = new GiftsAdapter(this, GiftsList, mSocket);
         GiftsList.setLayoutManager(layoutManager);

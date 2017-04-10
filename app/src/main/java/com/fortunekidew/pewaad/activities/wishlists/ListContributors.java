@@ -131,7 +131,7 @@ public class ListContributors extends Activity {
      * method to initialize the  view
      */
     private void initializerView() {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mSelectContactsAdapter = new SelectContactsAdapter(this, mContactsModelList);
         ContactsList.setLayoutManager(mLinearLayoutManager);

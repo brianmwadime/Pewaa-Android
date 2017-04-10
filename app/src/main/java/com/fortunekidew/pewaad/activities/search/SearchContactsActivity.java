@@ -65,7 +65,7 @@ public class SearchContactsActivity extends AppCompatActivity {
      * method to initialize the  view
      */
     private void initializerView() {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         searchList.setLayoutManager(mLinearLayoutManager);
         mContactsAdapter = new ContactsAdapter(this);

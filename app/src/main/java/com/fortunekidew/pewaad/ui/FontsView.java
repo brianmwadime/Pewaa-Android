@@ -5,12 +5,13 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
+import android.support.v7.widget.AppCompatTextView;
 
 /**
  * Created by Abderrahim on 11/5/2015.
  * This class to create icon by font awesome
  */
-public class FontsView extends TextView {
+public class FontsView extends AppCompatTextView {
     private static final String TAG = FontsView.class.getSimpleName();
     //Cache the font load status to improve performance
     private static Typeface font;

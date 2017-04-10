@@ -104,7 +104,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
     private void initializerView() {
         setHasOptionsMenu(true);
 
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mWishlistsAdapter = new WishlistsAdapter(getActivity());
         WishlistList.setLayoutManager(mLinearLayoutManager);

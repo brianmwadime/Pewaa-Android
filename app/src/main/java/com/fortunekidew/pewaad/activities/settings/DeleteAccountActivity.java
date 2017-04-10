@@ -166,7 +166,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
 
         initializerSearchView(searchInput, clearBtn);
         clearBtn.setOnClickListener(v -> clearSearchView());
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(PewaaApplication.getAppContext());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         CountriesList.setLayoutManager(mLinearLayoutManager);
         mCountriesAdapter = new CountriesAdapter(this);
         CountriesList.setAdapter(mCountriesAdapter);

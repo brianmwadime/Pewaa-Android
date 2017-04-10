@@ -211,6 +211,11 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
 
                     if (selectedContributors.size() > 0) {
                         saveContributor(newWishlist, selectedContributors);
+                    } else {
+                        EventBus.getDefault().post(new Pusher("new_wishlist", newWishlist));
+
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
 
                 } else {

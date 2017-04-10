@@ -339,4 +339,7 @@
     <string name="crash_error_message">Sorry! something went wrong. Please send this error report to the developer.</string>
     <string name="add_contributors">Add Contributors</string>
     <string name="select_contributor_button_label">Select</string>
+
+    <!--#3rd Party Keys-->
+    <string name="fabric_api_key">dba3618bc05d496c15e51cc355c4374a853a56d0</string>
 </resources>

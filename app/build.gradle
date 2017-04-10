@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.google.gms.google-services'
@@ -35,17 +44,29 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../resources/keys/pewaa.jks")
+            storePassword 'bandit'
+            keyAlias 'pewaa'
+            keyPassword 'bandit'
+        }
+    }
+
     buildTypes {
 
         debug {
             minifyEnabled false
             debuggable true
+            signingConfig signingConfigs.release
         }
 
         release {
-            minifyEnabled true
+            minifyEnabled false
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
 
     }
@@ -70,7 +91,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    def supportLibsVer = "25.1.1"
+    def supportLibsVer = "25.3.1"
     def supportLibsFirebaseVer = "9.8.0"
     compile "com.android.support:appcompat-v7:$supportLibsVer"
     compile "com.android.support:cardview-v7:$supportLibsVer"
@@ -102,7 +123,7 @@ dependencies {
         transitive = true;
     }
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
         transitive = true;
     }
 

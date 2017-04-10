@@ -1,5 +1,6 @@
 package com.fortunekidew.pewaad.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class CrashActivity extends AppCompatActivity {
+public class CrashActivity extends Activity {
     private static Boolean ENABLE_RESTART = false;
     @BindView(R.id.opsText)
     TextView opsText;

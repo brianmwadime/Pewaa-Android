@@ -59,8 +59,7 @@
         tools:ignore="UnusedAttribute">
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="dba3618bc05d496c15e51cc355c4374a853a56d0"
-        />
+            android:value="dba3618bc05d496c15e51cc355c4374a853a56d0" />
         <activity
             android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -94,14 +93,14 @@
         </activity>
 
         <!--CrashActivity-->
-        <activity
-            android:name=".activities.CrashActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="catch_error_activity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <!--<activity-->
+            <!--android:name=".activities.CrashActivity"-->
+            <!--android:label="@string/app_name">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="catch_error_activity" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <!--    WishlistActivity -->
         <activity

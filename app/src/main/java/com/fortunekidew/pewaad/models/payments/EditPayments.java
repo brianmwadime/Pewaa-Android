@@ -10,5 +10,5 @@ public class EditPayments {
     public String referenceID;
     public String trxId;
     public String userId;
-    public double totalAmount;
+    public int totalAmount;
 }

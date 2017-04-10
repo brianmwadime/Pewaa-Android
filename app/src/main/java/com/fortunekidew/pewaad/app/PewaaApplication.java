@@ -61,7 +61,7 @@ public class PewaaApplication extends Application {
 
     public static void setupCrashlytics() {
         Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-        Fabric.with(mInstance, crashlyticsKit);
+        Fabric.with(mInstance, crashlyticsKit, new Crashlytics());
         Crashlytics.setUserEmail(PreferenceManager.getPhone(getInstance()));
         Crashlytics.setUserName(PreferenceManager.getPhone(getInstance()));
         Crashlytics.setUserIdentifier(String.valueOf(PreferenceManager.getID(getInstance())));

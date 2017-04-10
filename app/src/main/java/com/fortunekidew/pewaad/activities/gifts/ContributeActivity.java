@@ -189,7 +189,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         imm.hideSoftInputFromWindow(EditAmount.getWindowToken(), 0);
 
 
-        double newPrice = Integer.parseInt(EditAmount.getText().toString().trim());
+        double newPrice = Double.parseDouble(EditAmount.getText().toString().trim());
 
         // If entered amount is greater than the gift price
         if(newPrice > gift.getPrice()) {
@@ -201,7 +201,6 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
             AppHelper.Snackbar(getApplicationContext(), contributeParentLayout, "Amount entered exceeds the total gift price.", AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
             return;
         }
-
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -215,7 +214,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         payment.clientLocation = "";
         payment.clientName  = PreferenceManager.getNumber(ContributeActivity.this);
         payment.referenceID = referenceID;
-        payment.totalAmount = newPrice;
+        payment.totalAmount = (int) Math.floor(newPrice);
         payment.phoneNumber = PreferenceManager.getNumber(ContributeActivity.this).replaceAll("\\D", "");
         payment.userId      = PreferenceManager.getID(ContributeActivity.this);
 

@@ -18,8 +18,8 @@ import android.view.animation.Animation;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 
 /**
- * Created by Abderrahim El imame on 26/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 public class AnimationsUtil {
     // To reveal a previously invisible view using this effect:

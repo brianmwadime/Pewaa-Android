@@ -63,6 +63,7 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
     private MenuItem searchItem;
     private SearchView searchView;
 
+    private List<PewaaContact> mContactsModelList;
     private ContactsAdapter mContactsAdapter;
     private ContactsPresenter mContactsPresenter;
 
@@ -97,7 +98,7 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
     private void initializerView() {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mContactsAdapter = new ContactsAdapter(getActivity());
+        mContactsAdapter = new ContactsAdapter(getActivity(), mContactsModelList);
         setHasOptionsMenu(true);
         ContactsList.setLayoutManager(mLinearLayoutManager);
         ContactsList.setAdapter(mContactsAdapter);
@@ -151,7 +152,7 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
      *
      * @param contacts this is parameter for  ShowContacts method
      */
-    public void ShowContacts(List<ContactsModel> contacts) {
+    public void ShowContacts(List<ContactsModel> contacts, boolean isRefresh) {
 
         List<PewaaContact> contacts1 = new ArrayList<>();
         for (ContactsModel item : contacts) {
@@ -171,6 +172,12 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
         }
 
         mContactsAdapter.setContacts(contacts1);
+
+        if (!isRefresh) {
+            mContactsModelList = contacts1;
+        } else {
+            mContactsAdapter.setContacts(contacts1);
+        }
 
         if (contacts1.size() != 0) {
             fastScroller.setVisibility(View.VISIBLE);

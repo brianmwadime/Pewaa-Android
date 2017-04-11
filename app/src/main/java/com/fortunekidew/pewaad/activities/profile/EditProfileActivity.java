@@ -1,6 +1,8 @@
 package com.fortunekidew.pewaad.activities.profile;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,18 +16,27 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.status.StatusActivity;
 import com.fortunekidew.pewaad.api.APIContact;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.fragments.BottomSheetEditProfile;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
+import com.fortunekidew.pewaad.helpers.Files.ImageLoader;
+import com.fortunekidew.pewaad.helpers.Files.MemoryCache;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
+import com.fortunekidew.pewaad.helpers.images.PewaaImageLoader;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
@@ -39,6 +50,8 @@ import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -48,12 +61,16 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
+import io.realm.Realm;
+import io.socket.client.Socket;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_IMAGE_PROFILE_PATH;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_UPDATE_CURRENT_STATUS;
 import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJavaString;
 
 /**
@@ -74,17 +91,24 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     @BindView(R.id.numberPhone)
     TextView numberPhone;
     @BindDimen(R.dimen.large_avatar_height) int largeAvatarSize;
+    @BindView(R.id.progress_bar_edit_profile)
+    ProgressBar progressBar;
     private ContactsModel mContactsModel;
     private EditProfilePresenter mEditProfilePresenter = new EditProfilePresenter(this);
     private APIService mApiService;
     private String PicturePath;
+
+    private Socket mSocket;
+    private MemoryCache memoryCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         ButterKnife.bind(this);
+        connectToChatServer();
         initializerView();
+        memoryCache = new MemoryCache();
         mEditProfilePresenter.onCreate();
         ActivityCompat.setEnterSharedElementCallback(this, new SharedElementCallback() {
             @Override
@@ -114,6 +138,24 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             }
         });
         EventBus.getDefault().register(this);
+    }
+
+    /**
+     * method to connect to the chat sever by socket
+     */
+    private void connectToChatServer() {
+
+        PewaaApplication app = (PewaaApplication) getApplication();
+        mSocket = app.getSocket();
+
+        if (mSocket == null) {
+            PewaaApplication.connectSocket();
+            mSocket = app.getSocket();
+        }
+        if (!mSocket.connected())
+            mSocket.connect();
+
+
     }
 
     /**
@@ -153,49 +195,33 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
         } else {
             username.setText(getString(R.string.no_username));
         }
-        if (mContactsModel.getImage() != null) {
-            Glide.with(this)
-                    .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-                    .transform(new CircleTransform(this))
-                    .placeholder(R.drawable.avatar_placeholder)
-                    .override(largeAvatarSize, largeAvatarSize)
-                    .into(userAvatar);
-//            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))) {
-////                Picasso.with(this)
-////                        .load(FilesManager.getFileImageProfile(String.valueOf(mContactsModel.getId()), mContactsModel.getId()))
-////                        .transform(new CropSquareTransformation())
-////                        .resize(200, 200)
-////                        .networkPolicy(NetworkPolicy.NO_CACHE)
-////                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-////                        .into(userAvatar);
-//
-//                Glide.with(this)
-//                    .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-//                    .transform(new CircleTransform(this))
-//                    .placeholder(R.drawable.avatar_placeholder)
-//                    .override(largeAvatarSize, largeAvatarSize)
-//                    .into(userAvatar);
-//
-//            } else {
-//                Glide.with(this)
-//                    .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-//                    .transform(new CircleTransform(this))
-//                    .placeholder(R.drawable.avatar_placeholder)
-//                    .override(largeAvatarSize, largeAvatarSize)
-//                    .into(userAvatar);
-//
-////                Picasso.with(this)
-////                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-////                        .transform(new CropSquareTransformation())
-////                        .resize(200, 200)
-////                        .networkPolicy(NetworkPolicy.NO_CACHE)
-////                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-////                        .into(userAvatar);
-//            }
+        Bitmap bitmap = ImageLoader.GetCachedBitmapImage(memoryCache, mContactsModel.getImage(), this, mContactsModel.getId(), AppConstants.USER, AppConstants.EDIT_PROFILE);
+        if (bitmap != null) {
+            ImageLoader.SetBitmapImage(bitmap, userAvatar);
         } else {
 
-            userAvatar.setPadding(2, 2, 2, 2);
-            userAvatar.setImageResource(R.drawable.ic_user_holder_white_48dp);
+            Target target = new BitmapImageViewTarget(userAvatar) {
+                @Override
+                public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
+                    super.onResourceReady(bitmap, anim);
+                    userAvatar.setImageBitmap(bitmap);
+                    ImageLoader.DownloadImage(memoryCache, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), mContactsModel.getImage(), EditProfileActivity.this, mContactsModel.getId(), AppConstants.USER, AppConstants.EDIT_PROFILE);
+
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    userAvatar.setImageDrawable(errorDrawable);
+                }
+
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);
+                    userAvatar.setImageDrawable(placeholder);
+                }
+            };
+            PewaaImageLoader.loadCircleImage(this, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), target, R.drawable.image_holder_ur_circle, AppConstants.EDIT_PROFILE_IMAGE_SIZE);
         }
     }
 
@@ -285,17 +311,33 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
                 PicturePath = pusher.getData();
                 new Handler().postDelayed(() -> setImage(pusher.getData()), 500);
                 break;
-            case "updateCurrentStatus":
-                mEditProfilePresenter.onCreate();
-                break;
             case "updateImageProfile":
                 if (pusher.isBool()) {
                     AppHelper.CustomToast(EditProfileActivity.this, pusher.getData());
-                    FilesManager.downloadFilesToDevice(this, mContactsModel.getImage(), String.valueOf(mContactsModel.getId()), mContactsModel.getUsername(), "profile");
+                    FilesManager.downloadFilesToDevice(this, mContactsModel.getImage(), String.valueOf(mContactsModel.getId()), AppConstants.ROW_PROFILE);
                 } else {
                     AppHelper.CustomToast(EditProfileActivity.this, pusher.getData());
                 }
+            case EVENT_BUS_IMAGE_PROFILE_PATH:
+                PicturePath = String.valueOf(pusher.getData());
+                if (PicturePath != null) {
+                    try {
+                        new UploadFileToServer().execute();
+                    } catch (Exception e) {
+                        AppHelper.LogCat(e);
+                        AppHelper.CustomToast(EditProfileActivity.this, getString(R.string.oops_something));
+                    }
 
+                }
+                break;
+            case EVENT_BUS_UPDATE_CURRENT_STATUS:
+                mEditProfilePresenter.onCreate();
+                break;
+            case AppConstants.EVENT_BUS_USERNAME_PROFILE_UPDATED:
+                mEditProfilePresenter.loadData();
+                break;
+            case AppConstants.EVENT_BUS_MINE_IMAGE_PROFILE_UPDATED:
+                mEditProfilePresenter.loadData();
                 break;
         }
 
@@ -307,18 +349,37 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
      * @param path this is parameter for setImage method
      */
     public void setImage(String path) {
-        if (path != null) {
-            Glide.with(this)
-                    .load(path)
-                    .transform(new CircleTransform(this))
-                    .placeholder(R.drawable.avatar_placeholder)
-                    .override(400, 400)
-                    .into(userAvatar);
-        } else {
-            userAvatar.setPadding(2, 2, 2, 2);
-            userAvatar.setImageResource(R.drawable.ic_user_holder_white_48dp);
+        Target target = new BitmapImageViewTarget(userAvatar) {
+            @Override
+            public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
+                super.onResourceReady(bitmap, anim);
+                userAvatar.setImageBitmap(bitmap);
+                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_MINE_IMAGE_PROFILE_UPDATED));
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("senderId", PreferenceManager.getID(EditProfileActivity.this));
+                    jsonObject.put("phone", PreferenceManager.getPhone(EditProfileActivity.this));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (mSocket != null)
+                    mSocket.emit(AppConstants.SOCKET_IMAGE_PROFILE_UPDATED, jsonObject);
 
-        }
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                userAvatar.setImageDrawable(errorDrawable);
+            }
+
+            @Override
+            public void onLoadStarted(Drawable placeholder) {
+                super.onLoadStarted(placeholder);
+                userAvatar.setImageDrawable(placeholder);
+            }
+        };
+        PewaaImageLoader.loadCircleImage(this, EndPoints.ASSETS_BASE_URL + path, target, R.drawable.image_holder_ur_circle, AppConstants.EDIT_PROFILE_IMAGE_SIZE);
         new UploadFileToServer().execute();
 
     }
@@ -377,6 +438,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             } else {
                 requestFile = null;
             }
+            runOnUiThread(() -> progressBar.setVisibility(View.VISIBLE));
             APIContact mApiContact = mApiService.RootService(APIContact.class, PreferenceManager.getToken(EditProfileActivity.this), EndPoints.BASE_URL);
             EditProfileActivity.this.runOnUiThread(() -> AppHelper.showDialog(EditProfileActivity.this, "Updating ... "));
             Call<StatusResponse> statusResponseCall = mApiContact.uploadImage(requestFile);
@@ -386,7 +448,20 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
                     AppHelper.hideDialog();
                     if (response.isSuccessful()) {
                         EventBus.getDefault().post(new Pusher("updateImageProfile", response.body().getMessage(), response.body().isSuccess()));
+                        runOnUiThread(() -> {
+                            Realm realm = PewaaApplication.getRealmDatabaseInstance();
+                            realm.executeTransactionAsync(realm1 -> {
+                                ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", PreferenceManager.getID(EditProfileActivity.this)).findFirst();
+                                contactsModel.setImage(response.body().getUserImage());
+                                realm1.copyToRealmOrUpdate(contactsModel);
 
+                            }, () -> new Handler().postDelayed(() -> {
+                                progressBar.setVisibility(View.GONE);
+                                AppHelper.CustomToast(EditProfileActivity.this, response.body().getMessage());
+                                setImage(response.body().getUserImage());
+                            }, 700), error -> AppHelper.LogCat("error update group image in group model " + error.getMessage()));
+                            realm.close();
+                        });
                     } else {
                         AppHelper.CustomToast(EditProfileActivity.this, response.message());
                     }

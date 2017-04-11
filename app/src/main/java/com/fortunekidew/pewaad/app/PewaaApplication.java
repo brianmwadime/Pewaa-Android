@@ -18,6 +18,7 @@ import com.fortunekidew.pewaad.services.BootService;
 import com.fortunekidew.pewaad.services.MainService;
 import com.orhanobut.logger.Logger;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import butterknife.ButterKnife;
@@ -40,7 +41,7 @@ public class PewaaApplication extends Application {
     private static final long RECONNECT_DEALY = 100;
     private static final int RETRY_ATTEMPT = 10;
     private static Context AppContext;
-    private Socket mSocket = null;
+    private static Socket mSocket = null;
 
     {
         IO.Options options = new IO.Options();
@@ -54,7 +55,26 @@ public class PewaaApplication extends Application {
             mSocket = IO.socket(EndPoints.CHAT_SERVER_URL, options);
         } catch (URISyntaxException e) {
             AppHelper.LogCat(e);
-            Crashlytics.logException(e);
+        }
+
+    }
+
+    public static void connectSocket() {
+        if (mSocket != null && mSocket.connected()) {
+            return;
+        }
+        IO.Options options = new IO.Options();
+        options.forceNew = false;
+        options.timeout = TIMEOUT; //set -1 to  disable it
+        options.reconnection = true;
+        options.reconnectionDelay = (long) 3000;
+        options.reconnectionDelayMax = (long) 6000;
+        options.reconnectionAttempts = 2;
+        options.query = "token=" + AppConstants.APP_KEY_SECRET;
+        try {
+            mSocket = IO.socket(new URI(EndPoints.CHAT_SERVER_URL), options);
+        } catch (URISyntaxException e) {
+            AppHelper.LogCat(e);
         }
 
     }

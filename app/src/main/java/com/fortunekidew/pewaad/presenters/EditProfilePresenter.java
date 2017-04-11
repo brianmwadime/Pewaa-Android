@@ -75,6 +75,16 @@ public class EditProfilePresenter implements Presenter {
         }
     }
 
+    public void loadData() {
+        try {
+            mContactsService.getContact(PreferenceManager.getID(view)).subscribe(view::ShowContact, view::onErrorLoading);
+            mContactsService.getContactInfo(PreferenceManager.getID(view)).subscribe(view::ShowContact, view::onErrorLoading);
+        } catch (Exception e) {
+            AppHelper.LogCat(" EditProfileActivity Exception " + e.getMessage());
+        }
+
+    }
+
 
     @Override
     public void onPause() {

@@ -12,10 +12,8 @@ import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
 /**
- * Created by Abderrahim El imame on 7/31/16.
- *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 
 public class ViewAudioAnimation extends Animation {

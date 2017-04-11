@@ -60,11 +60,8 @@ public class ContactsPresenter implements Presenter {
         Handler handler = new Handler();
         APIService mApiService = APIService.with(contactsFragmentView.getActivity());
         mContactsService = new ContactsService(realm, contactsFragmentView.getActivity(), mApiService);
-        try {
-            mContactsService.getAllContacts().subscribe(contactsFragmentView::ShowContacts, contactsFragmentView::onErrorLoading, contactsFragmentView::onHideLoading);
-        } catch (Exception e) {
-            AppHelper.LogCat("getAllContacts Exception ContactsPresenter ");
-        }
+        getContacts(false);
+
         handler.postDelayed(() -> {
             try {
                 mContactsService.getContactInfo(PreferenceManager.getID(contactsFragmentView.getActivity())).subscribe(contactsModel -> AppHelper.LogCat("info user log contacts"), throwable -> AppHelper.LogCat("On error "));
@@ -73,6 +70,23 @@ public class ContactsPresenter implements Presenter {
                 AppHelper.LogCat("contact info Exception ");
             }
         }, 1500);
+    }
+
+    public void getContacts(boolean isRefresh) {
+        try {
+            mContactsService.getAllContacts().subscribe(contactsModels -> {
+                contactsFragmentView.ShowContacts(contactsModels, isRefresh);
+            }, contactsFragmentView::onErrorLoading, contactsFragmentView::onHideLoading);
+            mContactsService.getLinkedContacts().subscribe(contactsModels -> {
+                try {
+                    PreferenceManager.setContactSize(contactsModels.size(), contactsFragmentView.getActivity());
+                } catch (Exception e) {
+                    AppHelper.LogCat(" Exception size contact fragment");
+                }
+            }, throwable -> AppHelper.LogCat("contactsFragmentView " + throwable.getMessage()));
+        } catch (Exception e) {
+            AppHelper.LogCat("getAllContacts Exception ContactsPresenter ");
+        }
     }
 
     @Override

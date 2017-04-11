@@ -27,7 +27,10 @@ import com.fortunekidew.pewaad.ui.SwipeItem;
 import com.fortunekidew.pewaad.ui.SwipeRunnable;
 
 import java.util.ArrayList;
-
+/**
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
+ */
 public abstract class SwipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int SWIPE_LEFT = -1;
     public static final int SWIPE_RIGHT = 1;

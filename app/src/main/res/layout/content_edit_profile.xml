@@ -16,6 +16,11 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="4dp"-->
+            <!--android:background="@drawable/below_shadow_rect" />-->
+
         <FrameLayout
             android:layout_width="234dp"
             android:layout_height="234dp"
@@ -23,11 +28,20 @@
 
             <ImageView
                 android:id="@+id/userAvatar"
-                android:layout_width="210dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/bg_circle_image_holder"
-                android:layout_height="210dp"
                 app:srcCompat="@drawable/ic_user_holder_white_48dp"
                 android:transitionName="userAvatar" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/addAvatar"

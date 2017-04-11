@@ -84,11 +84,10 @@
         android:id="@+id/addGiftFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end|right"
+        android:layout_gravity="bottom|end"
         pressedTranslationZ="6dp"
         app:backgroundTint="@color/colorPinkDark"
-        app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="com.fortunekidew.pewaad.ui.ScrollAwareFABBehavior"
+        app:layout_behavior="com.fortunekidew.pewaad.ui.ScrollingFaBBehaviour"
         app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

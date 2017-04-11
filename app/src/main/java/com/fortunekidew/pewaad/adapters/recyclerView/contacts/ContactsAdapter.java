@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.profile.ProfilePreviewActivity;
 import com.fortunekidew.pewaad.animations.AnimationsUtil;
@@ -34,9 +36,13 @@ import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
+import com.fortunekidew.pewaad.helpers.Files.ImageLoader;
+import com.fortunekidew.pewaad.helpers.Files.MemoryCache;
 import com.fortunekidew.pewaad.helpers.UtilsPhone;
+import com.fortunekidew.pewaad.helpers.images.PewaaImageLoader;
 import com.fortunekidew.pewaad.models.users.contacts.PewaaContact;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,12 +66,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int BASIC_ITEM = 2;
     private int mPreviousPosition = 0;
     private boolean headerAdded = false;
+    private MemoryCache memoryCache;
+
+    public ContactsAdapter(@NonNull Activity mActivity, List<PewaaContact> mContactsModel) {
+        this.mActivity = mActivity;
+        this.mContactsModel = mContactsModel;
+        this.memoryCache = new MemoryCache();
+    }
 
     public ContactsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
         this.mContactsModel = new ArrayList<>();
+        this.memoryCache = new MemoryCache();
     }
-
 
     public void setContacts(List<PewaaContact> contacts) {
         this.mContactsModel = contacts;
@@ -240,11 +253,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 } else {
                     contactsViewHolder.showInviteButton();
                 }
-                if (contactsModel.getImage() != null) {
-                    contactsViewHolder.setUserImage(contactsModel.getImage(), String.valueOf(contactsModel.getId()), contactsModel.getUsername());
-                } else {
-                    contactsViewHolder.setNullUserImage(R.drawable.ic_user_holder_white_48dp);
-                }
+
+                contactsViewHolder.setUserImage(contactsModel.getImage(), contactsModel.getId());
+
             } catch (Exception e) {
                 AppHelper.LogCat("Contacts adapters Exception " + e.getMessage());
             }
@@ -265,41 +276,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 } else {
                     if (contactsModel.isLinked()) {
-//                        Intent messagingIntent = new Intent(mActivity, WishlistActivity.class);
-//                        messagingIntent.putExtra("conversationID", 0);
-//                        messagingIntent.putExtra("recipientID", contactsModel.getId());
-//                        messagingIntent.putExtra("isGroup", false);
-//                        mActivity.startActivity(messagingIntent);
-//                        mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    // TODO: Do something if Linked
                     } else {
-                        // Get Phone Number
                         String number = contactsModel.getPhone();
-                        // At least KitKat
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            //Need to change the build to API 19
-                            String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(mActivity);
+                        contactsViewHolder.setShareApp(mActivity, "From " + number, AppConstants.INVITE_MESSAGE_SMS + String.format(mActivity.getString(R.string.rate_helper_google_play_url), mActivity.getPackageName()));
 
-                            Uri uri = Uri.parse("smsto:" + number);
-                            Intent smsIntent = new Intent(Intent.ACTION_SENDTO, uri);
-                            smsIntent.setType("vnd.android-dir/mms-sms");
-                            smsIntent.putExtra(Intent.EXTRA_HTML_TEXT, AppConstants.INVITE_MESSAGE_SMS);
-
-                            // Can be null in case that there is no default, then the user would be able
-                            // to choose any app that support this intent.
-                            if (defaultSmsPackageName != null) {
-                                smsIntent.setPackage(defaultSmsPackageName);
-                            }
-
-                            mActivity.startActivity(smsIntent);
-
-                            } else {
-                                // For early versions we just use ACTION_VIEW
-                                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                                smsIntent.setType("vnd.android-dir/mms-sms");
-                                smsIntent.putExtra("address", number);
-                                smsIntent.putExtra("sms_body", AppConstants.INVITE_MESSAGE_SMS);
-                                mActivity.startActivity(smsIntent);
-                            }
                     }
                 }
 
@@ -311,9 +292,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 AnimationsUtil.animateY(holder, false);
             }
             mPreviousPosition = position;
-
-            contactsViewHolder.userImage.setTag(contactsModel);
-
         }
 
     }
@@ -340,60 +318,63 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ButterKnife.bind(this, itemView);
         }
 
+        void setShareApp(Activity mActivity, String subject, String message) {
 
-        void setUserImage(String ImageUrl, String userId, String name) {
+//            Uri bmpUri = Uri.parse("android.resource://" + mActivity.getPackageName() + "/mipmap/ic_launcher");
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+//            intent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+            intent.putExtra(Intent.EXTRA_TEXT, message);
+            mActivity.startActivity(intent);
+        }
 
-            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(userId, name))) {
+        void setUserImage(String ImageUrl, String userId) {
 
-                Glide.with(mActivity)
-                        .load(FilesManager.getFileImageProfile(userId, name))
-                        .asBitmap()
-                        .transform(new CropCircleTransformation(mActivity))
-                        .override(100, 100)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(userImage);
+            Bitmap bitmap = ImageLoader.GetCachedBitmapImage(memoryCache, ImageUrl, mActivity, userId, AppConstants.USER, AppConstants.ROW_PROFILE);
+            if (bitmap != null) {
+                ImageLoader.SetBitmapImage(bitmap, userImage);
             } else {
 
-                BitmapImageViewTarget target = new BitmapImageViewTarget(userImage) {
+                Target target = new BitmapImageViewTarget(userImage) {
                     @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                        userImage.setImageDrawable(placeholder);
-                    }
-
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        super.onResourceReady(resource, glideAnimation);
-                        userImage.setImageBitmap(resource);
+                    public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
+                        super.onResourceReady(bitmap, anim);
+                        userImage.setImageBitmap(bitmap);
+                        ImageLoader.DownloadImage(memoryCache, EndPoints.ASSETS_BASE_URL + ImageUrl, ImageUrl, mActivity, userId, AppConstants.USER, AppConstants.ROW_PROFILE);
 
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        userImage.setImageDrawable(errorDrawable);
+                        if (ImageUrl != null) {
+                            Bitmap bitmap = null;
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), Uri.parse(ImageUrl));
+                            } catch (IOException ex) {
+                                // AppHelper.LogCat(e.getMessage());
+                            }
+                            if (bitmap != null) {
+                                ImageLoader.SetBitmapImage(bitmap, userImage);
+                            } else {
+                                userImage.setImageDrawable(errorDrawable);
+                            }
+                        } else {
+                            userImage.setImageDrawable(errorDrawable);
+                        }
                     }
 
-
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        userImage.setImageDrawable(placeholder);
+                    }
                 };
 
-                Glide.with(mActivity)
-                        .load(EndPoints.BASE_URL + ImageUrl)
-                        .asBitmap()
-                        .transform(new CropCircleTransformation(mActivity))
-                        .override(100, 100)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(target);
-
+                PewaaImageLoader.loadCircleImage(mActivity, EndPoints.ASSETS_BASE_URL + ImageUrl, target, R.drawable.image_holder_ur_circle, AppConstants.ROWS_IMAGE_SIZE);
             }
 
-        }
-
-        void setNullUserImage(int drawable) {
-            userImage.setPadding(2, 2, 2, 2);
-            userImage.setImageResource(drawable);
         }
 
         void hideInviteButton() {

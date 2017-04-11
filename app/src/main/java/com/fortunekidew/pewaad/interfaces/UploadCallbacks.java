@@ -3,10 +3,8 @@ package com.fortunekidew.pewaad.interfaces;
 import com.fortunekidew.pewaad.models.wishlists.MessagesModel;
 
 /**
- * Created by Abderrahim El imame on 7/28/16.
- *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * Created by Brian Mwakima on 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 
 public interface UploadCallbacks {

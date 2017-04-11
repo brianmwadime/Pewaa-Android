@@ -11,7 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -46,6 +48,7 @@ import com.fortunekidew.pewaad.models.wishlists.MessagesModel;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
 import java.util.List;
 
 import io.realm.Realm;
@@ -519,5 +522,60 @@ public class AppHelper {
             clipboard.setPrimaryClip(clip);
         }
         return true;
+    }
+
+    private static final Hashtable<String, Typeface> cache = new Hashtable<>();
+
+    public static Typeface setTypeFace(Context c, String name) {
+        synchronized (cache) {
+            if (!cache.containsKey(name)) {
+                try {
+                    Typeface t = Typeface.createFromAsset(c.getAssets(), "fonts/" + name + ".otf");
+                    cache.put(name, t);
+                } catch (Exception e) {
+                    LogCat(e);
+                    return null;
+                }
+            }
+            return cache.get(name);
+        }
+    }
+
+    /**
+     * delete cache method
+     *
+     * @param context
+     */
+    public static void deleteCache(Context context) {
+        LogCat("here deleteCache method");
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {
+            LogCat(" deleteCache method Exception " + e.getMessage());
+        }
+    }
+
+    private static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else
+            return dir != null && dir.isFile() && dir.delete();
+    }
+
+    public static int getToolbarHeight(Context context) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+                new int[]{R.attr.actionBarSize});
+        int toolbarHeight = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        return toolbarHeight;
     }
 }

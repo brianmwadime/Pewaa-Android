@@ -58,6 +58,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_ACTION_MODE_DESTORYED;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_ACTION_MODE_STARTED;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_START_REFRESH;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_STOP_REFRESH;
+
 /**
  * Created by Brian Mwakima on 12/25/16.
  *
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
         PewaaApplication app = (PewaaApplication) getApplication();
         mSocket = app.getSocket();
         if (mSocket == null) {
-            app.reConnectSocket();
+            PewaaApplication.connectSocket();
             mSocket = app.getSocket();
         }
         if (!mSocket.connected())
@@ -134,9 +139,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.search_conversations:
-//                AppHelper.LaunchActivity(this, SearchConversationsActivity.class);
-//                break;
             case R.id.search_contacts:
                 AppHelper.LaunchActivity(this, SearchContactsActivity.class);
                 break;
@@ -325,18 +327,18 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
     @Subscribe
     public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
-            case "startRefresh":
+            case EVENT_BUS_START_REFRESH:
                 toolbarProgressBar.setVisibility(View.VISIBLE);
                 toolbarProgressBar.getIndeterminateDrawable().setColorFilter(AppHelper.getColor(this, R.color.colorWhite), PorterDuff.Mode.SRC_IN);
                 break;
-            case "stopRefresh":
+            case EVENT_BUS_STOP_REFRESH:
                 toolbarProgressBar.setVisibility(View.GONE);
                 break;
             case "startConversation":
                 if (viewPager.getCurrentItem() == 1)
                     viewPager.setCurrentItem(0);
                 break;
-            case "actionModeStarted":
+            case EVENT_BUS_ACTION_MODE_STARTED:
                 tabLayout.setBackgroundColor(AppHelper.getColor(this, R.color.colorGrayDarker));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Window window = getWindow();
@@ -344,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
                     window.setStatusBarColor(AppHelper.getColor(this, R.color.colorGrayDarkerBar));
                 }
                 break;
-            case "actionModeDestroyed":
+            case EVENT_BUS_ACTION_MODE_DESTORYED:
                 tabLayout.setBackgroundColor(AppHelper.getColor(this, R.color.colorPrimary));
                 if (AppHelper.isAndroid5()) {
                     Window window = getWindow();

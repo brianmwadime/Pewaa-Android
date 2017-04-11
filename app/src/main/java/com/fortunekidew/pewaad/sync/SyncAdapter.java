@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
@@ -74,13 +75,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 syncContacts.setContactsModelList(contactsList);
                 mUsersContacts.updateContacts(syncContacts).subscribe(contactsModelList -> {
                     if (contactsModelList != null)
-                        EventBus.getDefault().post(new PusherContacts("updatedContactsList", contactsModelList));
+                        EventBus.getDefault().post(new PusherContacts(AppConstants.EVENT_BUS_UPDATE_CONTACTS_LIST, contactsModelList));
                 }, throwable -> {
-                    EventBus.getDefault().post(new PusherContacts("updatedContactsListThrowable", throwable));
+                    EventBus.getDefault().post(new PusherContacts(AppConstants.EVENT_BUS_UPDATE_CONTACTS_LIST_THROWABLE, throwable));
                 });
 
             }, throwable -> {
-                EventBus.getDefault().post(new PusherContacts("updatedContactsListThrowable", throwable));
+                EventBus.getDefault().post(new PusherContacts(AppConstants.EVENT_BUS_UPDATE_CONTACTS_LIST_THROWABLE, throwable));
             });
 
         }

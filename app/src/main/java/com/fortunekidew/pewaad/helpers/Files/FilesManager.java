@@ -16,12 +16,14 @@ import android.webkit.MimeTypeMap;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.api.FilesDownloadService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -31,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import io.realm.internal.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,14 +59,14 @@ public class FilesManager {
      *
      * @return root directory
      */
-    private static File getMainPath() {
+    private static File getMainPath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), PewaaApplication.getAppContext().getString(R.string.app_name));
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), mContext.getApplicationContext().getString(R.string.app_name));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                AppHelper.LogCat("Oops! Failed create " + PewaaApplication.getAppContext().getString(R.string.app_name) + " directory");
+                AppHelper.LogCat("Oops! Failed create " + mContext.getApplicationContext().getString(R.string.app_name) + " directory");
                 return null;
             }
         }
@@ -78,10 +79,10 @@ public class FilesManager {
      *
      * @return all images directory
      */
-    private static File getImagesPath() {
+    private static File getImagesPath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(getMainPath(), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.images_directory));
+        File mediaStorageDir = new File(getMainPath(mContext), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.images_directory));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -98,10 +99,10 @@ public class FilesManager {
      *
      * @return image profile directory
      */
-    private static File getImagesProfilePath() {
+    private static File getImagesProfilePath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(getImagesPath(), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.images_profile_directory));
+        File mediaStorageDir = new File(getMainPath(mContext), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.images_profile_directory));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -119,10 +120,10 @@ public class FilesManager {
      *
      * @return image profile directory
      */
-    private static File getImagesOtherPath() {
+    private static File getImagesOtherPath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(getImagesPath(), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.images_other_directory));
+        File mediaStorageDir = new File(getMainPath(mContext), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.images_other_directory));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -135,10 +136,10 @@ public class FilesManager {
     }
 
 
-    private static File getVideosPath() {
+    private static File getVideosPath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(getMainPath(), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.videos_directory));
+        File mediaStorageDir = new File(getMainPath(mContext), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.videos_directory));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -150,10 +151,10 @@ public class FilesManager {
         return mediaStorageDir;
     }
 
-    private static File getAudiosPath() {
+    private static File getAudiosPath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(getMainPath(), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.audios_directory));
+        File mediaStorageDir = new File(getMainPath(mContext), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.audios_directory));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -166,10 +167,10 @@ public class FilesManager {
     }
 
 
-    private static File getDocumentsPath() {
+    private static File getDocumentsPath(Context mContext) {
 
         // External sdcard location
-        File mediaStorageDir = new File(getMainPath(), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.documents_directory));
+        File mediaStorageDir = new File(getMainPath(mContext), PewaaApplication.getAppContext().getString(R.string.app_name) + " " + PewaaApplication.getAppContext().getString(R.string.documents_directory));
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -189,43 +190,22 @@ public class FilesManager {
     /**
      * @return Images profile path string
      */
-    private static String getImagesProfilePathString() {
-        return String.valueOf(getImagesProfilePath());
+    private static String getImagesProfilePathString(Context mContext) {
+        return String.valueOf(getImagesProfilePath(mContext));
     }
 
     /**
      * @return Images group path string
      */
-    private static String getImagesGroupPathString() {
-        return String.valueOf(getImagesProfilePath());
+    private static String getImagesGroupPathString(Context mContext) {
+        return String.valueOf(getImagesProfilePath(mContext));
     }
 
     /**
      * @return other Images path string
      */
-    private static String getImagesOtherPathString() {
-        return String.valueOf(getImagesOtherPath());
-    }
-
-    /**
-     * @return Videos path string
-     */
-    private static String getVideosPathString() {
-        return String.valueOf(getVideosPath());
-    }
-
-    /**
-     * @return Audios path string
-     */
-    private static String getAudiosPathString() {
-        return String.valueOf(getAudiosPath());
-    }
-
-    /**
-     * @return Documents path string
-     */
-    private static String getDocumentsPathString() {
-        return String.valueOf(getDocumentsPath());
+    private static String getImagesOtherPathString(Context mContext) {
+        return String.valueOf(getImagesOtherPath(mContext));
     }
 
 /**
@@ -240,20 +220,21 @@ public class FilesManager {
      * @param Id this is the first parameter isFileImagesProfileExists method
      * @return Boolean
      */
-    public static boolean isFileImagesProfileExists(String Id) {
+    public static boolean isFileImagesProfileExists(Context mContext,String Id) {
 
-        File file = new File(getImagesProfilePathString(), Id);
+        File file = new File(getImagesProfilePathString(mContext), Id);
         return file.exists();
     }
 
     /**
      * Check file if exists method
      *
-     * @param Id this is the first parameter isFileImagesProfileExists method
+     * @param Id       this is the first parameter isFileImagesExists method
+     * @param mContext this is the second parameter isFileImagesExists method
      * @return Boolean
      */
-    public static boolean isFileImagesGroupExists(String Id) {
-        File file = new File(getImagesGroupPathString(), Id);
+    public static boolean isFileImagesExists(Context mContext, String Id) {
+        File file = new File(getImagesPathString(mContext), Id);
         return file.exists();
     }
 
@@ -263,30 +244,8 @@ public class FilesManager {
      * @param Id this is the first parameter isFileImagesOtherExists method
      * @return Boolean
      */
-    public static boolean isFileImagesOtherExists(String Id) {
-        File file = new File(getImagesOtherPathString(), Id);
-        return file.exists();
-    }
-
-    /**
-     * Check file if exists method
-     *
-     * @param Id this is the first parameter isFileVideosExists method
-     * @return Boolean
-     */
-    public static boolean isFileVideosExists(String Id) {
-        File file = new File(getVideosPathString(), Id);
-        return file.exists();
-    }
-
-    /**
-     * Check file if exists method
-     *
-     * @param Id this is the first parameter isFileVideosExists method
-     * @return Boolean
-     */
-    public static boolean isFileAudioExists(String Id) {
-        File file = new File(getAudiosPathString(), Id);
+    public static boolean isFileImagesOtherExists(Context mContext, String Id) {
+        File file = new File(getImagesOtherPathString(mContext), Id);
         return file.exists();
     }
 
@@ -301,17 +260,6 @@ public class FilesManager {
         return file.exists();
     }
 
-    /**
-     * Check file if exists method
-     *
-     * @param Id this is the first parameter isFileVideosExists method
-     * @return Boolean
-     */
-    public static boolean isFileDocumentsExists(String Id) {
-        File file = new File(getDocumentsPathString(), Id);
-        return file.exists();
-    }
-
 
     /**
      * ********************************************************************************* ************************************************
@@ -323,76 +271,11 @@ public class FilesManager {
      * method to get file
      *
      * @param Identifier this is first parameter of getFileImageProfile method
-     * @param name       this is second parameter of getFileImageProfile method
-     * @return file
-     */
-    public static File getFileImageProfile(String Identifier, String name) {
-        return new File(getFileImageProfilePath(Identifier, name));
-    }
 
-    /**
-     * method to get file
-     *
-     * @param Identifier this is first parameter of getFileImageProfile method
-     * @param name       this is second parameter of getFileImageProfile method
      * @return file
      */
-    public static File getFileImageGroup(String Identifier, String name) {
-        return new File(getFileImageGroupPath(Identifier, name));
-    }
-
-    /**
-     * method to get file
-     *
-     * @param Identifier this is first parameter of getFileImageOther method
-     * @param name       this is second parameter of getFileImageOther method
-     * @return file
-     */
-    public static File getFileImageOther(String Identifier, String name) {
-        return new File(getFileImageOtherPath(Identifier, name));
-    }
-
-    /**
-     * method to get file
-     *
-     * @param Identifier this is first parameter of getFileVideo method
-     * @param name       this is second parameter of getFileVideo method
-     * @return file
-     */
-    public static File getFileVideo(String Identifier, String name) {
-        return new File(getFileVideoPath(Identifier, name));
-    }
-
-    /**
-     * method to get file
-     *
-     * @param Identifier this is first parameter of getFileAudio method
-     * @param name       this is second parameter of getFileAudio method
-     * @return file
-     */
-    public static File getFileAudio(String Identifier, String name) {
-        return new File(getFileAudioPath(Identifier, name));
-    }
-
-    /**
-     * method to get file
-     *
-     * @param Path this is a parameter of getFileRecord method
-     * @return file
-     */
-    public static File getFileRecord(String Path) {
-        return new File(Path);
-    }
-
-    /**
-     * method to get file
-     *
-     * @param Identifier this is first parameter of getFileAudio method
-     * @param name       this is second parameter of getFileAudio method
-     * @return file
-     */
-    public static File getFileDocument(String Identifier, String name) {
-        return new File(getFileDocumentsPath(Identifier, name));
+    public static File getFileImageProfile(Context mContext, String Identifier) {
+        return new File(getFileProfilePhotoPath(mContext, Identifier));
     }
 
     /**
@@ -401,28 +284,12 @@ public class FilesManager {
      * **********************************************************************************************************************************
      */
 
-    public static String getProfileImage(String Identifier, String name) {
-        return String.format("%s-profile-%s", name, Identifier + ".jpg");
+    public static String getDataCached(String Identifier) {
+        return String.format("Data-%s", Identifier);
     }
 
-    public static String getGroupImage(String Identifier, String name) {
-        return String.format("%s-group-%s", name, Identifier + ".jpg");
-    }
-
-    public static String getOthersSentImage(String Identifier, String name) {
-        return String.format("%s-other-%s", name, Identifier + ".jpg");
-    }
-
-    public static String getSentAudio(String Identifier, String name) {
-        return String.format("%s-audio-%s", name, Identifier + ".mp3");
-    }
-
-    public static String getDocument(String Identifier, String name) {
-        return String.format("%s-document-%s", name, Identifier + ".pdf");
-    }
-
-    public static String getVideo(String Identifier, String name) {
-        return String.format("%s-video-%s", name, Identifier + ".mp4");
+    public static String getProfileImage(String Identifier) {
+        return String.format("IMG-Profile-%s", Identifier + ".jpg");
     }
 
     /**
@@ -432,74 +299,54 @@ public class FilesManager {
      */
 
     /**
-     * @param Identifier his is first parameter of getFileImageProfilePath method
-     * @param name       his is second parameter of getFileImageProfilePath method
+     * @param Identifier this is parameter of getFileImagesSentPath method
      * @return String path
      */
-    private static String getFileImageProfilePath(String Identifier, String name) {
-        return String.format(getImagesProfilePathString() + File.separator + "%s-profile-%s", name, Identifier + ".jpg");
+    public static String getFileDataCachedPath(Context mContext, String Identifier) {
+        return String.format(getDataCachedPathString(mContext) + File.separator + "Data-%s", Identifier);
     }
 
     /**
-     * @param Identifier his is first parameter of getFileImageProfilePath method
-     * @param name       his is second parameter of getFileImageProfilePath method
+     * @param Identifier this is parameter of getFileImagesSentPath method
      * @return String path
      */
-    private static String getFileImageGroupPath(String Identifier, String name) {
-        return String.format(getImagesGroupPathString() + File.separator + "%s-group-%s", name, Identifier + ".jpg");
+    public static String getFileProfilePhotoPath(Context mContext, String Identifier) {
+        return String.format(getProfilePhotosPathString(mContext) + File.separator + "IMG-Profile-%s", Identifier + ".jpg");
+    }
+
+
+    /**
+     * @param Identifier this is first parameter of getFileImagesPath method
+     * @return String path
+     */
+    public static String getFileImagesPath(Context mContext, String Identifier) {
+        return String.format(getImagesPathString(mContext) + File.separator + "IMG-%s", Identifier + ".jpg");
     }
 
     /**
-     * @param Identifier his is first parameter of getFileImageOtherPath method
-     * @param name       his is second parameter of getFileImageOtherPath method
+     * @param Identifier this is parameter of getFileImagesSentPath method
      * @return String path
      */
-    public static String getFileImageOtherPath(String Identifier, String name) {
-        return String.format(getImagesOtherPathString() + File.separator + "%s-other-%s", name, Identifier + ".jpg");
+    public static String getFileImagesSentPath(Context mContext, String Identifier) {
+        return String.format(getImagesSentPathString(mContext) + File.separator + "IMG-%s", Identifier + ".jpg");
     }
 
     /**
-     * @param Identifier his is first parameter of getFileAudio method
-     * @param name       his is second parameter of getFileAudio method
-     * @return String path
+     * @param mContext
+     * @return thumbnail Videos  path string
      */
-    public static String getFileVideoPath(String Identifier, String name) {
-        //String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale.getDefault()).format(new Date());
-        return String.format(getVideosPathString() + File.separator + "%s-video-%s", name, Identifier + ".mp4");
+    private static String getVideosThumbnailPathString(Context mContext) {
+        return String.valueOf(getVideosThumbnailPath(mContext));
     }
 
-    /**
-     * @param Identifier his is first parameter of getFileAudio method
-     * @param name       his is second parameter of getFileAudio method
-     * @return String path
-     */
-    public static String getFileAudioPath(String Identifier, String name) {
-        return String.format(getAudiosPathString() + File.separator + "%s-audio-%s", name, Identifier + ".mp3");
-    }
 
     /**
+     * @param mContext
      * @return String path
      */
-    public static String getFileRecordPath() {
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale.getDefault()).format(new Date());
-        return String.format(getAudiosPathString() + File.separator + "record-%s", timeStamp + ".mp3");
-    }
-
-    /**
-     * @param Identifier his is first parameter of getFileAudio method
-     * @param name       his is second parameter of getFileAudio method
-     * @return String path
-     */
-    public static String getFileDocumentsPath(String Identifier, String name) {
-        return String.format(getDocumentsPathString() + File.separator + "%s-document-%s", name, Identifier + ".pdf");
-    }
-
-    /**
-     * @return String path
-     */
-    public static String getFileThumbnailPath() {
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale.getDefault()).format(new Date());
-        return String.format(getVideosPathString() + File.separator + "thumbnail_%s", timeStamp + ".jpg");
+    public static String getFileThumbnailPath(Context mContext) {
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        return String.format(getVideosThumbnailPathString(mContext) + File.separator + "THUMB_%s", timeStamp + ".jpg");
     }
     /**
      * **************************************************************** *****************************************************************
@@ -514,9 +361,8 @@ public class FilesManager {
      * @param mContext   this is the first parameter downloadFilesToDevice method
      * @param fileUrl    this is the second parameter downloadFilesToDevice method
      * @param Identifier this is the third parameter downloadFilesToDevice method
-     * @param name       this is the fourth parameter downloadFilesToDevice method
      */
-    public static void downloadFilesToDevice(Context mContext, String fileUrl, String Identifier, String name, String type) {
+    public static void downloadFilesToDevice(Context mContext, String fileUrl, String Identifier, String type) {
 
         APIService apiService = new APIService(mContext);
         final FilesDownloadService downloadService = apiService.RootService(FilesDownloadService.class, PreferenceManager.getToken(mContext), EndPoints.ASSETS_BASE_URL);
@@ -531,7 +377,7 @@ public class FilesManager {
                         if (response.isSuccessful()) {
                             AppHelper.LogCat("server contacted and has file");
                                try{
-                                   writeResponseBodyToDisk(response.body(), Identifier, name, type);
+                                   writeResponseBodyToDisk(mContext, response.body(), Identifier, type);
                                }catch (Exception e){
                                    AppHelper.LogCat("file download was a failed");
                                }
@@ -557,127 +403,238 @@ public class FilesManager {
         }.execute();
     }
 
+    /* --------------------------  received fies       ---------------------------------------*/
+
+    /**
+     * method to get file
+     *
+     * @param Identifier this is  parameter of getFileImage method
+     * @return file
+     */
+    public static File getFileImage(Context mContext, String Identifier) {
+        return new File(getFileImagesPath(mContext, Identifier));
+    }
+
+    /**
+     * @param mContext
+     * @return sent Images path string
+     */
+    private static String getImagesSentPathString(Context mContext) {
+        return String.valueOf(getImagesSentPath(mContext));
+    }
+
+    /**
+     * @param mContext
+     * @return Images path string
+     */
+    public static String getImagesPathString(Context mContext) {
+        return String.valueOf(getImagesPath(mContext));
+    }
+
+    /**
+     * @param mContext
+     * @return Images profile path string
+     */
+    public static String getProfilePhotosPathString(Context mContext) {
+        return String.valueOf(getProfilePhotosPath(mContext));
+    }
+
+    /**
+     * @param mContext
+     * @return Images profile path string
+     */
+    public static String getDataCachedPathString(Context mContext) {
+        return String.valueOf(getImagesCachePath(mContext));
+    }
+
+    /* --------------------------  cached fies       ---------------------------------------*/
+
+    /**
+     * method to create thumb videos  directory
+     *
+     * @param mContext
+     * @return return value
+     */
+    private static File getVideosThumbnailPath(Context mContext) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(getVideosPath(mContext), mContext.getApplicationContext().getString(R.string.app_name) + " " + mContext.getApplicationContext().getString(R.string.video_thumbnail));
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                AppHelper.LogCat("Oops! Failed create " + mContext.getApplicationContext().getString(R.string.app_name) + " directory");
+                return null;
+            }
+        }
+
+        return mediaStorageDir;
+    }
+
+    /**
+     * method to create cached images directory
+     *
+     * @param mContext
+     * @return return value
+     */
+    public static File getImagesCachePath(Context mContext) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(mContext.getCacheDir(), mContext.getApplicationContext().getString(R.string.app_name) + "_" + mContext.getApplicationContext().getString(R.string.data_cache_directory));
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                AppHelper.LogCat("Oops! Failed create " + mContext.getApplicationContext().getString(R.string.app_name) + "_" + mContext.getApplicationContext().getString(R.string.data_cache_directory) + " directory");
+                return null;
+            }
+        }
+
+        return mediaStorageDir;
+    }
+
+    /**
+     * method to create images profile directory
+     *
+     * @param mContext
+     * @return return value
+     */
+    private static File getProfilePhotosPath(Context mContext) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(getMainPath(mContext), mContext.getApplicationContext().getString(R.string.app_name) + " " + mContext.getApplicationContext().getString(R.string.profile_photos));
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                AppHelper.LogCat("Oops! Failed create " + mContext.getApplicationContext().getString(R.string.app_name) + " directory");
+                return null;
+            }
+        }
+
+        return mediaStorageDir;
+    }
+
+    /**
+     * Check file if exists method
+     *
+     * @param Id       this is the first parameter isFileImagesSentExists method
+     * @param mContext this is the second parameter isFileImagesSentExists method
+     * @return Boolean
+     */
+    public static boolean isFileImagesSentExists(Context mContext, String Id) {
+        File file = new File(getImagesSentPathString(mContext), Id);
+        return file.exists();
+    }
+
     /**
      * @param body       this is the first parameter writeResponseBodyToDisk method
      * @param Identifier this is the first parameter writeResponseBodyToDisk method
-     * @param name       this is the first parameter writeResponseBodyToDisk method
      * @return boolean
      */
-    private static boolean writeResponseBodyToDisk(ResponseBody body, String Identifier, String name, String type) {
-        try {
-            boolean deleted = true;
+    private static boolean writeResponseBodyToDisk(Context mContext, ResponseBody body, String Identifier, String type) {
+        boolean deleted = true;
 
-            if (isFileImagesProfileExists(FilesManager.getProfileImage(Identifier, name))) {
-                deleted = getFileImageProfile(Identifier, name).delete();
-            } else if (isFileImagesGroupExists(FilesManager.getGroupImage(Identifier, name))) {
-                deleted = getFileImageGroup(Identifier, name).delete();
-            } else if (isFileImagesOtherExists(FilesManager.getOthersSentImage(Identifier, name))) {
-                deleted = getFileImageOther(Identifier, name).delete();
-            } else if (isFileVideosExists(FilesManager.getVideo(Identifier, name))) {
-                deleted = getFileVideo(Identifier, name).delete();
-            } else if (isFileAudioExists(FilesManager.getSentAudio(Identifier, name))) {
-                deleted = getFileAudio(Identifier, name).delete();
-            } else if (isFileDocumentsExists(FilesManager.getDocument(Identifier, name))) {
-                deleted = getFileDocument(Identifier, name).delete();
+        if (!deleted) {
+            AppHelper.LogCat(" not deleted ");
+            return false;
+        } else {
+            AppHelper.LogCat("deleted");
+            File downloadedFile = null;
+            switch (type) {
+                case AppConstants.DATA_CACHED:
+                    downloadedFile = new File(getFileDataCachedPath(mContext, Identifier));
+                    break;
             }
 
-            if (!deleted) {
-                AppHelper.LogCat(" not deleted ");
-                return false;
-            } else {
-                AppHelper.LogCat("deleted");
-                File futureStudioIconFile = null;
-                switch (type) {
-                    case "profile":
-                        futureStudioIconFile = new File(getFileImageProfilePath(Identifier, name));
-                        break;
-                    case "group":
-                        futureStudioIconFile = new File(getFileImageGroupPath(Identifier, name));
-                        break;
-                    case "other":
-                        futureStudioIconFile = new File(getFileImageOtherPath(Identifier, name));
-                        break;
-                    case "audio":
-                        futureStudioIconFile = new File(getFileAudioPath(Identifier, name));
-                        break;
-                    case "document":
-                        futureStudioIconFile = new File(getFileDocumentsPath(Identifier, name));
-                        break;
-                    case "video":
-                        futureStudioIconFile = new File(getFileVideoPath(Identifier, name));
-                        break;
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+            /*long fileSize = body.contentLength();
+            long fileSizeDownloaded = 0;*/
+
+                inputStream = body.byteStream();
+                try {
+                    if (downloadedFile != null) {
+                        outputStream = new FileOutputStream(downloadedFile);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
 
-                InputStream inputStream = null;
-                OutputStream outputStream = null;
-
-                try {
-                    byte[] fileReader = new byte[4096];
-
-                /*long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;*/
-
-                    inputStream = body.byteStream();
+                while (true) {
+                    int read = 0;
                     try {
-                        outputStream = new FileOutputStream(futureStudioIconFile);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                    while (true) {
-                        int read = 0;
-                        try {
-                            read = inputStream.read(fileReader);
-                        } catch (java.io.IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (read == -1) {
-                            break;
-                        }
-
-                        try {
-                            outputStream.write(fileReader, 0, read);
-                        } catch (java.io.IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    /*fileSizeDownloaded += read;*/
-
-                    /*AppHelper.LogCat("file download: " + fileSizeDownloaded + " of " + fileSize);*/
-                    }
-
-                    try {
-                        outputStream.flush();
+                        read = inputStream.read(fileReader);
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
                     }
 
-                    return true;
-                } catch (IOException e) {
-                    return false;
-                } finally {
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (java.io.IOException e) {
-                            e.printStackTrace();
-                        }
+                    if (read == -1) {
+                        break;
                     }
 
-                    if (outputStream != null) {
-                        try {
-                            outputStream.close();
-                        } catch (java.io.IOException e) {
-                            e.printStackTrace();
+                    try {
+                        if (outputStream != null) {
+                            outputStream.write(fileReader, 0, read);
                         }
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
+
+                /*fileSizeDownloaded += read;*/
+
+                /*AppHelper.LogCat("file download: " + fileSizeDownloaded + " of " + fileSize);*/
+                }
+
+                try {
+                    if (outputStream != null) {
+                        outputStream.flush();
+                    }
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                }
+
+                return true;
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
-        } catch (IOException e) {
-            return false;
-
         }
+    }
+
+    /**
+     * method to create sent images  directory
+     *
+     * @param mContext
+     * @return return value
+     */
+    private static File getImagesSentPath(Context mContext) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(getImagesPath(mContext), mContext.getApplicationContext().getString(R.string.app_name) + " " + mContext.getApplicationContext().getString(R.string.directory_sent));
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                AppHelper.LogCat("Oops! Failed create " + mContext.getApplicationContext().getString(R.string.app_name) + " directory");
+                return null;
+            }
+        }
+
+        return mediaStorageDir;
     }
 
     /**
@@ -704,13 +661,26 @@ public class FilesManager {
     }
 
 
-    public static File getFileThumbnail(Bitmap bmp) throws java.io.IOException {
-        File file = new File(getFileThumbnailPath());
+    public static File getFileThumbnail(Context mContext, Bitmap bmp) throws java.io.IOException {
+        File file = new File(getFileThumbnailPath(mContext));
         file.getParentFile().mkdirs();
         FileOutputStream out = new FileOutputStream(file);
         bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
         out.close();
         return file;
+    }
+
+    /**
+     * Check file if exists method
+     *
+     * @param Id       this is the first parameter isFileDocumentsSentExists method
+     * @param mContext this is the second parameter isFileDocumentsSentExists method
+     * @return Boolean
+     */
+    public static boolean isFileDataCachedExists(Context mContext, String Id) {
+
+        File file = new File(getDataCachedPathString(mContext), Id);
+        return file.exists();
     }
 
     /**
@@ -723,8 +693,6 @@ public class FilesManager {
      */
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
-
-
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -819,6 +787,16 @@ public class FilesManager {
     }
 
     /**
+     * method to get sent file
+     *
+     * @param Identifier this is  parameter of getFileImageSent method
+     * @return file
+     */
+    public static File getFileDataCached(Context mContext, String Identifier) {
+        return new File(getFileDataCachedPath(mContext, Identifier));
+    }
+
+    /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
@@ -840,5 +818,22 @@ public class FilesManager {
      */
     private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static void copyFile(File src, File dst) throws java.io.IOException {
+        FileInputStream fileInputStream = new FileInputStream(src);
+        FileOutputStream fileOutputStream = new FileOutputStream(dst);
+        byte[] var4 = new byte[1024];
+
+        int var5;
+        while ((var5 = fileInputStream.read(var4)) > 0) {
+            fileOutputStream.write(var4, 0, var5);
+        }
+        fileInputStream.close();
+        fileOutputStream.close();
+    }
+
+    public static String getImage(String Identifier) {
+        return String.format("IMG-%s", Identifier + ".jpg");
     }
 }

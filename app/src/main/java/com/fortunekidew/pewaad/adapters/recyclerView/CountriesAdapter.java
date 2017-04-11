@@ -29,8 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Abderrahim El imame on 11/03/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 public class CountriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity mActivity;

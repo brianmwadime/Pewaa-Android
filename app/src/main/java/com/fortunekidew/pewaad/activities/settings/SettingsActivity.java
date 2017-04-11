@@ -15,12 +15,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaad.activities.profile.EditProfileActivity;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
+import com.fortunekidew.pewaad.helpers.Files.ImageLoader;
+import com.fortunekidew.pewaad.helpers.Files.MemoryCache;
+import com.fortunekidew.pewaad.helpers.images.PewaaImageLoader;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaad.presenters.SettingsPresenter;
@@ -61,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
     private CircleTransform circleTransform;
     private ContactsModel mContactsModel;
     private SettingsPresenter mSettingsPresenter;
+    private MemoryCache memoryCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         circleTransform = new CircleTransform(this);
         setupToolbar();
+        memoryCache = new MemoryCache();
         mSettingsPresenter = new SettingsPresenter(this);
         mSettingsPresenter.onCreate();
         EventBus.getDefault().register(this);
@@ -128,55 +136,52 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 userName.setText(getString(R.string.no_username));
             }
-            if (mContactsModel.getImage() != null) {
-                Glide.with(this)
-                        .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-                        .transform(circleTransform)
-                        .placeholder(R.drawable.avatar_placeholder)
-                        .override(largeAvatarSize, largeAvatarSize)
-                        .into(userAvatar);
-//                if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(mContactsModel.getId(), mContactsModel.getId()))) {
-//                    Glide.with(this)
-//                            .load(FilesManager.getFileImageProfile(mContactsModel.getId(), mContactsModel.getId()))
-//                            .transform(circleTransform)
-//                            .placeholder(R.drawable.avatar_placeholder)
-//                            .override(largeAvatarSize, largeAvatarSize)
-//                            .into(userAvatar);
-//
-//                } else {
-//
-//
-//                    Target target = new Target() {
-//                        @Override
-//                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                            userAvatar.setImageBitmap(bitmap);
-//                            FilesManager.downloadFilesToDevice(SettingsActivity.this, mContactsModel.getImage(), mContactsModel.getId(), mContactsModel.getId(), "profile");
-//
-//                        }
-//
-//                        @Override
-//                        public void onBitmapFailed(Drawable errorDrawable) {
-//                            userAvatar.setImageDrawable(errorDrawable);
-//                        }
-//
-//                        @Override
-//                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                            userAvatar.setImageDrawable(placeHolderDrawable);
-//                        }
-//                    };
-//
-//                    Glide.with(this)
-//                            .load(EndPoints.ASSETS_BASE_URL + mContactsModel.getImage())
-//                            .transform(circleTransform)
-//                            .placeholder(R.drawable.avatar_placeholder)
-//                            .override(largeAvatarSize, largeAvatarSize)
-//                            .into(userAvatar);
-//
-//                }
+            Bitmap bitmap = ImageLoader.GetCachedBitmapImage(memoryCache, mContactsModel.getImage(), this, mContactsModel.getId(), AppConstants.USER, AppConstants.SETTINGS_PROFILE);
+            if (bitmap != null) {
+                ImageLoader.SetBitmapImage(bitmap, userAvatar);
             } else {
-                userAvatar.setPadding(2, 2, 2, 2);
-                userAvatar.setImageResource(R.drawable.ic_user_holder_white_48dp);
+             /*   Target target = new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        userAvatar.setImageBitmap(bitmap);
+                        ImageLoader.DownloadImage(memoryCache, EndPoints.SETTINGS_IMAGE_URL + mContactsModel.getImage(), mContactsModel.getImage(), SettingsActivity.this, mContactsModel.getId(), AppConstants.USER, AppConstants.SETTINGS_PROFILE);
+                        ImageLoader.DownloadImage(memoryCache, EndPoints.EDIT_PROFILE_IMAGE_URL + mContactsModel.getImage(), mContactsModel.getImage(), SettingsActivity.this, mContactsModel.getId(), AppConstants.USER, AppConstants.EDIT_PROFILE);
 
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        userAvatar.setImageDrawable(errorDrawable);
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        userAvatar.setImageDrawable(placeHolderDrawable);
+                    }
+                };*/
+                com.bumptech.glide.request.target.Target target = new BitmapImageViewTarget(userAvatar) {
+                    @Override
+                    public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
+                        super.onResourceReady(bitmap, anim);
+                        userAvatar.setImageBitmap(bitmap);
+                        ImageLoader.DownloadImage(memoryCache, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), mContactsModel.getImage(), SettingsActivity.this, mContactsModel.getId(), AppConstants.USER, AppConstants.SETTINGS_PROFILE);
+                        ImageLoader.DownloadImage(memoryCache, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), mContactsModel.getImage(), SettingsActivity.this, mContactsModel.getId(), AppConstants.USER, AppConstants.EDIT_PROFILE);
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        userAvatar.setImageDrawable(errorDrawable);
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        userAvatar.setImageDrawable(placeholder);
+                    }
+                };
+                PewaaImageLoader.loadCircleImage(this, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), target, R.drawable.image_holder_ur_circle, AppConstants.SETTINGS_IMAGE_SIZE);
 
             }
         } catch (Exception e) {
@@ -210,6 +215,9 @@ public class SettingsActivity extends AppCompatActivity {
             case "updateName":
             case "updateCurrentStatus":
             case "updateImageProfile":
+                mSettingsPresenter.loadData();
+                break;
+            case AppConstants.EVENT_BUS_MINE_IMAGE_PROFILE_UPDATED:
                 mSettingsPresenter.loadData();
                 break;
         }

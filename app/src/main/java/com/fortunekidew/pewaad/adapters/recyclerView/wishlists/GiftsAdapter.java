@@ -63,8 +63,8 @@ import io.socket.client.Socket;
 import static com.fortunekidew.pewaad.util.AnimUtils.getFastOutSlowInInterpolator;
 
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int REQUEST_CODE_VIEW_GIFT = 5407;

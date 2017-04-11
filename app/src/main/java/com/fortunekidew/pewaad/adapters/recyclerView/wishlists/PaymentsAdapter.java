@@ -18,7 +18,8 @@ import com.fortunekidew.pewaad.models.payments.EditPayments;
 import java.util.List;
 
 /**
- * Created by Ravi Tamada on 18/05/16.
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.MyViewHolder> {
 

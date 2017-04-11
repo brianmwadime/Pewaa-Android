@@ -26,7 +26,7 @@ public class AppConstants {
     public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";//for this you have to set you package name here we use this add the app to account manager in user phone
 
     public static final String DATABASE_LOCAL_NAME = "Pewaa.realm";
-    public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application https://play.google.com/apps/testing/com.fortunekidew.pewaad";
+    public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application ";
 
 
     // SMS provider identification
@@ -69,9 +69,41 @@ public class AppConstants {
     public static final String SOCKET_DISCONNECTED = "user_disconnect";
 
 
+    /**
+     * for cache
+     */
+    public static final String GROUP = "gp";
+    public static final String USER = "ur";
+    public static final String PROFILE_PREVIEW = "prp";
+    public static final String FULL_PROFILE = "fp";
+    public static final String SETTINGS_PROFILE = "spr";
+    public static final String EDIT_PROFILE = "epr";
+    public static final String ROW_PROFILE = "rpr";
+    public static final String ROW_MESSAGES_BEFORE = "rmebe";
+    public static final String ROW_WALLPAPER = "rwppr";
+    public static final String ROW_MESSAGES_AFTER = "rmeaf";
+    public static String EXPORT_REALM_FILE_NAME = "msgstore.realm";
+
+    public static final String DATA_CACHED = "DATA_CACHED";
+
+    /**
+     * images size
+     */
+    public static final int NOTIFICATIONS_IMAGE_SIZE = 150;
+    public static final int ROWS_IMAGE_SIZE = 90;
+    public static final int PROFILE_PREVIEW_IMAGE_SIZE = 500;
+    public static final int PROFILE_PREVIEW_BLUR_IMAGE_SIZE = 50;
+    public static final int PROFILE_IMAGE_SIZE = 500;
+    public static final int SETTINGS_IMAGE_SIZE = 100;
+    public static final int EDIT_PROFILE_IMAGE_SIZE = 500;
+    public static final int MESSAGE_IMAGE_SIZE = 300;
+    public static final int PRE_MESSAGE_IMAGE_SIZE = 40;
+    public static final int FULL_SCREEN_IMAGE_SIZE = 640;
+    public static final int BLUR_RADIUS = 1;
+
     // Payments
     public static final String SOCKET_PAYMENT_COMPLETED = "payment_completed";
-
+    public static final String SOCKET_IMAGE_PROFILE_UPDATED = "socket_profileImageUpdated";
     public static final String SOCKET_CONTRIBUTOR_ADDED = "added_contributor";
 
     public static final String SOCKET_GIFT_ADDED = "added_gift";
@@ -85,4 +117,22 @@ public class AppConstants {
     public static final int MESSAGE_COLOR_WARNING = R.color.colorOrange;
     public static final int MESSAGE_COLOR_SUCCESS = R.color.colorGreenDark;
     public static final int TEXT_COLOR = R.color.colorWhite;
+
+    /**
+     * those for EventBus tool
+     */
+    public static final String EVENT_BUS_CONTACTS_PERMISSION = "ContactsPermission";
+    public static final String EVENT_BUS_UPDATE_CONTACTS_LIST = "updatedContactsList";
+    public static final String EVENT_BUS_UPDATE_CONTACTS_LIST_THROWABLE = "updatedContactsListThrowable";
+    public static final String EVENT_BUS_STOP_REFRESH = "stopRefresh";
+    public static final String EVENT_BUS_START_REFRESH = "startRefresh";
+    public static final String EVENT_BUS_IMAGE_PROFILE_PATH = "ImageProfilePath";
+    public static final String EVENT_BUS_UPDATE_CURRENT_STATUS = "updateCurrentStatus";
+    public static final String EVENT_BUS_UPDATE_STATUS = "updateStatus";
+    public static final String EVENT_BUS_DELETE_STATUS = "deleteStatus";
+    public static final String EVENT_BUS_USERNAME_PROFILE_UPDATED = "updateUserName";
+    public static final String EVENT_BUS_MINE_IMAGE_PROFILE_UPDATED = "mine_profileImageUpdated";
+
+    public static final String EVENT_BUS_ACTION_MODE_STARTED = "actionModeStarted";
+    public static final String EVENT_BUS_ACTION_MODE_DESTORYED = "actionModeDestroyed";
 }

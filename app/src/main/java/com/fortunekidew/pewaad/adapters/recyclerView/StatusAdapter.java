@@ -26,8 +26,8 @@ import butterknife.ButterKnife;
 import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
 
 /**
- * Created by Abderrahim El imame on 28/04/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima 10/04/2017.
+ * Email : mwadime@fortunekidew.co.ke
  */
 public class StatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

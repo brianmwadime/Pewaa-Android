@@ -1,6 +1,7 @@
 package com.fortunekidew.pewaad.app;
 
 /**
+ * Created by Brian Mwakima 10/04/2017.
  * Email : mwadime@fortunekidew.co.ke
  */
 public class EndPoints {

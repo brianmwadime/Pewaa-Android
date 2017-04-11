@@ -1,8 +1,10 @@
 package com.fortunekidew.pewaad.helpers.Files;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.DownloadCallbacks;
 
 import java.io.File;
@@ -14,14 +16,8 @@ import java.io.OutputStream;
 import io.realm.internal.IOException;
 import okhttp3.ResponseBody;
 
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.getFileAudio;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.getFileDocument;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.getFileImageOther;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.getFileVideo;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.isFileAudioExists;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.isFileDocumentsExists;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.isFileImagesOtherExists;
-import static com.fortunekidew.pewaad.helpers.Files.FilesManager.isFileVideosExists;
+import static com.fortunekidew.pewaad.helpers.Files.FilesManager.getFileImage;
+import static com.fortunekidew.pewaad.helpers.Files.FilesManager.isFileImagesExists;
 
 /**
  * Created by Abderrahim El imame on 7/28/16.
@@ -36,51 +32,31 @@ public class DownloadFilesHelper {
     private static final int DEFAULT_BUFFER_SIZE = 4096;
     private String type;
     private String Identifier;
-    private String name;
     private ResponseBody mFile;
 
-    public DownloadFilesHelper(final ResponseBody mFile, String Identifier, String name, String type, final DownloadCallbacks mDownloadCallbacks) {
+    public DownloadFilesHelper(final ResponseBody mFile, String Identifier, String type, final DownloadCallbacks mDownloadCallbacks) {
         this.mFile = mFile;
         this.Identifier = Identifier;
         this.type = type;
-        this.name = name;
         this.mDownloadCallbacks = mDownloadCallbacks;
 
     }
 
 
-    public boolean writeResponseBodyToDisk() {
+    public boolean writeResponseBodyToDisk(Activity mActivity) {
         try {
             try {
-                if (isFileImagesOtherExists(Identifier)) {
-                    getFileImageOther(Identifier, name).delete();
-                    return false;
-                } else if (isFileVideosExists(Identifier)) {
-                    getFileVideo(Identifier, name).delete();
-                    return false;
-                } else if (isFileAudioExists(Identifier)) {
-                    getFileAudio(Identifier, name).delete();
-                    return false;
-                } else if (isFileDocumentsExists(Identifier)) {
-                    getFileDocument(Identifier, name).delete();
+                if (isFileImagesExists(mActivity,Identifier)) {
+                    getFileImage(mActivity,Identifier).delete();
                     return false;
                 }
             } catch (Exception ignored) {
             }
 
-            File futureStudioIconFile = null;
+            File downloadedFile = null;
             switch (type) {
                 case "image":
-                    futureStudioIconFile = new File(FilesManager.getFileImageOtherPath(Identifier, name));
-                    break;
-                case "video":
-                    futureStudioIconFile = new File(FilesManager.getFileVideoPath(Identifier, name));
-                    break;
-                case "audio":
-                    futureStudioIconFile = new File(FilesManager.getFileAudioPath(Identifier, name));
-                    break;
-                case "document":
-                    futureStudioIconFile = new File(FilesManager.getFileDocumentsPath(Identifier, name));
+                    downloadedFile = new File(FilesManager.getFileImagesPath(mActivity,Identifier));
                     break;
             }
 
@@ -95,7 +71,7 @@ public class DownloadFilesHelper {
 
                 inputStream = mFile.byteStream();
                 try {
-                    outputStream = new FileOutputStream(futureStudioIconFile);
+                    outputStream = new FileOutputStream(downloadedFile);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -121,7 +97,7 @@ public class DownloadFilesHelper {
                     fileSizeDownloaded += read;
                     // update progress on UI thread
                     handler.post(new Updater(fileSizeDownloaded, fileSize));
-                    //AppHelper.LogCat("file download: " + fileSizeDownloaded + " of " + fileSize);
+                    AppHelper.LogCat("file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
 
                 try {
@@ -167,7 +143,7 @@ public class DownloadFilesHelper {
 
         @Override
         public void run() {
-            mDownloadCallbacks.onUpdate((int) (100 * mUploaded / mTotal),type);
+            mDownloadCallbacks.onUpdate((int) (100 * mUploaded / mTotal), type);
         }
     }
 

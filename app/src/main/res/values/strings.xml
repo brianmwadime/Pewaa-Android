@@ -341,5 +341,10 @@
     <string name="select_contributor_button_label">Select</string>
 
     <!--#3rd Party Keys-->
-    <string name="fabric_api_key"></string> // dba3618bc05d496c15e51cc355c4374a853a56d0
+    <string name="fabric_api_key"></string>
+    <string name="directory_sent">Sent</string>
+    <string name="profile_photos">Profile Photos</string>
+    <string name="data_cache_directory">Backups</string>
+    <string name="video_thumbnail">Thumbnail</string>
+    // dba3618bc05d496c15e51cc355c4374a853a56d0
 </resources>

@@ -1,10 +1,15 @@
 package com.fortunekidew.pewaad.activities.gifts;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,9 +20,12 @@ import com.bumptech.glide.Glide;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIGifts;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.fragments.BottomSheetEditGift;
 import com.fortunekidew.pewaad.helpers.AppHelper;
+import com.fortunekidew.pewaad.helpers.Files.MemoryCache;
+import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
@@ -77,15 +85,17 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
     private APIService mApiService;
     private String PicturePath, wishlistID;
+    private boolean isOpen;
 
     private EditGiftPresenter mEditGiftPresenter;
+    private MemoryCache memoryCache;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_gift);
-
+        memoryCache = new MemoryCache();
         if (getIntent().getExtras() != null) {
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_ID)) {
                 wishlistID = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_ID);

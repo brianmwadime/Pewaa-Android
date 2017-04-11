@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,15 +20,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.profile.ProfilePreviewActivity;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.Files.FilesManager;
+import com.fortunekidew.pewaad.helpers.Files.ImageLoader;
+import com.fortunekidew.pewaad.helpers.Files.MemoryCache;
 import com.fortunekidew.pewaad.helpers.UtilsPhone;
+import com.fortunekidew.pewaad.helpers.images.PewaaImageLoader;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaad.ui.RecyclerViewFastScroller;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,6 +57,7 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<ContactsModel> mContactsModel;
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_HEADER = 2;
+    private MemoryCache memoryCache;
 
     public void setContacts(List<ContactsModel> contactsModelList) {
         this.mContactsModel = contactsModelList;
@@ -58,6 +67,7 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public SelectContactsAdapter(@NonNull Activity mActivity, List<ContactsModel> mContactsModel) {
         this.mActivity = mActivity;
         this.mContactsModel = mContactsModel;
+        this.memoryCache = new MemoryCache();
     }
 
     @Override
@@ -92,11 +102,8 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 } else {
                     contactsViewHolder.showInviteButton();
                 }
-                if (contactsModel.getImage() != null) {
-                    contactsViewHolder.setUserImage(contactsModel.getImage(), String.valueOf(contactsModel.getId()), contactsModel.getUsername());
-                } else {
-                    contactsViewHolder.setNullUserImage(R.drawable.ic_user_holder_white_48dp);
-                }
+
+                contactsViewHolder.setUserImage(contactsModel.getImage(), contactsModel.getId());
             } catch (Exception e) {
                 AppHelper.LogCat("" + e.getMessage());
             }
@@ -146,53 +153,54 @@ public class SelectContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ButterKnife.bind(this, itemView);
         }
 
-        void setUserImage(String ImageUrl, String userId, String name) {
+        void setUserImage(String ImageUrl, String userId) {
 
-            if (FilesManager.isFileImagesProfileExists(FilesManager.getProfileImage(userId, name))) {
-
-                Glide.with(mActivity)
-                        .load(FilesManager.getFileImageProfile(userId, name))
-                        .asBitmap()
-                        .transform(new CropCircleTransformation(mActivity))
-                        .override(100, 100)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(userImage);
+            Bitmap bitmap = ImageLoader.GetCachedBitmapImage(memoryCache, ImageUrl, mActivity, userId, AppConstants.USER, AppConstants.ROW_PROFILE);
+            if (bitmap != null) {
+                ImageLoader.SetBitmapImage(bitmap, userImage);
             } else {
 
-                BitmapImageViewTarget target = new BitmapImageViewTarget(userImage) {
+                Target target = new BitmapImageViewTarget(userImage) {
                     @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                        userImage.setImageDrawable(placeholder);
-                    }
+                    public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
+                        super.onResourceReady(bitmap, anim);
+                        userImage.setImageBitmap(bitmap);
+                        ImageLoader.DownloadImage(memoryCache, EndPoints.ASSETS_BASE_URL + ImageUrl, ImageUrl, mActivity, userId, AppConstants.USER, AppConstants.ROW_PROFILE);
 
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        super.onResourceReady(resource, glideAnimation);
-                        userImage.setImageBitmap(resource);
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        userImage.setImageDrawable(errorDrawable);
+                        if (ImageUrl != null) {
+                            Bitmap bitmap = null;
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), Uri.parse(ImageUrl));
+                            } catch (IOException ex) {
+                                // AppHelper.LogCat(e.getMessage());
+                            }
+                            if (bitmap != null) {
+                                ImageLoader.SetBitmapImage(bitmap, userImage);
+                            } else {
+                                userImage.setImageDrawable(errorDrawable);
+                            }
+                        } else {
+                            userImage.setImageDrawable(errorDrawable);
+                        }
                     }
 
-
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        userImage.setImageDrawable(placeholder);
+                    }
                 };
 
-                Glide.with(mActivity)
-                        .load(EndPoints.BASE_URL + ImageUrl)
-                        .asBitmap()
-                        .transform(new CropCircleTransformation(mActivity))
-                        .override(100, 100)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(target);
+                PewaaImageLoader.loadCircleImage(mActivity, EndPoints.ASSETS_BASE_URL + ImageUrl, target, R.drawable.image_holder_ur_circle, AppConstants.ROWS_IMAGE_SIZE);
             }
 
         }
+
 
 
         void setNullUserImage(int drawable) {

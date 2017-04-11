@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.fragments.ContactsFragment;
 import com.fortunekidew.pewaad.helpers.AppHelper;
@@ -160,13 +161,13 @@ public class ContactsPresenter implements Presenter {
     @Subscribe
     public void onEventMainThread(PusherContacts pusher) {
         switch (pusher.getAction()) {
-            case "updatedContactsList":
+            case AppConstants.EVENT_BUS_UPDATE_CONTACTS_LIST:
                 contactsFragmentView.updateContacts(pusher.getContactsModelList());
                 break;
-            case "updatedContactsListThrowable":
+            case AppConstants.EVENT_BUS_UPDATE_CONTACTS_LIST_THROWABLE:
                 contactsFragmentView.onErrorLoading(pusher.getThrowable());
                 break;
-            case "ContactsPermission":
+            case AppConstants.EVENT_BUS_CONTACTS_PERMISSION:
                 onRefresh();
                 break;
         }

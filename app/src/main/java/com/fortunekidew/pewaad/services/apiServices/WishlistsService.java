@@ -84,10 +84,17 @@ public class WishlistsService {
 
     /**
      * method to copy or update wishlists list
-     * @param wishlists this is parameter for copyOrUpdateWishlists method
+     * @param gifts this is parameter for copyOrUpdateWishlists method
      * @return return value
      */
     private List<GiftsModel> copyOrUpdateGifts(List<GiftsModel> gifts) {
         return  gifts;
+    }
+
+    public Observable<StatusResponse> removeContributor(String wishlist_id, String contributor_id) {
+        return initializeApiWishlists().removeContributor(wishlist_id, contributor_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(statusResponse -> statusResponse);
     }
 }

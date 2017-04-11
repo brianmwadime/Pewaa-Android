@@ -2,10 +2,7 @@ package com.fortunekidew.pewaad.models.users.status;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Abderrahim El imame on 03/05/2016.
- * Email : abderrahim.elimame@gmail.com
- */
+
 public class StatusResponse {
     private boolean success;
     private String message;

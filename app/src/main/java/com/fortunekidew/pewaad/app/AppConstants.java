@@ -82,6 +82,9 @@ public class AppConstants {
     public static final String ROW_MESSAGES_BEFORE = "rmebe";
     public static final String ROW_WALLPAPER = "rwppr";
     public static final String ROW_MESSAGES_AFTER = "rmeaf";
+
+
+
     public static String EXPORT_REALM_FILE_NAME = "msgstore.realm";
 
     public static final String DATA_CACHED = "DATA_CACHED";
@@ -132,7 +135,11 @@ public class AppConstants {
     public static final String EVENT_BUS_DELETE_STATUS = "deleteStatus";
     public static final String EVENT_BUS_USERNAME_PROFILE_UPDATED = "updateUserName";
     public static final String EVENT_BUS_MINE_IMAGE_PROFILE_UPDATED = "mine_profileImageUpdated";
-
+    public static final String EVENT_BUS_CONTRIBUTER_REMOVED = "contributor_archived";
     public static final String EVENT_BUS_ACTION_MODE_STARTED = "actionModeStarted";
     public static final String EVENT_BUS_ACTION_MODE_DESTORYED = "actionModeDestroyed";
+    public static final String EVENT_BUS_WISHLIST_DELETED = "deleteWishlist";
+    public static final String EVENT_BUS_NEW_WISHLIST = "new_wishlist";
+    public static final String EVENT_BUS_EXIT_WISHLIST = "exitWishlist";
+    public static final String EVENT_BUS_NEW_GIFT = "new_gift";
 }

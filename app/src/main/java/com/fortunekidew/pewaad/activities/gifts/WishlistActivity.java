@@ -32,6 +32,7 @@ import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.GiftsAdapter;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
+import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
@@ -180,6 +181,9 @@ public class WishlistActivity extends Activity implements LoadingData {
                 }
                 finish();
             break;
+            case R.id.delete_contributor:
+                deleteContributor(wishlistID, PreferenceManager.getID(this));
+                break;
             case R.id.add_contributor:
                 Intent intent = new Intent(this, NewContactsActivity.class);
                 intent.putExtra(NewContactsActivity.RESULT_EXTRA_WISHLIST_ID, wishlistID);
@@ -190,11 +194,19 @@ public class WishlistActivity extends Activity implements LoadingData {
         return super.onOptionsItemSelected(item);
     }
 
+    private void deleteContributor(String wishlist_id, String contributor_id) {
+        mGiftsPresenter.removeContributor(wishlist_id, contributor_id);
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         if(wishlistPermission.equals(AppConstants.WISHLIST_CONTRIBUTOR)) {
             menu.findItem(R.id.add_contributor).setVisible(false);
+            menu.findItem(R.id.delete_contributor).setVisible(true);
+        } else {
+            menu.findItem(R.id.delete_contributor).setVisible(false);
+            menu.findItem(R.id.add_contributor).setVisible(true);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -288,7 +300,7 @@ public class WishlistActivity extends Activity implements LoadingData {
     public void onEventMainThread(Pusher pusher) {
         int messageId = pusher.getMessageId();
         switch (pusher.getAction()) {
-            case "new_gift":
+            case AppConstants.EVENT_BUS_NEW_GIFT:
                 GiftsModel newGift = new GiftsModel();
                 newGift.setName(pusher.getGiftObject().getName());
                 newGift.setDescription(pusher.getGiftObject().getDescription());
@@ -300,6 +312,9 @@ public class WishlistActivity extends Activity implements LoadingData {
 
                 mGiftsAdapter.addItem(0, newGift);
 
+                break;
+        case AppConstants.EVENT_BUS_EXIT_WISHLIST:
+                // finish();
                 break;
         }
     }

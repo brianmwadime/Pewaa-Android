@@ -2,10 +2,14 @@ package com.fortunekidew.pewaad.presenters;
 
 import android.os.Handler;
 
+import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
+import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.Presenter;
+import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.services.apiServices.WishlistsService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -13,9 +17,13 @@ import org.greenrobot.eventbus.Subscribe;
 
 import io.realm.Realm;
 
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_CONTRIBUTER_REMOVED;
+
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class GiftsPresenter implements Presenter {
     private final WishlistActivity view;
@@ -47,7 +55,6 @@ public class GiftsPresenter implements Presenter {
 
         mWishlistsService = new WishlistsService(view.getApplicationContext(), mApiService);
         mWishlistsService.getGifts(wishlistID).subscribe(view::ShowGifts, view::onErrorLoading, view::onHideLoading);
-//        loadDataLocal();
     }
 
     @Override
@@ -84,6 +91,19 @@ public class GiftsPresenter implements Presenter {
 
     @Override
     public void onStop() {
+
+    }
+
+    public void removeContributor(String wishlist_id, String contributor_id) {
+        mWishlistsService.removeContributor(wishlist_id, contributor_id).subscribe(statusResponse -> {
+            if (statusResponse.isSuccess()) {
+                AppHelper.Snackbar(view.getBaseContext(), view.findViewById(R.id.wishlist_activity), "You have been removed successfully.", AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
+                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_EXIT_WISHLIST));
+                 view.finish();
+            } else {
+                AppHelper.Snackbar(view.getBaseContext(), view.findViewById(R.id.wishlist_activity), "Something went wrong. Please try again later.", AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
+            }
+        }, AppHelper::LogCat);
 
     }
 

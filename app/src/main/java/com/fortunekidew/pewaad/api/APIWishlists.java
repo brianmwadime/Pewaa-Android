@@ -10,6 +10,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -57,4 +58,7 @@ public interface APIWishlists {
      */
     @GET(EndPoints.WISHLIST_ITEMS)
     Observable<List<GiftsModel>> getGifts(@Path("wishlistId") String wishlistId);
+
+    @DELETE(EndPoints.WISHLIST_DELETE_CONTRIBUTOR)
+    Observable<StatusResponse> removeContributor(@Path("wishlist_id") String wishlist_id, @Path("contributor_id") String contributor_id);
 }

@@ -34,6 +34,7 @@ public class EndPoints {
     public static final String WISHLISTS_LIST = "wishlists";
     public static final String WISHLIST_ITEMS = "wishlists/{wishlistId}/gifts";
     public static final String GET_WISHLIST = "wishlists/{wishlistId}";
+    public static final String WISHLIST_DELETE_CONTRIBUTOR = "wishlists/{wishlist_id}/contributors/{contributor_id}";
 
     /**
      * Gifts

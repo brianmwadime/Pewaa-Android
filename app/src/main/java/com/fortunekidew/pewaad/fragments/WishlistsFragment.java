@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.WishlistsAdapter;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
@@ -48,6 +49,7 @@ import io.realm.RealmList;
 import io.socket.client.Socket;
 
 import static com.fortunekidew.pewaad.R.id.swipeContainer;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_CONTRIBUTER_REMOVED;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -310,7 +312,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
                 }
 
                 break;
-            case "new_wishlist":
+            case AppConstants.EVENT_BUS_NEW_WISHLIST:
                 WishlistsModel newWishlist = new WishlistsModel();
                 newWishlist.setName(pusher.getWishlistObject().getName());
                 newWishlist.setDescription(pusher.getWishlistObject().getDescription());
@@ -320,8 +322,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
                 newWishlist.setPermissions(pusher.getWishlistObject().getPermissions());
                 mWishlistsAdapter.addItem(0, newWishlist);
                 break;
-            case "deleteWishlist":
-            case "exitWishlist":
+            case AppConstants.EVENT_BUS_WISHLIST_DELETED:
+            case AppConstants.EVENT_BUS_EXIT_WISHLIST:
                 mWishlistsPresenter.updateWishlistList();
                 break;
         }

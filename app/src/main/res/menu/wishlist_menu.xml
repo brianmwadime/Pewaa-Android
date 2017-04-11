@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/delete_contributor"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/add_contributor"
+        android:showAsAction="always"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/add_contributor"
         android:icon="@drawable/ic_person_add_24dp"
         android:orderInCategory="100"

@@ -137,7 +137,7 @@ public class StatusPresenter implements Presenter {
         mContactsServiceDelete.deleteStatus(statusID).subscribe(statusResponse -> {
             if (statusResponse.isSuccess()) {
                 AppHelper.hideDialog();
-                EventBus.getDefault().post(new Pusher("deleteStatus", String.valueOf(statusID)));
+                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_DELETE_STATUS, String.valueOf(statusID)));
                 viewDelete.finish();
             } else {
                 AppHelper.hideDialog();
@@ -155,7 +155,7 @@ public class StatusPresenter implements Presenter {
             if (statusResponse.isSuccess()) {
                 AppHelper.hideDialog();
                 AppHelper.Snackbar(view.getBaseContext(), view.findViewById(R.id.ParentLayoutStatus), statusResponse.getMessage(), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
-                EventBus.getDefault().post(new Pusher("updateCurrentStatus"));
+                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_CURRENT_STATUS));
                 view.ShowCurrentStatus(status);
 
 
@@ -176,7 +176,7 @@ public class StatusPresenter implements Presenter {
             if (statusResponse.isSuccess()) {
                 AppHelper.hideDialog();
                 AppHelper.Snackbar(editStatusActivity.getBaseContext(), editStatusActivity.findViewById(R.id.ParentLayoutStatusEdit), statusResponse.getMessage(), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
-                EventBus.getDefault().post(new Pusher("updateStatus"));
+                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_STATUS));
                 editStatusActivity.finish();
             } else {
                 AppHelper.hideDialog();
@@ -191,7 +191,7 @@ public class StatusPresenter implements Presenter {
 
     public void onEventPush(Pusher pusher) {
         switch (pusher.getAction()) {
-            case "deleteStatus":
+            case AppConstants.EVENT_BUS_DELETE_STATUS:
                 int id = Integer.parseInt(pusher.getData());
                 realm.executeTransaction(realm1 -> realm1.where(StatusModel.class).equalTo("id", id).findFirst().deleteFromRealm());
                 AppHelper.Snackbar(view.getBaseContext(), view.findViewById(R.id.ParentLayoutStatus), view.getString(R.string.your_status_updated_successfully), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
@@ -199,15 +199,12 @@ public class StatusPresenter implements Presenter {
                 getStatusFromLocal();
                 getCurrentStatus();
                 break;
-            case "create":
-
-                break;
-            case "updateStatus":
+            case AppConstants.EVENT_BUS_UPDATE_STATUS:
                 getStatusFromLocal();
                 getStatusFromServer();
                 getCurrentStatus();
                 break;
-            case "updateCurrentStatus":
+            case AppConstants.EVENT_BUS_UPDATE_CURRENT_STATUS:
                 //TODO get status realm p
                 //getStatusFromServer();
                 // view.startActivity(view.getIntent());

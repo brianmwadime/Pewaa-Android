@@ -40,8 +40,6 @@ public class NotificationsSettingsActivity extends PreferenceActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         setupMessageRingTone();
         setupMessageLight();
-//        setupMessageGroupRingTone();
-//        setupMessageGroupLight();
     }
 
     private void setupMessageGroupLight() {
@@ -83,32 +81,6 @@ public class NotificationsSettingsActivity extends PreferenceActivity {
             return true;
         });
     }
-
-    private void setupMessageGroupRingTone() {
-
-        RingtonePreference ringtonePreferenceMessage = (RingtonePreference) findPreference(getString(R.string.key_message_group_notifications_settings_tone));
-        Ringtone userRingtoneDefault = RingtoneManager.getRingtone(ringtonePreferenceMessage.getContext(), PreferenceSettingsManager.getDefault_message_group_notifications_settings_tone(this));
-        ringtonePreferenceMessage.setSummary(userRingtoneDefault.getTitle(this));
-        ringtonePreferenceMessage.setDefaultValue(userRingtoneDefault);
-        ringtonePreferenceMessage.setOnPreferenceChangeListener((preference, o) -> {
-            String stringValue = o.toString();
-            if (TextUtils.isEmpty(stringValue)) {
-                preference.setSummary(R.string.message_notifications_settings_tone_silent);
-            } else {
-
-                Ringtone ringtone = RingtoneManager.getRingtone(preference.getContext(), Uri.parse(stringValue));
-                if (ringtone == null) {
-                    preference.setSummary(null);
-                } else {
-                    String name = ringtone.getTitle(preference.getContext());
-                    preference.setSummary(name);
-                }
-                preference.setDefaultValue(Uri.parse(stringValue));
-            }
-            return true;
-        });
-    }
-
 
     private void setupMessageLight() {
 

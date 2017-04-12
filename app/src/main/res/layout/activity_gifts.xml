@@ -6,13 +6,11 @@
     android:layout_width="match_parent"
     android:id="@+id/wishlist_activity"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".activities.gifts.WishlistActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
         android:theme="@style/Pewaa.AppBarOverlay">
 
         <Toolbar

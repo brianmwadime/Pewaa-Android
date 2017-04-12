@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.fortunekidew.pewaad.R;
-import com.fortunekidew.pewaad.activities.NewContactsActivity;
+import com.fortunekidew.pewaad.activities.contributors.NewContributorActivity;
 import com.fortunekidew.pewaad.activities.contributors.AssignContributor;
 import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.GiftsAdapter;
 import com.fortunekidew.pewaad.app.AppConstants;
@@ -88,7 +88,6 @@ public class WishlistActivity extends Activity implements LoadingData {
     private String wishlistID, wishlistTitle, wishlistPermission;
 
     private Realm realm;
-    private EventBus eventBus = EventBus.getDefault();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +100,8 @@ public class WishlistActivity extends Activity implements LoadingData {
             getActionBar().setDisplayHomeAsUpEnabled(true);
 
         realm = PewaaApplication.getRealmDatabaseInstance();
-        eventBus.register(this);
+
+        EventBus.getDefault().register(this);
 
         if (getIntent().getExtras() != null) {
             if (getIntent().hasExtra(RESULT_EXTRA_WISHLIST_ID)) {
@@ -185,8 +185,8 @@ public class WishlistActivity extends Activity implements LoadingData {
                 deleteContributor(wishlistID, PreferenceManager.getID(this));
                 break;
             case R.id.add_contributor:
-                Intent intent = new Intent(this, NewContactsActivity.class);
-                intent.putExtra(NewContactsActivity.RESULT_EXTRA_WISHLIST_ID, wishlistID);
+                Intent intent = new Intent(this, NewContributorActivity.class);
+                intent.putExtra(NewContributorActivity.RESULT_EXTRA_WISHLIST_ID, wishlistID);
                 startActivityForResult(intent, STATUS_CONTRIBUTOR_ADDED);
                 break;
         }
@@ -266,7 +266,7 @@ public class WishlistActivity extends Activity implements LoadingData {
     protected void onDestroy() {
         super.onDestroy();
         mGiftsPresenter.onDestroy();
-        eventBus.unregister(this);
+        EventBus.getDefault().unregister(this);
         realm.close();
     }
 
@@ -298,7 +298,6 @@ public class WishlistActivity extends Activity implements LoadingData {
      */
     @Subscribe
     public void onEventMainThread(Pusher pusher) {
-        int messageId = pusher.getMessageId();
         switch (pusher.getAction()) {
             case AppConstants.EVENT_BUS_NEW_GIFT:
                 GiftsModel newGift = new GiftsModel();
@@ -314,7 +313,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
                 break;
         case AppConstants.EVENT_BUS_EXIT_WISHLIST:
-                // finish();
+                 finish();
                 break;
         }
     }

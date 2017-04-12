@@ -6,11 +6,8 @@ import com.fortunekidew.pewaad.models.notifications.NotificationsModel;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
 import com.fortunekidew.pewaad.models.wishlists.EditGift;
 import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
-import com.fortunekidew.pewaad.models.wishlists.MessagesModel;
 
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -25,9 +22,7 @@ public class Pusher {
     private String data;
     private boolean bool;
     private ContactsModel contactsModel;
-    private List<MessagesModel> messagesModelList;
     private JSONObject jsonObject;
-    private MessagesModel messagesModel;
     private EditWishlist wishlistObject;
     private EditGift giftObject;
     private NotificationsModel notificationsModel;
@@ -42,16 +37,10 @@ public class Pusher {
         this.data = data;
     }
 
-
     public Pusher(String action, String data, Boolean bool) {
         this.action = action;
         this.data = data;
         this.bool = bool;
-    }
-
-    public Pusher(String action, List<MessagesModel> messagesModelList) {
-        this.action = action;
-        this.messagesModelList = messagesModelList;
     }
 
     public Pusher(String action, ContactsModel contactsModel) {
@@ -68,11 +57,6 @@ public class Pusher {
     public Pusher(String action, JSONObject jsonObject) {
         this.action = action;
         this.jsonObject = jsonObject;
-    }
-
-    public Pusher(String action, MessagesModel messagesModel) {
-        this.action = action;
-        this.messagesModel = messagesModel;
     }
 
     public Pusher(String action, EditWishlist wishlist) {
@@ -123,31 +107,12 @@ public class Pusher {
         this.view = view;
     }
 
-
-    public MessagesModel getMessagesModel() {
-        return messagesModel;
-    }
-
-    public void setMessagesModel(MessagesModel messagesModel) {
-        this.messagesModel = messagesModel;
-    }
-
-
     public JSONObject getJsonObject() {
         return jsonObject;
     }
 
     public void setJsonObject(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
-    }
-
-
-    public List<MessagesModel> getMessagesModelList() {
-        return messagesModelList;
-    }
-
-    public void setMessagesModelList(List<MessagesModel> messagesModelList) {
-        this.messagesModelList = messagesModelList;
     }
 
     public boolean isBool() {

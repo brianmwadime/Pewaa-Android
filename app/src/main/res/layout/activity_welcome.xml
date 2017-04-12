@@ -8,31 +8,25 @@
     android:orientation="vertical"
     tools:context=".activities.main.WelcomeActivity">
 
-
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="center"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        app:popupTheme="@style/Pewaa.PopupOverlay">
-
+        android:layout_height="wrap_content"
+        android:theme="@style/Pewaa.AppBarOverlay">
+        <!-- Progress bar -->
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/join_title"
-            android:textColor="@color/colorWhite" />
-
-
-    </LinearLayout>
-
-    <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@drawable/above_shadow_rect" />
+        android:layout_height="?attr/actionBarSize"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="@string/join_title"
+        android:textColor="@color/colorWhite" />
+    </android.support.design.widget.AppBarLayout>
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="3dp"-->
+        <!--android:background="@drawable/below_shadow_rect" />-->
 
     <com.fortunekidew.pewaad.adapters.others.WelcomeViewPager
         android:id="@+id/viewPagerVertical"

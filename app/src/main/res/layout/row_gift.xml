@@ -15,7 +15,8 @@
             android:id="@+id/gift_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds = "true"
             android:transitionName="@string/transition_gift_avatar"
             android:stateListAnimator="@animator/raise"
             android:foreground="@drawable/mid_grey_ripple"/>

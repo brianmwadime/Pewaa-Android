@@ -17,8 +17,6 @@ import retrofit2.Retrofit;
  */
 
 public class PewaaFirebaseInstanceIDService extends FirebaseInstanceIdService {
-    private APIPush mApiService;
-    Retrofit retrofit;
     private SignUpPreferenceManager mPreferenceManager;
 
     @Override
@@ -26,55 +24,17 @@ public class PewaaFirebaseInstanceIDService extends FirebaseInstanceIdService {
         super.onCreate();
 
         mPreferenceManager = new SignUpPreferenceManager(this);
-//        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-//        httpClient.addInterceptor(chain -> {
-//            Request original = chain.request();
-//
-//            // Customize the request
-//            Request request = original.newBuilder()
-//                    .header("Accept", "application/json")
-//                    .method(original.method(), original.body())
-//                    .build();
-//            // Customize or return the response
-//            return chain.proceed(request);
-//        });
-//
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        if (BuildConfig.DEBUG) {
-//            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//        } else {
-//            interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-//        }
-//        OkHttpClient client = httpClient.addInterceptor(interceptor).build();
-//
-//        retrofit = new Retrofit.Builder()
-//                    .baseUrl(BASE_URL)
-//                    .client(client)
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build();
-//
-//        mApiService = retrofit.create(APIPush.class);
 
     }
 
     @Override
     public void onTokenRefresh() {
-
-        //Getting registration token
+        // Getting registration token
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-
-        //Displaying token on logcat
+        // Displaying token on logcat
         AppHelper.LogCat("Refreshed token: " + refreshedToken);
-//        registerDevice(refreshedToken);
         mPreferenceManager.setDeviceToken(refreshedToken);
         mPreferenceManager.setIsDeviceSaved(false);
 
     }
-
-    public void saveToken(String token) {
-
-    }
-
-
-
 }

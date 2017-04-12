@@ -32,7 +32,8 @@
         android:transitionName="@string/transition_gift"
         android:background="@color/light_grey"
         app:scrimColor="@color/scrim"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds = "true"
         app:scrimAlpha="0"
         app:maxScrimAlpha="0.4"
         app:parallaxFactor="-0.5" />

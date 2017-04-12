@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaad.activities;
+package com.fortunekidew.pewaad.activities.contributors;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class NewContactsActivity extends AppCompatActivity {
+public class NewContributorActivity extends AppCompatActivity {
     public static final String RESULT_EXTRA_WISHLIST_ID = "RESULT_EXTRA_WISHLIST_ID";
     @BindView(R.id.ContactsList)
     RecyclerView ContactsList;

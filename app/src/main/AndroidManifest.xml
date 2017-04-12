@@ -56,7 +56,7 @@
         tools:ignore="UnusedAttribute">
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="dba3618bc05d496c15e51cc355c4374a853a56d0" />
+            android:value="@string/fabric_api_key" />
         <activity
             android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -86,7 +86,7 @@
             android:name=".activities.gifts.WishlistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".activities.main.MainActivity"
-            android:theme="@style/Pewaa.Home"
+            android:theme="@style/Pewaa"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -95,13 +95,11 @@
 
         <activity
             android:name=".activities.contributors.AssignContributor"
-            android:exported="false"
             android:theme="@style/Pewaa.Translucent.AssignContributor"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activities.wishlists.ListContributors"
-            android:exported="false"
             android:theme="@style/Pewaa.Translucent.AssignContributor"
             android:windowSoftInputMode="adjustResize" />
         <!--  AddWishlistsActivity -->
@@ -117,11 +115,14 @@
         <!--  AddGiftsActivity -->
         <activity android:name=".activities.gifts.AddGiftsActivity" />
 
-        <!--  GiftActivity -->
+        <!--  GiftDetailsActivity -->
         <activity
             android:name=".activities.gifts.GiftDetailsActivity"
             android:theme="@style/Pewaa.Translucent.Wishlists.gift"
             android:parentActivityName=".activities.gifts.WishlistActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.gifts.WishlistActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -133,7 +134,16 @@
             </intent-filter>
         </activity>
 
-        <!--  TransferMessageContactsActivity -->
+        <!--  IntroActivity -->
+        <activity
+            android:name="com.fortunekidew.pewaad.activities.main.IntroActivity"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!--  NotificationsSettingsActivity -->
         <activity android:name=".activities.settings.NotificationsSettingsActivity" />
@@ -255,9 +265,9 @@
             android:theme="@style/Pewaa"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- NewContactsActivity -->
+        <!-- NewContributorActivity -->
         <activity
-            android:name=".activities.NewContactsActivity"
+            android:name=".activities.contributors.NewContributorActivity"
             android:label="@string/title_select_contributor"
             android:theme="@style/Pewaa" />
 

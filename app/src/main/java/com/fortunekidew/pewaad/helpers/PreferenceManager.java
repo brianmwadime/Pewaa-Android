@@ -16,15 +16,12 @@ import java.util.List;
  * @Author : https://twitter.com/brianmwadime
  */
 public class PreferenceManager {
-
-
     private static SharedPreferences mSharedPreferences;
     private static final String PREFS_NAME = "MEMBERS_APP";
     private static final String MEMBERS_SELECTED = "MEMBERS_SELECTED";
     private static final String KEY_IS_WAITING_FOR_SMS = "KEY_IS_WAITING_FOR_SMS";
     private static final String KEY_MOBILE_NUMBER = "KEY_MOBILE_NUMBER";
     private static final String USER_PREF = "USER_PREF";
-    private static final String ADS_PREF = "ADS_PREF";
 
     /**
      * method to set token
@@ -169,32 +166,6 @@ public class PreferenceManager {
         return mSharedPreferences.getString("id", String.valueOf(0));
     }
 
-
-    /**
-     * method to setSocketID
-     *
-     * @param ID       this is the first parameter for setID  method
-     * @param mContext this is the second parameter for setID  method
-     * @return return value
-     */
-    public static boolean setSocketID(String ID, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString("socketId", ID);
-        return editor.commit();
-    }
-
-    /**
-     * method to getID
-     *
-     * @param mContext this is  parameter for getSocketID  method
-     * @return return value
-     */
-    public static String getSocketID(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
-        return mSharedPreferences.getString("socketId", null);
-    }
-
     /**
      * method to set contacts size
      *
@@ -239,105 +210,5 @@ public class PreferenceManager {
         editor.putString(MEMBERS_SELECTED, null);
 
         editor.apply();
-    }
-
-    /**
-     * method to setUnitInterstitialAdID
-     *
-     * @param UnitId       this is the first parameter for setUnitInterstitialAdID  method
-     * @param mContext this is the second parameter for setUnitInterstitialAdID  method
-     * @return return value
-     */
-    public static boolean setUnitInterstitialAdID(String UnitId, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString("InterstitialUnitId", UnitId);
-        return editor.commit();
-    }
-
-    /**
-     * method to getUnitInterstitialAdID
-     *
-     * @param mContext this is  parameter for getUnitInterstitialAdID  method
-     * @return return value
-     */
-    public static String getUnitInterstitialAdID(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        return mSharedPreferences.getString("InterstitialUnitId", null);
-    }
-
-    /**
-     * method to setShowInterstitialAds
-     *
-     * @param UnitId       this is the first parameter for setShowInterstitialAds  method
-     * @param mContext this is the second parameter for setShowInterstitialAds  method
-     * @return return value
-     */
-    public static boolean setShowInterstitialAds(Boolean UnitId, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean("ShowInterstitialAds", UnitId);
-        return editor.commit();
-    }
-
-    /**
-     * method to ShowInterstitialrAds
-     *
-     * @param mContext this is  parameter for ShowInterstitialrAds  method
-     * @return return value
-     */
-    public static Boolean ShowInterstitialrAds(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        return mSharedPreferences.getBoolean("ShowInterstitialAds", false);
-    }
-    /**
-     * method to setUnitBannerAdsID
-     *
-     * @param UnitId       this is the first parameter for setUnitBannerAdsID  method
-     * @param mContext this is the second parameter for setUnitBannerAdsID  method
-     * @return return value
-     */
-    public static boolean setUnitBannerAdsID(String UnitId, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString("BannerUnitId", UnitId);
-        return editor.commit();
-    }
-
-    /**
-     * method to getUnitBannerAdsID
-     *
-     * @param mContext this is  parameter for getUnitBannerAdsID  method
-     * @return return value
-     */
-    public static String getUnitBannerAdsID(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        return mSharedPreferences.getString("BannerUnitId", null);
-    }
-
-
-    /**
-     * method to setShowBannerAds
-     *
-     * @param UnitId       this is the first parameter for setShowBannerAds  method
-     * @param mContext this is the second parameter for setShowBannerAds  method
-     * @return return value
-     */
-    public static boolean setShowBannerAds(Boolean UnitId, Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean("ShowBannerAds", UnitId);
-        return editor.commit();
-    }
-
-    /**
-     * method to ShowBannerAds
-     *
-     * @param mContext this is  parameter for ShowBannerAds  method
-     * @return return value
-     */
-    public static Boolean ShowBannerAds(Context mContext) {
-        mSharedPreferences = mContext.getSharedPreferences(ADS_PREF, 0);
-        return mSharedPreferences.getBoolean("ShowBannerAds", false);
     }
 }

@@ -43,7 +43,6 @@ import android.widget.Toast;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
-import com.fortunekidew.pewaad.models.wishlists.MessagesModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -502,26 +501,6 @@ public class AppHelper {
     public static void hidePermissionsDialog() {
         if (dialog != null)
             dialog.dismiss();
-    }
-
-    /**
-     * method to copy text
-     *
-     * @param context       this is the first parameter for copyText  method
-     * @param messagesModel this is the second parameter for copyText  method
-     * @return return value
-     */
-    public static boolean copyText(Context context, MessagesModel messagesModel) {
-        int sdk = Build.VERSION.SDK_INT;
-        if (sdk < Build.VERSION_CODES.HONEYCOMB) {
-            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            clipboard.setText(messagesModel.getMessage());
-        } else {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(context.getString(R.string.message_copy), messagesModel.getMessage());
-            clipboard.setPrimaryClip(clip);
-        }
-        return true;
     }
 
     private static final Hashtable<String, Typeface> cache = new Hashtable<>();

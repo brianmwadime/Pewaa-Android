@@ -1,7 +1,7 @@
 package com.fortunekidew.pewaad.presenters;
 
 
-import com.fortunekidew.pewaad.activities.NewContactsActivity;
+import com.fortunekidew.pewaad.activities.contributors.NewContributorActivity;
 import com.fortunekidew.pewaad.activities.wishlists.ListContributors;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.PewaaApplication;
@@ -16,14 +16,14 @@ import io.realm.Realm;
  * Email : abderrahim.elimame@gmail.com
  */
 public class SelectContactsPresenter implements Presenter {
-    private NewContactsActivity newContactsActivity;
+    private NewContributorActivity newContributorActivity;
     private ListContributors newListContributor;
 
     private Realm realm;
     private boolean selector;
 
-    public SelectContactsPresenter(NewContactsActivity newContactsActivity) {
-        this.newContactsActivity = newContactsActivity;
+    public SelectContactsPresenter(NewContributorActivity newContributorActivity) {
+        this.newContributorActivity = newContributorActivity;
         this.realm = PewaaApplication.getRealmDatabaseInstance();
         selector = true;
     }
@@ -44,9 +44,9 @@ public class SelectContactsPresenter implements Presenter {
     @Override
     public void onCreate() {
         if (selector) {
-            APIService mApiService = APIService.with(this.newContactsActivity);
-            ContactsService mContactsService = new ContactsService(realm, this.newContactsActivity, mApiService);
-            mContactsService.getLinkedContacts().subscribe(newContactsActivity::ShowContacts, throwable -> {
+            APIService mApiService = APIService.with(this.newContributorActivity);
+            ContactsService mContactsService = new ContactsService(realm, this.newContributorActivity, mApiService);
+            mContactsService.getLinkedContacts().subscribe(newContributorActivity::ShowContacts, throwable -> {
                 AppHelper.LogCat("Error contacts selector " + throwable.getMessage());
             });
 

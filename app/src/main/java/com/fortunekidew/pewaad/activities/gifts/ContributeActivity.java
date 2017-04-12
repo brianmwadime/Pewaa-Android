@@ -240,7 +240,6 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                                     @Override
                                     public void onResponse(Call<ConfirmPaymentResponse> call, Response<ConfirmPaymentResponse> response) {
                                         AppHelper.hideDialog();
-
                                         finish();
                                     }
 

@@ -9,7 +9,6 @@
     <!-- permissions for SMS -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-
     <!-- permissions for contacts -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -35,7 +34,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true"/>
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <supports-screens
@@ -51,12 +51,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/Pewaa"
         android:largeHeap="true"
         tools:ignore="UnusedAttribute">
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="@string/fabric_api_key" />
         <activity
             android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -120,9 +118,6 @@
             android:name=".activities.gifts.GiftDetailsActivity"
             android:theme="@style/Pewaa.Translucent.Wishlists.gift"
             android:parentActivityName=".activities.gifts.WishlistActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.gifts.WishlistActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -136,14 +131,7 @@
 
         <!--  IntroActivity -->
         <activity
-            android:name="com.fortunekidew.pewaad.activities.main.IntroActivity"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name="com.fortunekidew.pewaad.activities.main.IntroActivity" />
 
         <!--  NotificationsSettingsActivity -->
         <activity android:name=".activities.settings.NotificationsSettingsActivity" />
@@ -211,11 +199,9 @@
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_adapter" />
-            <!--
                         <meta-data
                             android:name="android.provider.CONTACTS_STRUCTURE"
-                            android:resource="@xml/sync_contacts" />
-            -->
+                            android:resource="@xml/sync_adapter" />
         </service>
 
         <!-- SettingsActivity -->
@@ -223,14 +209,10 @@
             android:name=".activities.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/Pewaa" />
-
-        <!-- SearchConversationsActivity -->
-
         <!-- SearchContactsActivity -->
         <activity
             android:name=".activities.search.SearchContactsActivity"
             android:label="@string/title_activity_settings" />
-
 
         <!-- EditProfileActivity -->
         <activity
@@ -271,46 +253,13 @@
             android:label="@string/title_select_contributor"
             android:theme="@style/Pewaa" />
 
-
-        <receiver
-            android:name=".receivers.BootReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-        <!-- Restart service when the user kill processor -->
-
-        <service
-            android:name=".services.BootService"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_service_name"
-            android:process=":remote" />
-
-
         <receiver android:name=".receivers.NetworkChangeListener">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <!-- the main service  -->
-        <service
-            android:name=".services.MainService"
-            android:enabled="true"
-            android:exported="false"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_service_name">
-            <intent-filter>
-                <action android:name="new_wishlist_notification" />
-                <action android:name="new_gift_notification" />
-            </intent-filter>
-        </service>
-
-        <!-- Messaging services -->
+        <!-- Notification Services -->
         <service
             android:name=".services.PewaaFirebaseMessagingService">
             <intent-filter>
@@ -324,6 +273,21 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+       <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="9923ad57978aac4e7e4c2affa120c94be8ffeac5" />
     </application>
 
 </manifest>

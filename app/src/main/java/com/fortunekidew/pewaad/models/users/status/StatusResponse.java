@@ -8,6 +8,7 @@ public class StatusResponse {
     private String message;
     @SerializedName("createID")
     private String id;
+    @SerializedName("avatar")
     private String userImage;
 
     public String getUserImage() {

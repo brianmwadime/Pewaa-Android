@@ -1,5 +1,4 @@
 package com.fortunekidew.pewaad.services;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -7,7 +6,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
@@ -15,12 +13,10 @@ import com.fortunekidew.pewaad.activities.main.MainActivity;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
-import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.helpers.notifications.NotificationsManager;
 import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
@@ -35,11 +31,6 @@ public class PewaaFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        //Displaying data in log
-        //It is optional
-        AppHelper.LogCat("From: " + remoteMessage.getFrom());
-        AppHelper.LogCat("Notification Message Body: " + remoteMessage.getNotification().getBody());
-
         switch (remoteMessage.getNotification().getBody()) {
              case AppConstants.SOCKET_CONTRIBUTOR_ADDED:
                  try {

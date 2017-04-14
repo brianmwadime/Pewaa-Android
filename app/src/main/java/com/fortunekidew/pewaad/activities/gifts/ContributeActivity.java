@@ -94,7 +94,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.title_contributor));
+            getSupportActionBar().setTitle(getString(R.string.title_contribute));
 
         }
 

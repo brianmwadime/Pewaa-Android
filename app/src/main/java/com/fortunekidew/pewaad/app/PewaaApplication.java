@@ -1,10 +1,7 @@
 package com.fortunekidew.pewaad.app;
-
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.support.multidex.MultiDex;
-
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.fortunekidew.pewaad.BuildConfig;
@@ -14,13 +11,9 @@ import com.fortunekidew.pewaad.helpers.ExceptionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.NetworkListener;
 import com.fortunekidew.pewaad.receivers.NetworkChangeListener;
-import com.fortunekidew.pewaad.services.BootService;
-import com.fortunekidew.pewaad.services.MainService;
 import com.orhanobut.logger.Logger;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
@@ -103,7 +96,6 @@ public class PewaaApplication extends Application {
             mSocket = IO.socket(EndPoints.CHAT_SERVER_URL, options);
         } catch (URISyntaxException e) {
             AppHelper.LogCat(e);
-            Crashlytics.logException(e);
         }
 
     }
@@ -123,16 +115,17 @@ public class PewaaApplication extends Application {
 
         // Set the application context
         AppContext = getApplicationContext();
-
         ButterKnife.setDebug(BuildConfig.DEBUG);
+
+        if (BuildConfig.USE_CRASHLYTICS) {
+            setupCrashlytics();
+        }
+
         Realm.init(this);
-        startService(new Intent(this, BootService.class));
 
-        if (AppConstants.DEBUGGING_MODE)
-            Logger.init(AppConstants.TAG).hideThreadInfo();
+        if (AppConstants.DEBUGGING_MODE) Logger.init(AppConstants.TAG).hideThreadInfo();
 
-        if (AppConstants.ENABLE_CRASH_HANDLER)
-            Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        if (AppConstants.ENABLE_CRASH_HANDLER) Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }
 
 

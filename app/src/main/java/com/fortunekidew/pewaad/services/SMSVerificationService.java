@@ -52,8 +52,6 @@ public class SMSVerificationService extends IntentService {
                         Intent intent = new Intent(SMSVerificationService.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        startService(new Intent(SMSVerificationService.this, MainService.class));
-
 
                     } else {
                         AppHelper.CustomToast(getApplicationContext(), response.body().getMessage());

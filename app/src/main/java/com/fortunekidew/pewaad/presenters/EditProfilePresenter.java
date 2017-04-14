@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.fortunekidew.pewaad.R;
@@ -27,6 +28,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import io.realm.Realm;
 
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_IMAGE_PATH;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_UPDATE_NAME;
+
 /**
  * Created by Abderrahim El imame on 20/02/2016.
  * Email : abderrahim.elimame@gmail.com
@@ -37,6 +41,8 @@ public class EditProfilePresenter implements Presenter {
     private Realm realm;
     private ContactsService mContactsService;
     private boolean isEditUsername = false;
+    public File photoFile;
+    public Uri uri;
 
     public EditProfilePresenter(EditProfileActivity editProfileActivity) {
         this.view = editProfileActivity;
@@ -120,54 +126,20 @@ public class EditProfilePresenter implements Presenter {
     public void onActivityResult(BottomSheetEditProfile bottomSheetEditProfile, int requestCode, int resultCode, Intent data) {
         String imagePath = null;
         if (resultCode == Activity.RESULT_OK) {
-            if (AppHelper.checkPermission(bottomSheetEditProfile.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                AppHelper.LogCat("Read contact data permission already granted.");
-            } else {
-                AppHelper.LogCat("Please request Read contact data permission.");
-                AppHelper.requestPermission(bottomSheetEditProfile.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-
-
-            if (AppHelper.checkPermission(bottomSheetEditProfile.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                AppHelper.LogCat("Read contact data permission already granted.");
-            } else {
-                AppHelper.LogCat("Please request Read contact data permission.");
-                AppHelper.requestPermission(bottomSheetEditProfile.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
             switch (requestCode) {
                 case AppConstants.SELECT_PROFILE_PICTURE:
-                    imagePath = FilesManager.getPath(PewaaApplication.getInstance(), data.getData());
+                    imagePath = FilesManager.getPath(bottomSheetEditProfile.getActivity(), data.getData());
                     break;
                 case AppConstants.SELECT_PROFILE_CAMERA:
-                    if (data.getData() != null) {
-                        imagePath = FilesManager.getPath(PewaaApplication.getInstance(), data.getData());
-                    } else {
-                        try {
-                            String[] projection = new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA, MediaStore
-                                    .Images.ImageColumns.BUCKET_DISPLAY_NAME, MediaStore.Images.ImageColumns.DATE_TAKEN, MediaStore.Images
-                                    .ImageColumns.MIME_TYPE};
-                            final Cursor cursor = PewaaApplication.getAppContext().getContentResolver()
-                                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.ImageColumns
-                                            .DATE_TAKEN + " DESC");
-
-                            if (cursor != null && cursor.moveToFirst()) {
-                                String imageLocation = cursor.getString(1);
-                                cursor.close();
-                                File imageFile = new File(imageLocation);
-                                if (imageFile.exists()) {
-                                    imagePath = imageFile.getPath();
-                                }
-                            }
-                        } catch (Exception e) {
-                            AppHelper.LogCat("error" + e);
-                        }
+                    if (photoFile != null) {
+                        imagePath = photoFile.getAbsolutePath();
                     }
                     break;
             }
         }
 
         if (imagePath != null) {
-            EventBus.getDefault().post(new Pusher("Path", imagePath));
+            EventBus.getDefault().post(new Pusher(EVENT_BUS_IMAGE_PATH, imagePath));
         } else {
             AppHelper.LogCat("imagePath is null");
         }
@@ -178,7 +150,7 @@ public class EditProfilePresenter implements Presenter {
         mContactsService.editUsername(name).subscribe(statusResponse -> {
             if (statusResponse.isSuccess()) {
                 AppHelper.Snackbar(editUsernameActivity.getBaseContext(), editUsernameActivity.findViewById(R.id.ParentLayoutStatusEdit), statusResponse.getMessage(), AppConstants.MESSAGE_COLOR_SUCCESS, AppConstants.TEXT_COLOR);
-                EventBus.getDefault().post(new Pusher("updateName"));
+                EventBus.getDefault().post(new Pusher(EVENT_BUS_UPDATE_NAME));
                 editUsernameActivity.finish();
             } else {
                 AppHelper.Snackbar(editUsernameActivity.getBaseContext(), editUsernameActivity.findViewById(R.id.ParentLayoutStatusEdit), statusResponse.getMessage(), AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);

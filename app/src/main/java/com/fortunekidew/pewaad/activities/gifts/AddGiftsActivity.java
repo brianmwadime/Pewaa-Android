@@ -82,20 +82,14 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
     @BindView(R.id.edit_gift_price)
     EditText EditPrice;
-
     private APIService mApiService;
     private String PicturePath, wishlistID;
-    private boolean isOpen;
-
     private EditGiftPresenter mEditGiftPresenter;
-    private MemoryCache memoryCache;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_gift);
-        memoryCache = new MemoryCache();
         if (getIntent().getExtras() != null) {
             if (getIntent().hasExtra(RESULT_EXTRA_GIFT_ID)) {
                 wishlistID = getIntent().getExtras().getString(RESULT_EXTRA_GIFT_ID);
@@ -103,7 +97,6 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
         }
 
         ButterKnife.bind(this);
-
         mEditGiftPresenter = new EditGiftPresenter(this);
         initializerView();
         EventBus.getDefault().register(this);
@@ -194,7 +187,7 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
     @Subscribe
     public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
-            case "GiftImagePath":
+            case AppConstants.EVENT_BUS_IMAGE_GIFT_PATH:
                 PicturePath = pusher.getData();
                 new Handler().postDelayed(() -> setImage(pusher.getData()), 500);
                 break;

@@ -69,8 +69,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_IMAGE_PATH;
 import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_IMAGE_PROFILE_PATH;
 import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_UPDATE_CURRENT_STATUS;
+import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_UPDATE_PROFILE_IMAGE;
 import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJavaString;
 
 /**
@@ -97,8 +99,6 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     private EditProfilePresenter mEditProfilePresenter = new EditProfilePresenter(this);
     private APIService mApiService;
     private String PicturePath;
-
-    private Socket mSocket;
     private MemoryCache memoryCache;
 
     @Override
@@ -106,7 +106,6 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         ButterKnife.bind(this);
-        connectToChatServer();
         initializerView();
         memoryCache = new MemoryCache();
         mEditProfilePresenter.onCreate();
@@ -138,24 +137,6 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             }
         });
         EventBus.getDefault().register(this);
-    }
-
-    /**
-     * method to connect to the chat sever by socket
-     */
-    private void connectToChatServer() {
-
-        PewaaApplication app = (PewaaApplication) getApplication();
-        mSocket = app.getSocket();
-
-        if (mSocket == null) {
-            PewaaApplication.connectSocket();
-            mSocket = app.getSocket();
-        }
-        if (!mSocket.connected())
-            mSocket.connect();
-
-
     }
 
     /**
@@ -221,7 +202,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
                     userAvatar.setImageDrawable(placeholder);
                 }
             };
-            PewaaImageLoader.loadCircleImage(this, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), target, R.drawable.image_holder_ur_circle, AppConstants.EDIT_PROFILE_IMAGE_SIZE);
+            PewaaImageLoader.loadCircleImage(this, EndPoints.ASSETS_BASE_URL + mContactsModel.getImage(), target, R.drawable.image_holder_ur_circle, AppConstants.EDIT_PROFILE_SMALL_IMAGE_SIZE);
         }
     }
 
@@ -307,16 +288,13 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
     @Subscribe
     public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
-            case "Path":
+            case EVENT_BUS_IMAGE_PATH:
                 PicturePath = pusher.getData();
                 new Handler().postDelayed(() -> setImage(pusher.getData()), 500);
                 break;
-            case "updateImageProfile":
+            case EVENT_BUS_UPDATE_PROFILE_IMAGE:
                 if (pusher.isBool()) {
-                    AppHelper.CustomToast(EditProfileActivity.this, pusher.getData());
                     FilesManager.downloadFilesToDevice(this, mContactsModel.getImage(), String.valueOf(mContactsModel.getId()), AppConstants.ROW_PROFILE);
-                } else {
-                    AppHelper.CustomToast(EditProfileActivity.this, pusher.getData());
                 }
             case EVENT_BUS_IMAGE_PROFILE_PATH:
                 PicturePath = String.valueOf(pusher.getData());
@@ -354,17 +332,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             public void onResourceReady(final Bitmap bitmap, GlideAnimation anim) {
                 super.onResourceReady(bitmap, anim);
                 userAvatar.setImageBitmap(bitmap);
-                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_MINE_IMAGE_PROFILE_UPDATED));
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("senderId", PreferenceManager.getID(EditProfileActivity.this));
-                    jsonObject.put("phone", PreferenceManager.getPhone(EditProfileActivity.this));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (mSocket != null)
-                    mSocket.emit(AppConstants.SOCKET_IMAGE_PROFILE_UPDATED, jsonObject);
-
+                EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_PROFILE_IMAGE));
             }
 
             @Override
@@ -413,7 +381,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            AppHelper.LogCat("onPreExecute  image ");
+            AppHelper.LogCat("onPreExecute image");
         }
 
         @Override
@@ -440,26 +408,23 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
             }
             runOnUiThread(() -> progressBar.setVisibility(View.VISIBLE));
             APIContact mApiContact = mApiService.RootService(APIContact.class, PreferenceManager.getToken(EditProfileActivity.this), EndPoints.BASE_URL);
-            EditProfileActivity.this.runOnUiThread(() -> AppHelper.showDialog(EditProfileActivity.this, "Updating ... "));
             Call<StatusResponse> statusResponseCall = mApiContact.uploadImage(requestFile);
             statusResponseCall.enqueue(new Callback<StatusResponse>() {
                 @Override
                 public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
-                    AppHelper.hideDialog();
                     if (response.isSuccessful()) {
-                        EventBus.getDefault().post(new Pusher("updateImageProfile", response.body().getMessage(), response.body().isSuccess()));
+                        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_PROFILE_IMAGE, response.body().getMessage(), response.body().isSuccess()));
                         runOnUiThread(() -> {
                             Realm realm = PewaaApplication.getRealmDatabaseInstance();
                             realm.executeTransactionAsync(realm1 -> {
                                 ContactsModel contactsModel = realm1.where(ContactsModel.class).equalTo("id", PreferenceManager.getID(EditProfileActivity.this)).findFirst();
                                 contactsModel.setImage(response.body().getUserImage());
                                 realm1.copyToRealmOrUpdate(contactsModel);
-
+                                progressBar.setVisibility(View.GONE);
                             }, () -> new Handler().postDelayed(() -> {
                                 progressBar.setVisibility(View.GONE);
-                                AppHelper.CustomToast(EditProfileActivity.this, response.body().getMessage());
                                 setImage(response.body().getUserImage());
-                            }, 700), error -> AppHelper.LogCat("error update group image in group model " + error.getMessage()));
+                            }, 700), error -> AppHelper.LogCat("error update contact model " + error.getMessage()));
                             realm.close();
                         });
                     } else {
@@ -469,8 +434,7 @@ public class EditProfileActivity extends AppCompatActivity implements LoadingDat
 
                 @Override
                 public void onFailure(Call<StatusResponse> call, Throwable t) {
-                    AppHelper.hideDialog();
-                    AppHelper.CustomToast(EditProfileActivity.this, getString(R.string.failed_upload_image));
+                    progressBar.setVisibility(View.GONE);
                     AppHelper.LogCat("Failed  upload your image " + t.getMessage());
                 }
             });

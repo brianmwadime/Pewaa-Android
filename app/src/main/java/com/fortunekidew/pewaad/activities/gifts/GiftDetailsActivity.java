@@ -578,7 +578,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                     });
 
             // TODO should keep the background if the image contains transparency?!
-            GiftCover.setBackground(null);
+            // GiftCover.setBackground(null);
             return false;
         }
 

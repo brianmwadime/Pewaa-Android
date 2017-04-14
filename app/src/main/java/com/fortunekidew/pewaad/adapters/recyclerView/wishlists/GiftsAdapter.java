@@ -70,22 +70,16 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int REQUEST_CODE_VIEW_GIFT = 5407;
     protected final Activity mActivity;
     private RealmList<GiftsModel> mGifts;
-    private Realm realm;
-    private APIService mApiService;
+
     private String SearchQuery;
     private SparseBooleanArray selectedItems;
     private boolean isActivated = false;
     private RecyclerView wishlistList;
     private final ColorDrawable[] giftLoadingPlaceholders;
-    private Socket mSocket;
-
-
 
     public GiftsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
         this.mGifts = new RealmList<>();
-        this.realm = PewaaApplication.getRealmDatabaseInstance();
-        this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
 
         // get the gift placeholder colors & badge color from the theme
@@ -103,14 +97,11 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public GiftsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList, Socket mSocket) {
+    public GiftsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList) {
         this.mActivity = mActivity;
         this.mGifts = new RealmList<>();
         this.wishlistList = wishlistList;
-        this.realm = PewaaApplication.getRealmDatabaseInstance();
-        this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
-        this.mSocket = mSocket;
 
         // get the gift placeholder colors & badge color from the theme
         final TypedArray a = this.mActivity.obtainStyledAttributes(R.styleable.GiftFeed);

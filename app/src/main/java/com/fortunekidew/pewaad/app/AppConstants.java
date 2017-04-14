@@ -43,7 +43,7 @@ public class AppConstants {
     public static final int UPLOAD_PICTURE_REQUEST_CODE = 0x001;
     public static final int SELECT_PROFILE_PICTURE = 0x005;
     public static final int SELECT_PROFILE_CAMERA = 0x006;
-    public static final int SELECT_MESSAGES_CAMERA = 0x007;
+    public static final int SELECT_GIFT_CAMERA = 0x007;
     public static final int PERMISSION_REQUEST_CODE = 0x009;
     public static final int CONTACTS_PERMISSION_REQUEST_CODE = 0x010;
     public static final int SELECT_COUNTRY = 0x011;
@@ -99,6 +99,7 @@ public class AppConstants {
     public static final int PROFILE_IMAGE_SIZE = 500;
     public static final int SETTINGS_IMAGE_SIZE = 100;
     public static final int EDIT_PROFILE_IMAGE_SIZE = 500;
+    public static final int EDIT_PROFILE_SMALL_IMAGE_SIZE = 234;
     public static final int MESSAGE_IMAGE_SIZE = 300;
     public static final int PRE_MESSAGE_IMAGE_SIZE = 40;
     public static final int FULL_SCREEN_IMAGE_SIZE = 640;
@@ -130,6 +131,7 @@ public class AppConstants {
     public static final String EVENT_BUS_STOP_REFRESH = "stopRefresh";
     public static final String EVENT_BUS_START_REFRESH = "startRefresh";
     public static final String EVENT_BUS_IMAGE_PROFILE_PATH = "ImageProfilePath";
+    public static final String EVENT_BUS_IMAGE_GIFT_PATH = "ImageGiftPath";
     public static final String EVENT_BUS_UPDATE_CURRENT_STATUS = "updateCurrentStatus";
     public static final String EVENT_BUS_UPDATE_STATUS = "updateStatus";
     public static final String EVENT_BUS_DELETE_STATUS = "deleteStatus";
@@ -142,4 +144,7 @@ public class AppConstants {
     public static final String EVENT_BUS_NEW_WISHLIST = "new_wishlist";
     public static final String EVENT_BUS_EXIT_WISHLIST = "exitWishlist";
     public static final String EVENT_BUS_NEW_GIFT = "new_gift";
+    public static final String EVENT_BUS_UPDATE_NAME = "updateName";
+    public static final String EVENT_BUS_UPDATE_PROFILE_IMAGE = "updateImageProfile";
+    public static final String EVENT_BUS_IMAGE_PATH = "Path";
 }

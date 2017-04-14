@@ -53,7 +53,6 @@ import io.realm.RealmList;
 
 import static com.fortunekidew.pewaad.app.AppConstants.STATUS_CONTRIBUTOR_ADDED;
 import static com.fortunekidew.pewaad.app.AppConstants.STATUS_CONTRIBUTOR_ADDED_SUCCESS;
-import static com.fortunekidew.pewaad.services.MainService.mSocket;
 
 
 /**
@@ -140,8 +139,6 @@ public class WishlistActivity extends Activity implements LoadingData {
      * method initialize the view
      */
     public void initializerView() {
-
-
         getActionBar().setTitle(wishlistTitle);
 
         if (wishlistPermission.equals(AppConstants.WISHLIST_CONTRIBUTOR)) AddGift.setVisibility(View.GONE);
@@ -150,7 +147,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mGiftsAdapter = new GiftsAdapter(this, GiftsList, mSocket);
+        mGiftsAdapter = new GiftsAdapter(this, GiftsList);
         GiftsList.setLayoutManager(layoutManager);
         Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.recycler_divider);
         GiftsList.addItemDecoration(new DividerItemDecoration(dividerDrawable));

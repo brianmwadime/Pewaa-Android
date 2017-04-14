@@ -3,17 +3,21 @@ package com.fortunekidew.pewaad.fragments;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +29,11 @@ import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.presenters.EditGiftPresenter;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +54,7 @@ public class BottomSheetEditGift extends BottomSheetDialogFragment {
     FrameLayout galleryBtn;
     private EditGiftPresenter mEditGiftPresenter = new EditGiftPresenter();
     private PackageManager packageManager;
-    private String senderId;
+
 
     @Override
     public void onStart() {
@@ -60,9 +69,19 @@ public class BottomSheetEditGift extends BottomSheetDialogFragment {
             if (PermissionHandler.checkPermission(getActivity(), Manifest.permission.CAMERA)) {
                 AppHelper.LogCat("camera permission already granted.");
 
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                cameraIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                startActivityForResult(cameraIntent, AppConstants.SELECT_PROFILE_CAMERA);
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    try {
+                        mEditGiftPresenter.photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        AppHelper.LogCat("Log Camera Exception " + ex.toString() + "...");
+                    }
+                    if (mEditGiftPresenter.photoFile != null) {
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mEditGiftPresenter.photoFile));
+                        startActivityForResult(takePictureIntent, AppConstants.SELECT_GIFT_CAMERA);
+                    }
+
+                }
             } else {
                 AppHelper.LogCat("Please request camera  permission.");
                 PermissionHandler.requestPermission(getActivity(), Manifest.permission.CAMERA);
@@ -90,6 +109,25 @@ public class BottomSheetEditGift extends BottomSheetDialogFragment {
             PermissionHandler.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
         }
 
+    }
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
     }
 
 

@@ -3,28 +3,19 @@ package com.fortunekidew.pewaad.helpers.images;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
-
 import java.io.File;
-
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-
 /**
- * Created by Abderrahim El imame on 9/26/16.
+ * Created by Brian Mwakima on 12/25/16.
  *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class PewaaImageLoader {
-
-
-    /*********************************************
-     * ************** For users ******************
-     *******************************************/
     public static void loadCircleImage(Context mContext, String file, ImageView imageView, int placeHolder, int dimens) {
 
         Glide.with(mContext.getApplicationContext())
@@ -94,49 +85,4 @@ public class PewaaImageLoader {
                 .override(dimens, dimens)
                 .into(target);
     }
-
-
-    /*********************************************
-     * ************** For Groups ******************
-     *******************************************/
-
-
-    public static void loadCircleImageGroup(Context mContext, String file, ImageView imageView, int placeHolder, int dimens) {
-
-        Glide.with(mContext.getApplicationContext())
-                .load(file)
-                .asBitmap()
-                .centerCrop()
-                .transform(new CropCircleTransformation(mContext))
-                .placeholder(placeHolder)
-                .error(placeHolder)
-                .override(dimens, dimens)
-                .into(imageView);
-    }
-
-
-    public static void loadCircleImageGroup(Context mContext, String ImageUrl, Target target, int placeHolder, int dimens) {
-        Glide.with(mContext.getApplicationContext())
-                .load(ImageUrl)
-                .asBitmap()
-                .centerCrop()
-                .transform(new CropCircleTransformation(mContext))
-                .placeholder(placeHolder)
-                .error(placeHolder)
-                .override(dimens, dimens)
-                .into(target);
-    }
-
-    public static void loadSimpleImageGroup(Context mContext, String ImageUrl, Target target, Drawable placeHolder, int dimens) {
-        Glide.with(mContext.getApplicationContext())
-                .load(ImageUrl)
-                .asBitmap()
-                .centerCrop()
-                .placeholder(placeHolder)
-                .error(placeHolder)
-                .override(dimens, dimens)
-                .into(target);
-    }
-
-
 }

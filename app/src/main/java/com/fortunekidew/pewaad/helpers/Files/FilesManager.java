@@ -39,10 +39,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Abderrahim El imame on 6/12/16.
+ * Created by Brian Mwakima on 12/25/16.
  *
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 public class FilesManager {
@@ -381,9 +381,6 @@ public class FilesManager {
                                }catch (Exception e){
                                    AppHelper.LogCat("file download was a failed");
                                }
-
-
-                           //AppHelper.LogCat("file download was a success? " + writtenToDisk);
                         } else {
                             AppHelper.LogCat("server contact failed");
                         }

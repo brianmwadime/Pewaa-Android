@@ -9,10 +9,9 @@ import android.net.NetworkInfo;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.NetworkListener;
-import com.fortunekidew.pewaad.services.MainService;
+
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -34,11 +33,8 @@ public class NetworkChangeListener extends BroadcastReceiver {
                 if (isConnected()) {
                     AppHelper.LogCat("Connection is available");
                     setUserIsConnected(true);
-                    mContext.stopService(new Intent(mContext, MainService.class));
-                    mContext.startService(new Intent(mContext, MainService.class));
                 } else {
                     AppHelper.LogCat("Connection is not available");
-                    mContext.stopService(new Intent(mContext, MainService.class));
                     setUserIsConnected(false);
 
                 }
@@ -68,8 +64,6 @@ public class NetworkChangeListener extends BroadcastReceiver {
             AppHelper.LogCat("Connection is not available");
         } else if (is_Connecting && is_Connected) {
             AppHelper.LogCat("Connection is available");
-            mContext.getApplicationContext().stopService(new Intent(mContext.getApplicationContext(), MainService.class));
-            mContext.getApplicationContext().startService(new Intent(mContext.getApplicationContext(), MainService.class));
         } else {
             AppHelper.LogCat("Connection is available but waiting for network");
         }

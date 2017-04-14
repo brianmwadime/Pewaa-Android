@@ -30,11 +30,14 @@ import com.fortunekidew.pewaad.activities.settings.PreferenceSettingsManager;
 
 public class NotificationsManager {
 
-
     private static NotificationManager mNotificationManager;
-    private static int numMessages = 0;
+    private static int numGiftMessages = 0;
+    private static int numPaymentMessages = 0;
+    private static int numWishlistMessages = 0;
     // Sets an ID for the notification
-    static int mNotificationId = 001;
+    static int mGiftNotificationId = 0x51;
+    static int mWishlistNotificationId = 0x52;
+    static int mPaymentNotificationId = 0x53;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static void showGiftNotification(Context mContext, Intent resultIntent, String text) {
@@ -53,7 +56,9 @@ public class NotificationsManager {
                 .addAction(R.drawable.ic_notification, mContext.getString(R.string.view), resultPendingIntent)
                 .setContentTitle("Pewaa!")
                 .setContentText(text)
+                .setNumber(++numGiftMessages)
                 .setAutoCancel(true)
+                .setGroup("group_key_gifts")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(resultPendingIntent)
@@ -96,7 +101,7 @@ public class NotificationsManager {
 
         mNotifyBuilder.setAutoCancel(true);
 
-        mNotificationManager.notify(mNotificationId, mNotifyBuilder.build());
+        mNotificationManager.notify(mGiftNotificationId, mNotifyBuilder.build());
 
     }
 
@@ -119,7 +124,9 @@ public class NotificationsManager {
                 .addAction(R.drawable.ic_notification, mContext.getString(R.string.view), resultPendingIntent)
                 .setContentTitle("Pewaa!")
                 .setContentText(text)
+                .setNumber(++numWishlistMessages)
                 .setAutoCancel(true)
+                .setGroup("group_key_wishlists")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(resultPendingIntent)
@@ -162,7 +169,7 @@ public class NotificationsManager {
 
         mNotifyBuilder.setAutoCancel(true);
 
-        mNotificationManager.notify(mNotificationId, mNotifyBuilder.build());
+        mNotificationManager.notify(mWishlistNotificationId, mNotifyBuilder.build());
 
     }
 
@@ -184,7 +191,7 @@ public class NotificationsManager {
      * @param index
      */
     public static void cancelNotification(int index) {
-        numMessages = 0;
+        numGiftMessages = numWishlistMessages = numPaymentMessages = 0;
         mNotificationManager.cancel(index);
     }
 

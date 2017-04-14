@@ -28,6 +28,10 @@ android {
         versionCode gitCommitCount
         versionName gitTag
         archivesBaseName = "pewaa-${versionName}"
+        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+        def filesAuthorityValue = applicationId + ".fileprovider";
+        buildConfigField "String", "FILES_AUTHORITY", "\"${filesAuthorityValue}\""
+        manifestPlaceholders = [filesAuthority: filesAuthorityValue]
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {

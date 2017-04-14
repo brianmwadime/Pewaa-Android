@@ -4,9 +4,11 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -52,7 +54,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     protected final Activity mActivity;
     private List<WishlistsModel> mWishlists;
     private List<WishlistsModel> mWishlistsSearch;
-    private APIService mApiService;
     private String SearchQuery;
     private SparseBooleanArray selectedItems;
     private boolean isActivated = false;
@@ -60,7 +61,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public WishlistsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
         this.mWishlists = new ArrayList<>();
-        this.mApiService = new APIService(mActivity);
         this.selectedItems = new SparseBooleanArray();
     }
 
@@ -163,22 +163,22 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 switch (wishlistsModel.getCategory()) {
                     case "Wedding":
-                        wishlistViewHolder.setWishlistImage(R.drawable.wedding);
+                        wishlistViewHolder.setWishlistImage(R.drawable.wedding, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_navy));
                     break;
                     case "House Warming":
-                        wishlistViewHolder.setWishlistImage(R.drawable.house_warming);
+                        wishlistViewHolder.setWishlistImage(R.drawable.house_warming, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_red));
                     break;
                     case "Baby Shower":
-                        wishlistViewHolder.setWishlistImage(R.drawable.baby_shower);
+                        wishlistViewHolder.setWishlistImage(R.drawable.baby_shower, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_green));
                     break;
                     case "Birthday":
-                        wishlistViewHolder.setWishlistImage(R.drawable.birthday);
+                        wishlistViewHolder.setWishlistImage(R.drawable.birthday, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_orange));
                     break;
                     case "Graduation":
-                        wishlistViewHolder.setWishlistImage(R.drawable.graduation);
+                        wishlistViewHolder.setWishlistImage(R.drawable.graduation, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_yellow));
                     break;
                     case "Bridal Shower":
-                        wishlistViewHolder.setWishlistImage(R.drawable.bridal_shower);
+                        wishlistViewHolder.setWishlistImage(R.drawable.bridal_shower, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_pink));
                         break;
                 }
 
@@ -302,7 +302,9 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
 
-        void setWishlistImage(int ImageUrl) {
+        void setWishlistImage(int ImageUrl, Drawable color) {
+
+            wishlistImage.setBackground(color);
 
             BitmapImageViewTarget target = new BitmapImageViewTarget(wishlistImage) {
                 @Override
@@ -323,8 +325,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     super.onLoadFailed(e, errorDrawable);
                     wishlistImage.setImageDrawable(errorDrawable);
                 }
-
-
             };
 
             Glide.with(mActivity)
@@ -333,7 +333,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .transform(new CropCircleTransformation(mActivity))
                     .override(100, 100)
                     .into(target);
-
         }
 
         void setNullWishlistImage(int drawable) {
@@ -341,21 +340,16 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             wishlistImage.setImageResource(drawable);
         }
 
-
         void setWishlist_name(String wishlist) {
-
             if (wishlist.length() > 16)
                 wishlist_name.setText(wishlist.substring(0, 16) + "... " + "");
             else
                 wishlist_name.setText(wishlist);
-
         }
-
 
         void setWishlistDate(String creationDate) {
             wishlistDate.setText(creationDate);
         }
-
 
         void setCategory(String Counter) {
             category.setText(Counter.toUpperCase());
@@ -365,7 +359,6 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             category.setVisibility(View.GONE);
         }
 
-
         void showCategory() {
             category.setVisibility(View.VISIBLE);
         }
@@ -374,7 +367,5 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(listener);
             wishlistImage.setOnClickListener(listener);
         }
-
     }
-
 }

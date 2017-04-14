@@ -12,6 +12,7 @@
     <!-- permissions for contacts -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -152,7 +153,6 @@
             android:name=".activities.settings.ChangeNumberActivity"
             android:label="@string/title_activity_change_number"
             android:theme="@style/Pewaa" />
-
         <!--  ChangeNumberActivity -->
         <activity
             android:name=".activities.settings.AboutActivity"
@@ -162,14 +162,12 @@
             android:name=".activities.profile.ProfilePreviewActivity"
             android:theme="@style/Dialog"
             android:windowActionBar="false" />
-
         <!-- SMS Receiver -->
         <receiver android:name=".receivers.SmsReceiverBroadCast">
             <intent-filter android:priority="99999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
         <!-- Intent service for OTP -->
         <service
             android:name=".services.SMSVerificationService"
@@ -182,12 +180,10 @@
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
-
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-
         <!-- SyncService for SyncAdapter -->
         <service
             android:name=".sync.SyncService"
@@ -195,15 +191,10 @@
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_adapter" />
-                        <meta-data
-                            android:name="android.provider.CONTACTS_STRUCTURE"
-                            android:resource="@xml/sync_adapter" />
         </service>
-
         <!-- SettingsActivity -->
         <activity
             android:name=".activities.settings.SettingsActivity"
@@ -213,14 +204,12 @@
         <activity
             android:name=".activities.search.SearchContactsActivity"
             android:label="@string/title_activity_settings" />
-
         <!-- EditProfileActivity -->
         <activity
             android:name=".activities.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
             android:screenOrientation="portrait"
             android:theme="@style/Pewaa" />
-
         <!-- StatusActivity -->
         <activity
             android:name=".activities.status.StatusActivity"
@@ -276,7 +265,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="${filesAuthority}"
             android:exported="false"
             android:grantUriPermissions="true">
 

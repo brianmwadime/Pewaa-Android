@@ -317,6 +317,13 @@
         <item>Bridal Shower</item>
     </string-array>
 
+    <string-array name="wishlist_category_colors">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
     <string name="widget_labelled_spinner_errorText">You must choose an item.</string>
     <string name="no_contributors">No contributors yet.</string>
     <string name="add_contribution">CONTRIBUTE</string>

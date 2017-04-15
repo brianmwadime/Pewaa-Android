@@ -637,7 +637,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
                 @Override
                 public void onTransitionEnd(Transition transition) {
-//                    contributorAnimator.setAnimateMoves(true);
+                    contributorAnimator.setAnimateMoves(true);
                     contributorsList.setOnTouchListener(null);
                 }
             });
@@ -732,7 +732,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
                     final ContributorsModel contributor = getContributor(position);
                     TransitionManager.beginDelayedTransition(contributorsList, expandCollapse);
-//                    contributorAnimator.setAnimateMoves(false);
+                    contributorAnimator.setAnimateMoves(false);
 
                     // collapse any currently expanded items
                     if (expandedContributorPosition != RecyclerView.NO_POSITION) {

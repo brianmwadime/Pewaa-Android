@@ -157,13 +157,13 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
                     case 0:
                         viewPager.setCurrentItem(0);
                         AddWishlistFab.show();
-                        findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter));
-                        ((TextView) findViewById(R.id.title_tabs_messages)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorWhite));
+                        findViewById(R.id.counterTabWishlists).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter));
+                        ((TextView) findViewById(R.id.title_tabs_wishlists)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorWhite));
                         break;
                     case 1:
                         viewPager.setCurrentItem(1);
                         AddWishlistFab.hide();
-                        findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
+                        findViewById(R.id.counterTabWishlists).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
                         ((TextView) findViewById(R.id.title_tabs_contacts)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorWhite));
                         break;
                     default:
@@ -176,11 +176,11 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
                 switch (tab.getPosition()) {
                     case 0:
 
-                        findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
-                        ((TextView) findViewById(R.id.title_tabs_messages)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorUnSelected));
+                        findViewById(R.id.counterTabWishlists).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
+                        ((TextView) findViewById(R.id.title_tabs_wishlists)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorUnSelected));
                         break;
                     case 1:
-                        findViewById(R.id.counterTabMessages).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
+                        findViewById(R.id.counterTabWishlists).setBackground(AppHelper.getDrawable(MainActivity.this, R.drawable.bg_circle_tab_counter_unselected));
                         ((TextView) findViewById(R.id.title_tabs_contacts)).setTextColor(AppHelper.getColor(MainActivity.this, R.color.colorUnSelected));
                         break;
                     default:
@@ -250,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
             ContentResolver.setIsSyncable(mAccount, ContactsContract.AUTHORITY, 1);
             ContentResolver.setSyncAutomatically(mAccount, ContactsContract.AUTHORITY, true);
             ContentResolver.addPeriodicSync(mAccount, ContactsContract.AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
-
         }
     }
 

@@ -55,8 +55,6 @@ import io.realm.Realm;
  */
 
 public class DeleteAccountActivity extends AppCompatActivity {
-
-
     @BindView(R.id.app_bar)
     Toolbar toolbar;
     @BindView(R.id.delete_account_btn)
@@ -92,7 +90,6 @@ public class DeleteAccountActivity extends AppCompatActivity {
         mContactsServiceDelete = new ContactsService(this, mApiServiceDelete);
         mSignUpPreferenceManager = new SignUpPreferenceManager(this);
         deleteAccount.setOnClickListener(view -> verifyNumberPhone());
-
     }
 
     private void verifyNumberPhone() {
@@ -140,6 +137,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
                     PreferenceManager.setToken(null, this);
                     PreferenceManager.setID(String.valueOf(0), this);
                     mSignUpPreferenceManager.setIsWaitingForSms(false);
+                    PewaaApplication.DeleteRealmDatabaseInstance();
                     Intent intent = new Intent(this, WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

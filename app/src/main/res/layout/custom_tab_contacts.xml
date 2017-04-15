@@ -14,7 +14,7 @@
         android:layout_marginRight="5dp"
         android:textStyle="bold"
         android:gravity="center"
-        android:text="CONTACTS"
+        android:text="@string/tab_contacts_title"
         android:textSize="13sp"
         android:visibility="visible" />
 

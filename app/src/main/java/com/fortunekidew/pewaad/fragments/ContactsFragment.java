@@ -203,23 +203,32 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
      * @param contacts this is parameter for  updateContacts method
      */
     public void updateContacts(List<ContactsModel> contacts) {
-        List<PewaaContact> contacts1 = new ArrayList<>();
-        for (ContactsModel item : contacts) {
-            PewaaContact contact = new PewaaContact();
-            contact.setId(item.getId());
-            contact.setContactID(item.getContactID());
-            contact.setUsername(item.getUsername());
-            contact.setName(item.getName());
-            contact.setPhone(item.getPhone());
-            contact.setLinked(item.isLinked());
-            contact.setExist(item.isExist());
-            contact.setImage(item.getImage());
-            contact.setStatus(item.getStatus());
+        if (contacts.size() != 0) {
+            List<PewaaContact> contacts1 = new ArrayList<>();
+            for (ContactsModel item : contacts) {
+                PewaaContact contact = new PewaaContact();
+                contact.setId(item.getId());
+                contact.setContactID(item.getContactID());
+                contact.setUsername(item.getUsername());
+                contact.setName(item.getName());
+                contact.setPhone(item.getPhone());
+                contact.setLinked(item.isLinked());
+                contact.setExist(item.isExist());
+                contact.setImage(item.getImage());
+                contact.setStatus(item.getStatus());
 
-            contacts1.add(contact);
+                contacts1.add(contact);
+            }
+
+            ContactsList.setVisibility(View.VISIBLE);
+            emptyContacts.setVisibility(View.GONE);
+            mContactsAdapter.setContacts(contacts1);
+        } else {
+            ContactsList.setVisibility(View.GONE);
+            emptyContacts.setVisibility(View.VISIBLE);
         }
 
-        mContactsAdapter.setContacts(contacts1);
+
     }
 
     /**
@@ -253,6 +262,8 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
     @Override
     public void onErrorLoading(Throwable throwable) {
         AppHelper.LogCat(throwable.getMessage());
+        ContactsList.setVisibility(View.GONE);
+        emptyContacts.setVisibility(View.VISIBLE);
         EventBus.getDefault().post(new Pusher("stopRefresh"));
     }
 }

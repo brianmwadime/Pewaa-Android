@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
@@ -80,6 +84,8 @@ public class WishlistActivity extends Activity implements LoadingData {
     FloatingActionButton AddGift;
     @BindView(R.id.loading)
     ProgressBar loading;
+    @BindView(R.id.gift_appbar)
+    AppBarLayout giftAppBar;
     public Intent mIntent = null;
     private GiftsAdapter mGiftsAdapter;
     public Context context;
@@ -140,7 +146,6 @@ public class WishlistActivity extends Activity implements LoadingData {
      */
     public void initializerView() {
         getActionBar().setTitle(wishlistTitle);
-
         if (wishlistPermission.equals(AppConstants.WISHLIST_CONTRIBUTOR)) AddGift.setVisibility(View.GONE);
 
         setExitSharedElementCallback(GiftsAdapter.createSharedElementReenterCallback(this));

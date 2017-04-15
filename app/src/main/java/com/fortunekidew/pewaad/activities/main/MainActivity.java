@@ -70,7 +70,6 @@ import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_STOP_REFRESH;
  * @Author : https://twitter.com/brianmwadime
  */
 public class MainActivity extends AppCompatActivity implements NetworkListener {
-
     @BindView(R.id.viewpager)
     ViewPager viewPager;
     @BindView(R.id.main_activity)
@@ -84,17 +83,14 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
     @BindView(R.id.toolbar_progress_bar)
     ProgressBar toolbarProgressBar;
     // authority for sync adapter's content provider
-
     private APIService mApiService;
     private SignUpPreferenceManager mPreferenceManager;
-
     // Sync interval constants
     public static final long SECONDS_PER_MINUTE = 60L;
     public static final long SYNC_INTERVAL_IN_MINUTES = 60L;//
     public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;// 3600L
     private Account mAccount;
 
-    private Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,32 +105,7 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
         setupAccountInstance();
         startPeriodicSync();
         initRequestSync();
-        connectToServer();
-
     }
-
-    private void connectToServer() {
-
-        PewaaApplication app = (PewaaApplication) getApplication();
-        mSocket = app.getSocket();
-        if (mSocket == null) {
-            PewaaApplication.connectSocket();
-            mSocket = app.getSocket();
-        }
-        if (!mSocket.connected())
-            mSocket.connect();
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("connected", true);
-            json.put("senderId", PreferenceManager.getID(this));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
-
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -226,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
         if(!mPreferenceManager.isDeviceSaved()) {
             registerDevice(mPreferenceManager.getDeviceToken());
         }
-
     }
 
     @OnClick(R.id.addWishlistFab)
@@ -243,21 +213,17 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        DisConnectFromServer();
     }
 
     private void registerDevice(String token) {
@@ -274,8 +240,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
                 mPreferenceManager.setIsDeviceSaved(false);
             }
         });
-
-
     }
 
     /**
@@ -306,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
             AppHelper.LogCat("Read contact data permission already granted.");
         } else {
             AppHelper.LogCat("Please request Read contact data permission.");
-            AppHelper.showPermissionDialog(this);
             PermissionHandler.requestPermission(this, Manifest.permission.READ_CONTACTS);
         }
         if (PermissionHandler.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -334,10 +297,6 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
             case EVENT_BUS_STOP_REFRESH:
                 toolbarProgressBar.setVisibility(View.GONE);
                 break;
-            case "startConversation":
-                if (viewPager.getCurrentItem() == 1)
-                    viewPager.setCurrentItem(0);
-                break;
             case EVENT_BUS_ACTION_MODE_STARTED:
                 tabLayout.setBackgroundColor(AppHelper.getColor(this, R.color.colorGrayDarker));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -355,13 +314,11 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
                 }
                 break;
         }
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AppConstants.CONTACTS_PERMISSION_REQUEST_CODE) {
-            AppHelper.hidePermissionsDialog();
             EventBus.getDefault().post(new Pusher("ContactsPermission"));
         }
     }
@@ -371,30 +328,8 @@ public class MainActivity extends AppCompatActivity implements NetworkListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == AppConstants.CONTACTS_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                AppHelper.hidePermissionsDialog();
                 EventBus.getDefault().post(new Pusher("ContactsPermission"));
             }
-        }
-    }
-
-
-    /**
-     * method to disconnect from socket server
-     */
-    private void DisConnectFromServer() {
-
-        try {
-            JSONObject json = new JSONObject();
-            try {
-                json.put("connected", false);
-                json.put("senderId", PreferenceManager.getID(this));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            mSocket.emit(AppConstants.SOCKET_IS_ONLINE, json);
-        } catch (Exception e) {
-            AppHelper.LogCat("User is offline  Exception MainActivity" + e.getMessage());
         }
     }
 

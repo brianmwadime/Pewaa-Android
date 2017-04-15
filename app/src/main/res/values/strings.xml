@@ -27,7 +27,7 @@
     <string name="NoGifts">you have no gifts yet.</string>
     <string name="NoGroups">there\'s no group you may create one </string>
     <string name="error_response">Unable to update.</string>
-    <string name="NoContacts">There is no contacts try to add one</string>
+    <string name="NoContacts">There are no contacts synced yet.</string>
     <string name="type_msg">Type a message</string>
     <string name="NoResult">Nothing</string>
     <string name="error_response_contacts">Unable to update your contacts.</string>
@@ -282,8 +282,8 @@
     <string name="delete_user_account">DELETE MY ACCOUNT</string>
     <string name="delete_your_account"><![CDATA[> Delete your account and all data associated with it.]]></string>
     <string name="deleting_your_account_will">DELETING YOUR ACCOUNT WILL:</string>
-    <string name="alert_message_delete_account"> ou are about to delete your account. Are you sure?</string>
-    <string name="delete_account_failed_please_try_later">Failed to delete your account please try again later.</string>
+    <string name="alert_message_delete_account"> You are about to delete your account. Are you sure?</string>
+    <string name="delete_account_failed_please_try_later">Failed to delete your account. Please try again later.</string>
     <string name="unexpected_reponse_from_server">An error has occured. Please contact support.</string>
     <string name="Settings">Settings</string>
     <string name="hintName">Name</string>
@@ -354,5 +354,7 @@
     <string name="profile_photos">Profile Photos</string>
     <string name="data_cache_directory">Backups</string>
     <string name="video_thumbnail">Thumbnail</string>
+    <string name="tab_wishlists_title">WISHLISTS</string>
+    <string name="tab_contacts_title">CONTACTS</string>
 
 </resources>

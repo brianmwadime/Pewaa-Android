@@ -3,6 +3,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.R;
@@ -52,62 +53,6 @@ public class PewaaApplication extends Application {
 
     }
 
-    public static void connectSocket() {
-        if (mSocket != null && mSocket.connected()) {
-            return;
-        }
-        IO.Options options = new IO.Options();
-        options.forceNew = false;
-        options.timeout = TIMEOUT; //set -1 to  disable it
-        options.reconnection = true;
-        options.reconnectionDelay = (long) 3000;
-        options.reconnectionDelayMax = (long) 6000;
-        options.reconnectionAttempts = 2;
-        options.query = "token=" + AppConstants.APP_KEY_SECRET;
-        try {
-            mSocket = IO.socket(new URI(EndPoints.CHAT_SERVER_URL), options);
-        } catch (URISyntaxException e) {
-            AppHelper.LogCat(e);
-        }
-
-    }
-
-    public static void setupCrashlytics() {
-        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-        Fabric.with(mInstance, crashlyticsKit, new Crashlytics());
-        Crashlytics.setUserEmail(PreferenceManager.getPhone(getInstance()));
-        Crashlytics.setUserName(PreferenceManager.getPhone(getInstance()));
-        Crashlytics.setUserIdentifier(String.valueOf(PreferenceManager.getID(getInstance())));
-    }
-
-    public Socket getSocket() {
-        return mSocket;
-    }
-
-    public void reConnectSocket() {
-        IO.Options options = new IO.Options();
-        options.forceNew = true;
-        options.timeout = TIMEOUT; //set -1 to  disable it
-        options.reconnection = true;
-        options.reconnectionDelay = RECONNECT_DEALY;
-        options.reconnectionAttempts = RETRY_ATTEMPT;
-        options.query = "token=" + AppConstants.APP_KEY_SECRET;
-        try {
-            mSocket = IO.socket(EndPoints.CHAT_SERVER_URL, options);
-        } catch (URISyntaxException e) {
-            AppHelper.LogCat(e);
-        }
-
-    }
-
-    public static synchronized PewaaApplication getInstance() {
-        return mInstance;
-    }
-
-    public void setmInstance(PewaaApplication mInstance) {
-        PewaaApplication.mInstance = mInstance;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -118,7 +63,7 @@ public class PewaaApplication extends Application {
         ButterKnife.setDebug(BuildConfig.DEBUG);
 
         if (BuildConfig.USE_CRASHLYTICS) {
-            setupCrashlytics();
+            setupFabric();
         }
 
         Realm.init(this);
@@ -128,6 +73,21 @@ public class PewaaApplication extends Application {
         if (AppConstants.ENABLE_CRASH_HANDLER) Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }
 
+    public static void setupFabric() {
+        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+        Fabric.with(mInstance, crashlyticsKit, new Crashlytics(), new Answers());
+        Crashlytics.setUserEmail(PreferenceManager.getPhone(getInstance()));
+        Crashlytics.setUserName(PreferenceManager.getPhone(getInstance()));
+        Crashlytics.setUserIdentifier(String.valueOf(PreferenceManager.getID(getInstance())));
+    }
+
+    public static synchronized PewaaApplication getInstance() {
+        return mInstance;
+    }
+
+    public void setmInstance(PewaaApplication mInstance) {
+        PewaaApplication.mInstance = mInstance;
+    }
 
     public static Context getAppContext() {
         return AppContext;

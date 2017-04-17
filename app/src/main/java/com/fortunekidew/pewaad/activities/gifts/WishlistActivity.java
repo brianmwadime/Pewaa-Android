@@ -152,7 +152,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mGiftsAdapter = new GiftsAdapter(this, GiftsList);
+        mGiftsAdapter = new GiftsAdapter(this);
         GiftsList.setLayoutManager(layoutManager);
         Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.recycler_divider);
         GiftsList.addItemDecoration(new DividerItemDecoration(dividerDrawable));

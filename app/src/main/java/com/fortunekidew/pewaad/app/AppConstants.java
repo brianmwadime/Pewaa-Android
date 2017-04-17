@@ -82,7 +82,9 @@ public class AppConstants {
     public static final String ROW_MESSAGES_BEFORE = "rmebe";
     public static final String ROW_WALLPAPER = "rwppr";
     public static final String ROW_MESSAGES_AFTER = "rmeaf";
-
+    public static final String PENDING_STATUS = "PENDING";
+    public static final String EVENT_BUS_COUNTRY_CODE = "countryCode";
+    public static final String EVENT_BUS_COUNTRY_NAME = "countryName";
 
 
     public static String EXPORT_REALM_FILE_NAME = "msgstore.realm";

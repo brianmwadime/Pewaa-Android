@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.helpers.PermissionHandler;
+import com.fortunekidew.pewaad.helpers.PhoneNumberWatcher;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -94,6 +95,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     private String mOldAccountType;
 
     private final String DEFAULT_COUNTRY = Locale.getDefault().getCountry();
+    private PhoneNumberWatcher mPhoneNumberWatcher = new PhoneNumberWatcher(DEFAULT_COUNTRY);
     private CountriesAdapter mCountriesAdapter;
     private String Code;
     private String Country;
@@ -117,7 +119,6 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
         ButterKnife.bind(this);
         initializerView();
         EventBus.getDefault().register(this);
@@ -154,6 +155,14 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
 
         }
 
+//        phoneNumberWrapper.setEnabled(false);
+//        phoneNumberWrapper.setOnClickListener(view -> {
+//            if (!phoneNumberWrapper.isEnabled()) {
+//                AppHelper.CustomToast(this, getString(R.string.please_select_country));
+//            }
+//        });
+
+        phoneNumberWrapper.addTextChangedListener(mPhoneNumberWatcher);
         initializerSearchView(searchInput, clearBtn);
         clearBtn.setOnClickListener(v -> clearSearchView());
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
@@ -167,7 +176,6 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         Code = "" + list.get(1).getDial_code();
         Country = "" + list.get(1).getName();
         code.setText(Code);
-//        toolbar.setBackgroundColor(AppHelper.getColor(this, R.color.colorPrimary));
         btnNext.setOnClickListener(this);
         btnVerifyOtp.setOnClickListener(this);
         Resend.setOnClickListener(this);
@@ -600,11 +608,11 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     @Subscribe
     public void onEventMainThread(Pusher pusher) {
         switch (pusher.getAction()) {
-            case "countryCode":
+            case AppConstants.EVENT_BUS_COUNTRY_CODE:
                 Code = "" + pusher.getData();
                 code.setText(Code);
                 break;
-            case "countryName":
+            case AppConstants.EVENT_BUS_COUNTRY_NAME:
                 Country = "" + pusher.getData();
                 break;
         }

@@ -227,14 +227,14 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                 if(response.isSuccessful()) {
                     payment.trxId = response.body().response.trx_id;
                     ContributeActivity.this.runOnUiThread(() -> AppHelper.showDialog(ContributeActivity.this, response.body().response.cust_msg));
-                    Call<PaymentResponse> statusResponseCall = mAPIPayments.createPayment(newPrice, gift.getId(), referenceID, "PENDING", gift.getDescription(), payment.trxId);
+                    Call<PaymentResponse> statusResponseCall = mAPIPayments.createPayment(newPrice, gift.getId(), referenceID, AppConstants.PENDING_STATUS, gift.getDescription(), payment.trxId);
                     statusResponseCall.enqueue(new Callback<PaymentResponse>() {
                         @Override
                         public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
                             AppHelper.hideDialog();
                             if (response.isSuccessful()) {
 
-                                ContributeActivity.this.runOnUiThread(() -> AppHelper.showDialog(ContributeActivity.this, "Processing your payment ... "));
+                                ContributeActivity.this.runOnUiThread(() -> AppHelper.showDialog(ContributeActivity.this, "Processing your payment..."));
                                 Call<ConfirmPaymentResponse> confirmPayment = mAPIPayments.confirmPayment(payment.trxId);
                                 confirmPayment.enqueue(new Callback<ConfirmPaymentResponse>() {
                                     @Override
@@ -246,7 +246,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                                     @Override
                                     public void onFailure(Call<ConfirmPaymentResponse> call, Throwable t) {
                                         AppHelper.hideDialog();
-                                        AppHelper.CustomToast(ContributeActivity.this, "Failed to request payment.");
+                                        AppHelper.CustomToast(ContributeActivity.this, "Failed to add contribution. Please try again later.");
                                         AppHelper.LogCat("Failed to request payment " + t.getMessage());
                                     }
                                 });
@@ -259,7 +259,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                         @Override
                         public void onFailure(Call<PaymentResponse> call, Throwable t) {
                             AppHelper.hideDialog();
-                            AppHelper.CustomToast(ContributeActivity.this, "Failed to add contribution.");
+                            AppHelper.CustomToast(ContributeActivity.this, "Failed to add contribution. Please try again later.");
                             AppHelper.LogCat("Failed to add gift " + t.getMessage());
                         }
                     });
@@ -285,8 +285,6 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                 AppHelper.LogCat("Failed to request payment " + t.getMessage());
             }
         });
-
     }
-
 }
 

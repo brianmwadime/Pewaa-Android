@@ -74,33 +74,11 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private String SearchQuery;
     private SparseBooleanArray selectedItems;
     private boolean isActivated = false;
-    private RecyclerView wishlistList;
     private final ColorDrawable[] giftLoadingPlaceholders;
 
     public GiftsAdapter(@NonNull Activity mActivity) {
         this.mActivity = mActivity;
         this.mGifts = new RealmList<>();
-        this.selectedItems = new SparseBooleanArray();
-
-        // get the gift placeholder colors & badge color from the theme
-        final TypedArray a = this.mActivity.obtainStyledAttributes(R.styleable.GiftFeed);
-        final int loadingColorArrayId =
-                a.getResourceId(R.styleable.GiftFeed_giftLoadingPlaceholderColors, 0);
-        if (loadingColorArrayId != 0) {
-            int[] placeholderColors = this.mActivity.getResources().getIntArray(loadingColorArrayId);
-            giftLoadingPlaceholders = new ColorDrawable[placeholderColors.length];
-            for (int i = 0; i < placeholderColors.length; i++) {
-                giftLoadingPlaceholders[i] = new ColorDrawable(placeholderColors[i]);
-            }
-        } else {
-            giftLoadingPlaceholders = new ColorDrawable[] { new ColorDrawable(Color.DKGRAY) };
-        }
-    }
-
-    public GiftsAdapter(@NonNull Activity mActivity, RecyclerView wishlistList) {
-        this.mActivity = mActivity;
-        this.mGifts = new RealmList<>();
-        this.wishlistList = wishlistList;
         this.selectedItems = new SparseBooleanArray();
 
         // get the gift placeholder colors & badge color from the theme

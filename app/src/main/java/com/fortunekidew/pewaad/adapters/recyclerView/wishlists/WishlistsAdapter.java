@@ -180,6 +180,9 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     case "Bridal Shower":
                         wishlistViewHolder.setWishlistImage(R.drawable.bridal_shower, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_pink));
                         break;
+                    case "Retirement":
+                        wishlistViewHolder.setWishlistImage(R.drawable.retirement, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_beige));
+                        break;
                 }
 
                 wishlistViewHolder.setOnClickListener(view -> {

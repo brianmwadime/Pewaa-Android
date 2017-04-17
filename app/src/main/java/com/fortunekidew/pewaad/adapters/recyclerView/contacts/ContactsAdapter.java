@@ -29,6 +29,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.Target;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.InviteEvent;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.profile.ProfilePreviewActivity;
 import com.fortunekidew.pewaad.animations.AnimationsUtil;
@@ -319,11 +321,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void setShareApp(Activity mActivity, String subject, String message) {
+            Answers.getInstance().logInvite(new InviteEvent()
+                    .putMethod("SMS"));
 
-//            Uri bmpUri = Uri.parse("android.resource://" + mActivity.getPackageName() + "/mipmap/ic_launcher");
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
-//            intent.putExtra(Intent.EXTRA_STREAM, bmpUri);
             intent.putExtra(Intent.EXTRA_SUBJECT, subject);
             intent.putExtra(Intent.EXTRA_TEXT, message);
             mActivity.startActivity(intent);

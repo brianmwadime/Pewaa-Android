@@ -57,17 +57,17 @@
     <string name="next">Next</string>
     <string name="placeholder_sms_of_verification">You will receive an sms with your verification code.</string>
     <string name="resend">Resend</string>
-    <string name="enter_the_code_below_to_verify">Enter the code below to verify</string>
+    <string name="enter_the_code_below_to_verify">Enter the code below to verify.</string>
     <string name="enter_your_code">Enter your code</string>
     <string name="ok">OK</string>
-    <string name="please_enter_your_ver_code">Please enter your verification code</string>
+    <string name="please_enter_your_ver_code">Please enter your verification code.</string>
     <string name="enter_a_val_number">Enter a valid number phone</string>
     <string name="change_number">Change number</string>
     <string name="invite">INVITE</string>
     <string name="your_current_status">Your current status</string>
     <string name="select_your_new_status">Select your new status</string>
     <string name="title_activity_status">Status</string>
-    <string name="Make_sure_delete_status">Do you want to delete your status</string>
+    <string name="Make_sure_delete_status">Do you want to delete your status.</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
     <string name="delete">Delete</string>
@@ -315,13 +315,7 @@
         <item>Birthday</item>
         <item>Graduation</item>
         <item>Bridal Shower</item>
-    </string-array>
-
-    <string-array name="wishlist_category_colors">
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
+        <item>Retirement</item>
     </string-array>
 
     <string name="widget_labelled_spinner_errorText">You must choose an item.</string>
@@ -356,5 +350,7 @@
     <string name="video_thumbnail">Thumbnail</string>
     <string name="tab_wishlists_title">WISHLISTS</string>
     <string name="tab_contacts_title">CONTACTS</string>
+    <string name="please_select_country">Please Select Country</string>
+    <string name="default_country_code">+254</string>
 
 </resources>

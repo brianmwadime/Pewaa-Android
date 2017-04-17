@@ -69,7 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="vertical"
             tools:listitem="@layout/row_gift" />
     </android.support.v4.widget.SwipeRefreshLayout>
@@ -81,6 +80,6 @@
         pressedTranslationZ="6dp"
         app:backgroundTint="@color/colorPinkDark"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="com.fortunekidew.pewaad.ui.ScrollingFaBBehaviour"
+
         app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

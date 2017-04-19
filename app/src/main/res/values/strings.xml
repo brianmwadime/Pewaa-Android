@@ -300,7 +300,7 @@
     <string name="add_contributor_button_label">ADD</string>
     <string name="cancel_contributor_button_label">CANCEL</string>
     <string name="hintRecipients">Recipient(s)</string>
-    <string name="fab_scrolling_behavior">com.fortunekidew.pewaad.ui.fab.ScrollOffBottomBehaviour</string>
+    <string name="fab_scrolling_behavior">com.fortunekidew.pewaad.ui.ScrollingFABBehavior</string>
 
     <string-array name="contributor_dropdown_arrays">
         <item>CONTRIBUTOR</item>

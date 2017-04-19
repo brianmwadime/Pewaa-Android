@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.WishlistsAdapter;
 import com.fortunekidew.pewaad.app.AppConstants;
-import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
@@ -44,12 +43,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.socket.client.Socket;
 
 import static com.fortunekidew.pewaad.R.id.swipeContainer;
-import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_CONTRIBUTER_REMOVED;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -58,19 +53,19 @@ import static com.fortunekidew.pewaad.app.AppConstants.EVENT_BUS_CONTRIBUTER_REM
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class WishlistsFragment extends Fragment implements LoadingData, ActionMode.Callback, SearchView.OnQueryTextListener {
+public class WishlistsFragment extends Fragment implements LoadingData, RecyclerView.OnItemTouchListener, ActionMode.Callback, SearchView.OnQueryTextListener {
 
     @BindView(R.id.WishlistsList)
-    RecyclerView WishlistList;
+    RecyclerView wishlistList;
     @BindView(R.id.empty)
-    LinearLayout EmptyWishlists;
+    LinearLayout emptyWishlists;
     @BindView(swipeContainer)
     SwipeRefreshLayout SwipeToRefresh;
 
     private MenuItem searchItem;
     private SearchView searchView;
 
-
+    private GestureDetectorCompat gestureDetector;
     private WishlistsAdapter mWishlistsAdapter;
     private WishlistsPresenter mWishlistsPresenter = new WishlistsPresenter(this);
     private ActionMode actionMode;
@@ -109,16 +104,26 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mWishlistsAdapter = new WishlistsAdapter(getActivity());
-        WishlistList.setLayoutManager(mLinearLayoutManager);
-        WishlistList.setAdapter(mWishlistsAdapter);
-        WishlistList.setItemAnimator(new DefaultItemAnimator());
+        wishlistList.setLayoutManager(mLinearLayoutManager);
+        wishlistList.setAdapter(mWishlistsAdapter);
+        wishlistList.setItemAnimator(new DefaultItemAnimator());
+        gestureDetector = new GestureDetectorCompat(getActivity(), new RecyclerViewBenOnGestureListener());
+        SwipeToRefresh.setOnRefreshListener(() -> mWishlistsPresenter.onRefresh());
+    }
 
-        SwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mWishlistsPresenter.onRefresh();
-            }
-        });
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        gestureDetector.onTouchEvent(e);
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
     }
 
@@ -206,9 +211,9 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
     @Override
     public boolean onQueryTextChange(String search) {
         if (search.isEmpty()) {
-            ((WishlistsAdapter) WishlistList.getAdapter()).getFilter().filter("");
+            ((WishlistsAdapter) wishlistList.getAdapter()).getFilter().filter("");
         } else {
-            ((WishlistsAdapter) WishlistList.getAdapter()).getFilter().filter(search.toLowerCase());
+            ((WishlistsAdapter) wishlistList.getAdapter()).getFilter().filter(search.toLowerCase());
         }
 
         return false;
@@ -222,8 +227,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         }
 
         public void onLongPress(MotionEvent e) {
-            View view = WishlistList.findChildViewUnder(e.getX(), e.getY());
-            int currentPosition = WishlistList.getChildAdapterPosition(view);
+            View view = wishlistList.findChildViewUnder(e.getX(), e.getY());
+            int currentPosition = wishlistList.getChildAdapterPosition(view);
 
             super.onLongPress(e);
         }
@@ -238,8 +243,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
     public void ShowWishlist(List<WishlistsModel> wishlistsModels) {
         SwipeToRefresh.setRefreshing(false);
         if (wishlistsModels.size() != 0) {
-            WishlistList.setVisibility(View.VISIBLE);
-            EmptyWishlists.setVisibility(View.GONE);
+            wishlistList.setVisibility(View.VISIBLE);
+            emptyWishlists.setVisibility(View.GONE);
             List<WishlistsModel> wishlistsModels1 = new ArrayList<>();
             for (WishlistsModel conversationsModel : wishlistsModels) {
                 wishlistsModels1.add(conversationsModel);
@@ -247,8 +252,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
             mWishlistsAdapter.setWishlists(wishlistsModels1);
 
         } else {
-            WishlistList.setVisibility(View.GONE);
-            EmptyWishlists.setVisibility(View.VISIBLE);
+            wishlistList.setVisibility(View.GONE);
+            emptyWishlists.setVisibility(View.VISIBLE);
         }
 
     }
@@ -260,16 +265,16 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
      */
     public void UpdateWishlist(List<WishlistsModel> wishlistsModels) {
         if (wishlistsModels.size() != 0) {
-            WishlistList.setVisibility(View.VISIBLE);
-            EmptyWishlists.setVisibility(View.GONE);
+            wishlistList.setVisibility(View.VISIBLE);
+            emptyWishlists.setVisibility(View.GONE);
             List<WishlistsModel> wishlistsModels1 = new ArrayList<WishlistsModel>();
             for (WishlistsModel wishlistsModel : wishlistsModels) {
                 wishlistsModels1.add(wishlistsModel);
             }
             mWishlistsAdapter.setWishlists(wishlistsModels1);
         } else {
-            WishlistList.setVisibility(View.GONE);
-            EmptyWishlists.setVisibility(View.VISIBLE);
+            wishlistList.setVisibility(View.GONE);
+            emptyWishlists.setVisibility(View.VISIBLE);
         }
     }
 
@@ -305,7 +310,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
         int messageId = pusher.getMessageId();
         switch (pusher.getAction()) {
             case "ItemIsActivated":
-                int idx = WishlistList.getChildAdapterPosition(pusher.getView());
+                int idx = wishlistList.getChildAdapterPosition(pusher.getView());
                 if (actionMode != null) {
                     ToggleSelection(idx);
                     return;
@@ -332,8 +337,8 @@ public class WishlistsFragment extends Fragment implements LoadingData, ActionMo
     @Override
     public void onErrorLoading(Throwable throwable) {
         SwipeToRefresh.setRefreshing(false);
-        WishlistList.setVisibility(View.GONE);
-        EmptyWishlists.setVisibility(View.VISIBLE);
+        wishlistList.setVisibility(View.GONE);
+        emptyWishlists.setVisibility(View.VISIBLE);
         AppHelper.LogCat("Wishlists Fragment " + throwable.getMessage());
     }
 

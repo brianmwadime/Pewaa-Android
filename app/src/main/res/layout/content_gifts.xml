@@ -4,7 +4,6 @@
     android:id="@+id/ParentLayoutGifts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/viewBackground"
     android:orientation="vertical"
     tools:context=".activities.gifts.WishlistActivity"
@@ -26,7 +25,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,7 +63,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/GiftsList"
             android:layout_width="match_parent"
@@ -79,7 +80,11 @@
         android:layout_gravity="bottom|end"
         pressedTranslationZ="6dp"
         app:backgroundTint="@color/colorPinkDark"
-        android:layout_margin="@dimen/fab_margin"
-
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:fabSize="normal"
+        app:layout_behavior="@string/fab_scrolling_behavior"
         app:srcCompat="@drawable/ic_add" />
 </FrameLayout>

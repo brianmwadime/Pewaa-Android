@@ -51,9 +51,8 @@ import static com.fortunekidew.pewaad.helpers.UtilsString.unescapeJava;
 
 public class ProfilePreviewActivity extends Activity {
 
-    public static final String EXTRA_USER_ID = "userID";
+    public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
     public static final String EXTRA_CONTRIBUTOR_ID = "EXTRA_CONTRIBUTOR_ID";
-
     @BindView(R.id.userProfileName)
     EmojiconTextView userProfileName;
     @BindView(R.id.ContactBtn)
@@ -70,7 +69,6 @@ public class ProfilePreviewActivity extends Activity {
     LinearLayout containerProfile;
     @BindView(R.id.containerProfileInfo)
     LinearLayout containerProfileInfo;
-
 
     public int userID;
     public int groupID;
@@ -100,7 +98,6 @@ public class ProfilePreviewActivity extends Activity {
         initializerView();
         setupProgressBar();
         if (getIntent().hasExtra(EXTRA_USER_ID)) {
-            isGroup = getIntent().getExtras().getBoolean("isGroup");
             userID = getIntent().getExtras().getInt(EXTRA_USER_ID);
         }
 
@@ -124,23 +121,23 @@ public class ProfilePreviewActivity extends Activity {
             userProfilePicture.setTransitionName(getString(R.string.user_image_transition));
             userProfileName.setTransitionName(getString(R.string.user_name_transition));
         }
-        ContactBtn.setOnClickListener(v -> {
-            if (isGroup) {
-                Intent messagingIntent = new Intent(this, WishlistActivity.class);
-                messagingIntent.putExtra("conversationID", conversationID);
-                messagingIntent.putExtra("groupID", groupID);
-                messagingIntent.putExtra("isGroup", true);
-                startActivity(messagingIntent);
-                finish();
-            } else {
-                Intent messagingIntent = new Intent(this, WishlistActivity.class);
-                messagingIntent.putExtra("conversationID", 0);
-                messagingIntent.putExtra("recipientID", userID);
-                messagingIntent.putExtra("isGroup", false);
-                startActivity(messagingIntent);
-                finish();
-            }
-        });
+//        ContactBtn.setOnClickListener(v -> {
+//            if (isGroup) {
+//                Intent messagingIntent = new Intent(this, WishlistActivity.class);
+//                messagingIntent.putExtra("conversationID", conversationID);
+//                messagingIntent.putExtra("groupID", groupID);
+//                messagingIntent.putExtra("isGroup", true);
+//                startActivity(messagingIntent);
+//                finish();
+//            } else {
+//                Intent messagingIntent = new Intent(this, WishlistActivity.class);
+//                messagingIntent.putExtra("conversationID", 0);
+//                messagingIntent.putExtra("recipientID", userID);
+//                messagingIntent.putExtra("isGroup", false);
+//                startActivity(messagingIntent);
+//                finish();
+//            }
+//        });
         AboutBtn.setOnClickListener(v -> {
 
 //                if (AppHelper.isAndroid5()) {
@@ -160,11 +157,11 @@ public class ProfilePreviewActivity extends Activity {
 
 
         });
-        CallBtn.setOnClickListener(v -> {
-            if (!isGroup) {
-                callContact(contactsModel.getPhone());
-            }
-        });
+//        CallBtn.setOnClickListener(v -> {
+//            if (!isGroup) {
+//                callContact(contactsModel.getPhone());
+//            }
+//        });
         containerProfile.setOnClickListener(v -> {
             if (AppHelper.isAndroid5())
                 containerProfileInfo.post(() -> AnimationsUtil.hide(this, containerProfileInfo, Duration));
@@ -187,8 +184,6 @@ public class ProfilePreviewActivity extends Activity {
         ProgressBar mProgress = (ProgressBar) findViewById(R.id.progress_bar);
         mProgress.getIndeterminateDrawable().setColorFilter(Color.parseColor("#0EC654"),
                 PorterDuff.Mode.SRC_IN);
-
-
     }
 
     /**
@@ -256,9 +251,6 @@ public class ProfilePreviewActivity extends Activity {
                 finish();
             return true;
         }
-
         return super.onTouchEvent(event);
     }
-
-
 }

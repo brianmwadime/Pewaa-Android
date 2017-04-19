@@ -148,8 +148,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mContactsModel.add(toPosition, model);
         notifyItemMoved(fromPosition, toPosition);
     }
-    //Methods for search end
-
 
     @Override
     public int getItemViewType(int position) {
@@ -266,13 +264,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     if (AppHelper.isAndroid5()) {
                         Intent mIntent = new Intent(mActivity, ProfilePreviewActivity.class);
-                        mIntent.putExtra("userID", contactsModel.getId());
-                        mIntent.putExtra("isGroup", false);
+                        mIntent.putExtra(ProfilePreviewActivity.EXTRA_USER_ID, contactsModel.getId());
                         mActivity.startActivity(mIntent);
                     } else {
                         Intent mIntent = new Intent(mActivity, ProfilePreviewActivity.class);
-                        mIntent.putExtra("userID", contactsModel.getId());
-                        mIntent.putExtra("isGroup", false);
+                        mIntent.putExtra(ProfilePreviewActivity.EXTRA_USER_ID, contactsModel.getId());
                         mActivity.startActivity(mIntent);
                         mActivity.overridePendingTransition(R.anim.push_down_in, R.anim.push_down_out);
                     }

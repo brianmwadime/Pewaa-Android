@@ -132,13 +132,7 @@ public class WishlistActivity extends Activity implements LoadingData {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        SwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mGiftsPresenter.onRefresh();
-            }
-        });
-
+        SwipeToRefresh.setOnRefreshListener(() -> mGiftsPresenter.onRefresh());
     }
 
     /**

@@ -308,7 +308,7 @@
     </string-array>
 
     <string-array name="wishlist_categories_arrays">
-        <item>Select Wishlist Category</item>
+        <item>Select Category</item>
         <item>House Warming</item>
         <item>Baby Shower</item>
         <item>Wedding</item>

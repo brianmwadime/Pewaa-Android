@@ -60,8 +60,8 @@
             android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:noHistory="true"
-            android:theme="@style/Pewaa.SplashTheme">
+            android:theme="@style/Pewaa.SplashTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

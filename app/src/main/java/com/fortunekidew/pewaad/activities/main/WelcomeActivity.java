@@ -106,7 +106,6 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     public static final String PARAM_AUTH_TOKEN_TYPE = "auth.token";
     LocalBroadcastManager mLocalBroadcastManager;
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(getPackageName() + "closeWelcomeActivity")) {
@@ -126,7 +125,6 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         IntentFilter mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(getPackageName() + "closeWelcomeActivity");
         mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
-
     }
 
     /**
@@ -220,17 +218,14 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
             Account newAccount = new Account(getString(R.string.app_name), mOldAccountType);
             // Get an instance of the Android account manager
             AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-
             if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
                 AppHelper.CustomToast(this, getString(R.string.app_name) + getString(R.string.account_added_already));
                 finish();
-
             }
             return newAccount;
         } else {
             return null;
         }
-
     }
 
     /**
@@ -257,7 +252,6 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
                 InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
-
         });
         searchInput.addTextChangedListener(new TextWatcherAdapter() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -277,7 +271,6 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (s.length() == 0) {
                     clearSearchBtn.setVisibility(View.GONE);
                     Gson gson = new Gson();
@@ -331,7 +324,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         try {
             mobile = phoneNumberWrapper.getText().toString().trim();
         } catch (Exception e) {
-            AppHelper.LogCat(" number mobile is null Exception WelcomeActivity " + e.getMessage());
+            AppHelper.LogCat(" number mobile is null Exception on WelcomeActivity " + e.getMessage());
         }
         if (mobile != null) {
             PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
@@ -341,7 +334,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
             try {
                 phNumberProto = phoneUtil.parse(mobile, countryCode);
             } catch (NumberParseException e) {
-                AppHelper.LogCat("number  error  NumberParseException  WelcomeActivity" + e.getMessage());
+                AppHelper.LogCat("number  error  NumberParseException on WelcomeActivity" + e.getMessage());
                 phoneNumberWrapper.setError(getString(R.string.enter_a_val_number));
             }
             if (phNumberProto != null) {
@@ -374,7 +367,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
                 if (response.isSuccessful()) {
                     if (response.body().isSuccess()) {
                         Resend.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
+//                        mProgressBar.setVisibility(View.VISIBLE);
                         textViewShowTime.setVisibility(View.VISIBLE);
                         setTimer();
                         startTimer();

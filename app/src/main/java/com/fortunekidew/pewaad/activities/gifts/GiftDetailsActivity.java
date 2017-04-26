@@ -298,7 +298,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             giftTimeAgo.setVisibility(View.GONE);
         }
 
-        ContributorAnimator contributorAnimator = new ContributorAnimator();
+        contributorAnimator = new ContributorAnimator();
         contributorsList.setItemAnimator(contributorAnimator);
         adapter = new ContributorsAdapter(giftDescription, contributorFooter, 0,
                 getResources().getInteger(R.integer.contributor_expand_collapse_duration));

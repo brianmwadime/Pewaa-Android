@@ -6,15 +6,13 @@ package com.fortunekidew.pewaad.app;
  */
 public class EndPoints {
 
-    public static final String BASE_URL = "http://api.pewaa.com/v1/";
+    public static final String BASE_URL = "https://api.pewaa.com/v1/";
 
-    public static final String ASSETS_BASE_URL = "http://api.pewaa.com/static/";
+    public static final String ASSETS_BASE_URL = "https://api.pewaa.com/static/";
     /**
      * Chat server URLs
      */
-    public static final String CHAT_SERVER_URL = "http://api.pewaa.com";
-
-;
+    public static final String CHAT_SERVER_URL = "https://api.pewaa.com";
     /**
      * Authentication & Profile
      */
@@ -26,67 +24,39 @@ public class EndPoints {
     public static final String UPLOAD_PROFILE_IMAGE = "users/avatar";
     public static final String GET_CONTACT = "users/{userID}";
     public static final String EDIT_NAME = "users/changeUsername";
-
     /**
      *  Wishlists
      */
-
     public static final String WISHLISTS_LIST = "wishlists";
     public static final String WISHLIST_ITEMS = "wishlists/{wishlistId}/gifts";
     public static final String GET_WISHLIST = "wishlists/{wishlistId}";
     public static final String WISHLIST_DELETE_CONTRIBUTOR = "wishlists/{wishlist_id}/contributors/{contributor_id}";
-
     /**
      * Gifts
      */
     public static final String GIFTS = "gifts";
     public static final String GIFT = "gifts/{giftId}";
     public static final String GIFT_CONTRIBUTORS = "gifts/{id}/contributors";
-
     public static final String Payments = "payments/create";
     public static final String Payment = "payments/update/{trx_id}";
     public static final String PAYMENT_REQUEST = "payments/request";
     public static final String PAYMENT_CONFIRM = "payments/confirm/{trx_id}";
-
     /**
      * Contributors
      */
     public static final String CONTRIBUTORS = "contributors";
     public static final String SEND_CONTRIBUTORS = "contributors/addContributors";
     public static final String CONTRIBUTOR = "contributors/{contributorId}";
-
     /**
      * Push Notifications
      */
     public static final String NOTIFICATIONS = "notifications";
     public static final String DEVICES = "devices";
     public static final String DEVICE = "devices/{deviceId}";
-
     /**
      * Groups
      */
-    public static final String CREATE_GROUP = "Groups/createGroup";
-    public static final String ADD_MEMBERS_TO_GROUP = "Groups/addMembersToGroup";
-    public static final String REMOVE_MEMBER_FROM_GROUP = "Groups/removeMemberFromGroup";
-    public static final String MAKE_MEMBER_AS_ADMIN = "Groups/makeMemberAdmin";
-    public static final String GROUPS_lIST = "Groups/all";
-    public static final String GROUP_MEMBERS_lIST = "GetGroupMembers/{groupID}";
-    public static final String EXIT_GROUP = "ExitGroup/{groupID}";
-    public static final String DELETE_GROUP = "DeleteGroup/{groupID}";
-    public static final String GET_GROUP = "GetGroup/{groupID}";
-    public static final String UPLOAD_GROUP_PROFILE_IMAGE = "uploadGroupImage";
     public static final String EDIT_GROUP_NAME = "EditGroupName";
-
-
-    /**
-     * Download and upload files
-     */
-    public static final String UPLOAD_MESSAGES_IMAGE = "uploadMessagesImage";
-    public static final String UPLOAD_MESSAGES_VIDEO = "uploadMessagesVideo";
-    public static final String UPLOAD_MESSAGES_AUDIO = "uploadMessagesAudio";
-    public static final String UPLOAD_MESSAGES_DOCUMENT = "uploadMessagesDocument";
-
-
     /**
      * Contacts
      */

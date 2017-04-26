@@ -18,6 +18,11 @@
         android:paddingStart="@dimen/padding_normal"
         android:layout_height="match_parent">
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/edit_amount_wrapper">
         <EditText
             android:id="@+id/amount"
             android:focusable="true"
@@ -29,6 +34,7 @@
             android:textAlignment="center"
             android:textSize="@dimen/display_2_text_size"
             android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/contribute"

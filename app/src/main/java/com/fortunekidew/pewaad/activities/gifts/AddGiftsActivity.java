@@ -11,9 +11,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
@@ -80,6 +83,15 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
     @BindView(R.id.edit_gift_description)
     EditText EditDescription;
 
+    @BindView(R.id.edit_price_wrapper)
+    TextInputLayout price_wrapper;
+
+    @BindView(R.id.edit_name_wrapper)
+    TextInputLayout name_wrapper;
+
+    @BindView(R.id.edit_description_wrapper)
+    TextInputLayout description_wrapper;
+
     @BindView(R.id.edit_gift_price)
     EditText EditPrice;
     private APIService mApiService;
@@ -108,6 +120,14 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
      */
     private void initializerView() {
         mEditGiftPresenter.onCreate();
+
+        EditPrice.setOnFocusChangeListener((v, hasFocus) -> price_wrapper.setErrorEnabled(false));
+        EditName.setOnFocusChangeListener((v, hasFocus) -> name_wrapper.setErrorEnabled(false));
+        EditDescription.setOnFocusChangeListener((v, hasFocus) -> description_wrapper.setErrorEnabled(false));
+
+        EditDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        EditDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+
         addAvatar.setOnClickListener(v -> {
             BottomSheetEditGift bottomSheetEditGift = new BottomSheetEditGift();
             bottomSheetEditGift.show(getSupportFragmentManager(), bottomSheetEditGift.getTag());
@@ -201,14 +221,29 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
     @OnClick(R.id.action_save)
     public void saveGift(View view) {
 
-        if (EditName.getText().toString().isEmpty())
+        if (EditName.getText().toString().isEmpty()){
+            name_wrapper.setError("Please enter your gift name.");
             return;
+        }
 
-        if (EditPrice.getText().toString().isEmpty())
+        if (EditPrice.getText().toString().isEmpty()) {
+            price_wrapper.setError("Please enter your gift price.");
             return;
+        }
 
-        if (EditDescription.getText().toString().isEmpty())
+        double price = Double.parseDouble(EditPrice.getText().toString().trim());
+
+        if(price < 2000){
+            price_wrapper.setError("The minimum gift price is Kes. 2000");
             return;
+        }
+
+
+        if (EditDescription.getText().toString().isEmpty()) {
+            description_wrapper.setError("Please enter a description.");
+            return;
+        }
+
 
         RequestBody requestFile;
 

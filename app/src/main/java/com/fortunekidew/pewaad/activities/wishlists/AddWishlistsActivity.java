@@ -10,8 +10,10 @@ import android.os.StrictMode;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.ActionMode;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -110,19 +112,12 @@ public class AddWishlistsActivity extends AppCompatActivity implements LoadingDa
         mApiService = new APIService(this);
         CategorySpinner.requestFocus();
 
-        EditName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                name_wrapper.setErrorEnabled(false);
-            }
-        });
+        EditName.setOnFocusChangeListener((v, hasFocus) -> name_wrapper.setErrorEnabled(false));
 
-        EditDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                description_wrapper.setErrorEnabled(false);
-            }
-        });
+        EditDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        EditDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+
+        EditDescription.setOnFocusChangeListener((v, hasFocus) -> description_wrapper.setErrorEnabled(false));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

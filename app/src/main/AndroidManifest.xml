@@ -103,16 +103,19 @@
             android:windowSoftInputMode="adjustResize" />
         <!--  AddWishlistsActivity -->
         <activity
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:name=".activities.wishlists.AddWishlistsActivity"
             android:parentActivityName=".activities.gifts.WishlistActivity" />
 
         <!--  ContributeActivity -->
         <activity
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:name=".activities.gifts.ContributeActivity"
             android:parentActivityName=".activities.gifts.GiftDetailsActivity" />
 
         <!--  AddGiftsActivity -->
-        <activity android:name=".activities.gifts.AddGiftsActivity" />
+        <activity
+            android:name=".activities.gifts.AddGiftsActivity" />
 
         <!--  GiftDetailsActivity -->
         <activity

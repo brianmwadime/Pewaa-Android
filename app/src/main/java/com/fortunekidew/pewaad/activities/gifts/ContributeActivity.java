@@ -1,9 +1,9 @@
 package com.fortunekidew.pewaad.activities.gifts;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIPayments;
 import com.fortunekidew.pewaad.api.APIService;
@@ -20,22 +19,16 @@ import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
-import com.fortunekidew.pewaad.models.payments.ConfirmPaymentResponse;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
 import com.fortunekidew.pewaad.models.payments.PaymentResponse;
 import com.fortunekidew.pewaad.models.payments.RequestPaymentResponse;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
 import com.google.gson.Gson;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
-
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.UUID;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -60,9 +53,9 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
     RelativeLayout contributeParentLayout;
     @BindView(R.id.amount)
     EditText EditAmount;
-
+    @BindView(R.id.edit_amount_wrapper)
+    TextInputLayout amount_wrapper;
     private GiftsModel gift;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +81,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
 
         // Minus the contributed amount from the gift price
+        EditAmount.setOnFocusChangeListener((v, hasFocus) -> amount_wrapper.setErrorEnabled(false));
 
         EditAmount.setText(String.valueOf(gift.getPrice() - gift.getContributed()));
 
@@ -180,31 +174,30 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
     @OnClick(R.id.contribute)
     public void contribute(View view) {
 
-        if (EditAmount.getText().toString().isEmpty())
+        if (EditAmount.getText().toString().isEmpty()){
+            amount_wrapper.setError("Please enter an amount");
             return;
+        }
 
         // Hide keyboard
         final InputMethodManager imm = (InputMethodManager)getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(EditAmount.getWindowToken(), 0);
 
-
         double newPrice = Double.parseDouble(EditAmount.getText().toString().trim());
 
         // If entered amount is greater than the gift price
         if(newPrice > gift.getPrice()) {
-            AppHelper.Snackbar(getApplicationContext(), contributeParentLayout, "Amount entered is greater than the gift price.", AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
+            amount_wrapper.setError("Amount entered is greater than the gift price.");
             return;
         }
 
         if((gift.getContributed() + newPrice) > gift.getPrice()) {
-            AppHelper.Snackbar(getApplicationContext(), contributeParentLayout, "Amount entered exceeds the total gift price.", AppConstants.MESSAGE_COLOR_WARNING, AppConstants.TEXT_COLOR);
+            amount_wrapper.setError("Amount entered exceeds the total gift price.");
             return;
         }
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-        String referenceID = UUID.fromString(gift.getId()).toString() + timestamp.getTime();
+        String referenceID = gift.getName();
 
         APIPayments mAPIPayments = mApiService.RootService(APIPayments.class, PreferenceManager.getToken(ContributeActivity.this), EndPoints.BASE_URL);
 
@@ -234,22 +227,8 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                             AppHelper.hideDialog();
                             if (response.isSuccessful()) {
 
-                                ContributeActivity.this.runOnUiThread(() -> AppHelper.showDialog(ContributeActivity.this, "Processing your payment..."));
-                                Call<ConfirmPaymentResponse> confirmPayment = mAPIPayments.confirmPayment(payment.trxId);
-                                confirmPayment.enqueue(new Callback<ConfirmPaymentResponse>() {
-                                    @Override
-                                    public void onResponse(Call<ConfirmPaymentResponse> call, Response<ConfirmPaymentResponse> response) {
-                                        AppHelper.hideDialog();
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ConfirmPaymentResponse> call, Throwable t) {
-                                        AppHelper.hideDialog();
-                                        AppHelper.CustomToast(ContributeActivity.this, "Failed to add contribution. Please try again later.");
-                                        AppHelper.LogCat("Failed to request payment " + t.getMessage());
-                                    }
-                                });
+                                AppHelper.hideDialog();
+                                finish();
 
                             } else {
                                 AppHelper.CustomToast(ContributeActivity.this, response.message());

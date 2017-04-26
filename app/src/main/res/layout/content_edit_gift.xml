@@ -54,6 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_gift_name"
+                android:inputType="text"
+                android:imeOptions="actionNext"
                 android:ems="10"
                 android:hint="@string/hintName"/>
         </android.support.design.widget.TextInputLayout>
@@ -67,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_gift_price"
+                android:imeOptions="actionNext"
                 android:ems="10"
                 android:inputType="numberDecimal"
                 android:hint="@string/hintPrice"/>
@@ -84,6 +87,7 @@
                 android:ems="10"
                 android:lines="6"
                 android:gravity="top|left"
+                android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
                 android:hint="@string/hintDescription"/>
         </android.support.design.widget.TextInputLayout>

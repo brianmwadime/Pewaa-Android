@@ -38,6 +38,16 @@
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
 
+            <ImageButton
+                android:id="@+id/cashout_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:clickable="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/cash_out"/>
+
             <TextView
                 android:id="@+id/date_created"
                 android:layout_width="wrap_content"

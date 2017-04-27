@@ -259,6 +259,17 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                 ownerName.setText("N/A");
             }
 
+            ((TextView)contributedAmount).setText(String.valueOf(gift.getContributed()));
+
+            double progress =  ((gift.getContributed()/ gift.getPrice()) * 100);
+            // Set contribution progress
+            ((ProgressBar) giftProgress).setProgress((int)progress);
+
+            // Hide contribute button once we hit the mark!
+            if (progress == 100) {
+                contribute.setVisibility(View.INVISIBLE);
+            }
+
             ((TextView) targetAmount).setText(String.format(Locale.ENGLISH, "Target: %1$,.2f", gift.getPrice()));
 
             Glide.with(this)
@@ -326,25 +337,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
 
                 if (contributors != null && !contributors.isEmpty()) {
-                    ((TextView)contributedAmount).setText(String.valueOf(0.0));
                     adapter.addContributors(contributors);
-                    double amount = 0;
-
-                    for (int i=0; i < contributors.size(); i++) {
-                        amount += contributors.get(i).getAmount();
-                    }
-
-                    ((TextView)contributedAmount).setText(String.valueOf(amount));
-                    double progress =  ((amount/ gift.getPrice()) * 100);
-                    // Set contributin progress
-                    ((ProgressBar) giftProgress).setProgress((int)progress);
-                    // Set the total contributed amount for further calculations.
-                    gift.setContributed(amount);
-
-                    // Hide contribute button once we hit the mark!
-                    if (progress == 100) {
-                        contribute.setVisibility(View.INVISIBLE);
-                    }
                 }
             }
 
@@ -389,15 +382,12 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                 contributorsList, false);
         contribute = (Button) contributorFooter.findViewById(R.id.contribute);
 
-        contribute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent contribute = new Intent();
-                contribute.setClass(GiftDetailsActivity.this, ContributeActivity.class);
-                contribute.putExtra(ContributeActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, gift));
+        contribute.setOnClickListener(view -> {
+            Intent contribute1 = new Intent();
+            contribute1.setClass(GiftDetailsActivity.this, ContributeActivity.class);
+            contribute1.putExtra(ContributeActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, gift));
 
-                startActivity(contribute);
-            }
+            startActivity(contribute1);
         });
     }
 
@@ -498,12 +488,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
      * We run a transition to expand/collapse contributors. Scrolling the RecyclerView while this is
      * running causes issues, so we consume touch events while the transition runs.
      */
-    private View.OnTouchListener touchEater = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
-        }
-    };
+    private View.OnTouchListener touchEater = (view, motionEvent) -> true;
 
     private RequestListener shotLoadListener = new RequestListener<String, GlideDrawable>() {
         @Override
@@ -601,7 +586,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         super.onDestroy();
     }
 
-    /* package */ class ContributorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    /* package */ private class ContributorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int EXPAND = 0x1;
         private static final int COLLAPSE = 0x2;
@@ -724,25 +709,23 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             final ContributorViewHolder holder = new ContributorViewHolder(
                     getLayoutInflater().inflate(viewType, parent, false));
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final int position = holder.getAdapterPosition();
-                    if (position == RecyclerView.NO_POSITION) return;
+            holder.itemView.setOnClickListener(v -> {
+                final int position = holder.getAdapterPosition();
+                if (position == RecyclerView.NO_POSITION) return;
 
-                    final ContributorsModel contributor = getContributor(position);
-                    TransitionManager.beginDelayedTransition(contributorsList, expandCollapse);
-                    contributorAnimator.setAnimateMoves(false);
+                final ContributorsModel contributor = getContributor(position);
+                TransitionManager.beginDelayedTransition(contributorsList, expandCollapse);
+                contributorAnimator.setAnimateMoves(false);
 
-                    // collapse any currently expanded items
-                    if (expandedContributorPosition != RecyclerView.NO_POSITION) {
-                        notifyItemChanged(expandedContributorPosition, COLLAPSE);
-                    }
+                // collapse any currently expanded items
+                if (expandedContributorPosition != RecyclerView.NO_POSITION) {
+                    notifyItemChanged(expandedContributorPosition, COLLAPSE);
+                }
 
-                    // expand this item (if it wasn't already)
-                    if (expandedContributorPosition != position) {
-                        expandedContributorPosition = position;
-                        notifyItemChanged(position, EXPAND);
+                // expand this item (if it wasn't already)
+                if (expandedContributorPosition != position) {
+                    expandedContributorPosition = position;
+                    notifyItemChanged(position, EXPAND);
 //                        if (contributor.liked == null) {
 //                            final Call<Like> liked = dribbblePrefs.getApi()
 //                                    .likedComment(shot.id, contributor.id);
@@ -761,16 +744,13 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 //                            enterComment.clearFocus();
 //                            ImeUtils.hideIme(enterComment);
 //                        }
-                        holder.itemView.requestFocus();
-                    } else {
-                        expandedContributorPosition = RecyclerView.NO_POSITION;
-                    }
+                    holder.itemView.requestFocus();
+                } else {
+                    expandedContributorPosition = RecyclerView.NO_POSITION;
                 }
             });
 
-            holder.avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.avatar.setOnClickListener(v -> {
 //                    final int position = holder.getAdapterPosition();
 //                    if (position == RecyclerView.NO_POSITION) return;
 //
@@ -784,7 +764,6 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 //                                    Pair.create((View) holder.avatar,
 //                                            getString(R.string.transition_player_avatar)));
 //                    startActivity(player, options.toBundle());
-                }
             });
 
 //            holder.reply.setOnClickListener(new View.OnClickListener() {
@@ -946,7 +925,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         }
     }
 
-    /* package */ static class SimpleViewHolder extends RecyclerView.ViewHolder {
+    /* package */ private static class SimpleViewHolder extends RecyclerView.ViewHolder {
 
         public SimpleViewHolder(View itemView) {
             super(itemView);
@@ -974,7 +953,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
      * custom item animator allows us to stop RecyclerView from trying to handle this for us while
      * the transition is running.
      */
-    /* package */ static class ContributorAnimator extends SlideInItemAnimator {
+    /* package */ private static class ContributorAnimator extends SlideInItemAnimator {
 
         private boolean animateMoves = false;
 

@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -30,7 +29,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.WishlistActivity;
-import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 
@@ -181,7 +179,7 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         wishlistViewHolder.setWishlistImage(R.drawable.bridal_shower, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_pink));
                         break;
                     case "Retirement":
-                        wishlistViewHolder.setWishlistImage(R.drawable.retirement, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_beige));
+                        wishlistViewHolder.setWishlistImage(R.drawable.retirement, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_brown));
                         break;
                 }
 

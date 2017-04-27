@@ -15,6 +15,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -28,6 +29,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -37,17 +39,23 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity;
+import com.fortunekidew.pewaad.api.APIContributor;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
+import com.fortunekidew.pewaad.helpers.PreferenceManager;
+import com.fortunekidew.pewaad.models.users.status.StatusResponse;
+import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
 import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
 import com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView;
 import com.fortunekidew.pewaad.util.ObservableColorMatrix;
 import com.fortunekidew.pewaad.util.glide.PewaaTarget;
+import com.google.gson.Gson;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,6 +67,9 @@ import io.github.rockerhieu.emojicon.EmojiconTextView;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.socket.client.Socket;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.fortunekidew.pewaad.util.AnimUtils.getFastOutSlowInInterpolator;
 
@@ -70,6 +81,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int REQUEST_CODE_VIEW_GIFT = 5407;
     protected final Activity mActivity;
     private RealmList<GiftsModel> mGifts;
+    private APIService mApiService;
 
     private String SearchQuery;
     private SparseBooleanArray selectedItems;
@@ -80,6 +92,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mActivity = mActivity;
         this.mGifts = new RealmList<>();
         this.selectedItems = new SparseBooleanArray();
+        mApiService = new APIService(mActivity);
 
         // get the gift placeholder colors & badge color from the theme
         final TypedArray a = this.mActivity.obtainStyledAttributes(R.styleable.GiftFeed);
@@ -101,8 +114,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
 
-
-    //Methods for search start
+    // Methods for search start
     public void setString(String SearchQuery) {
         this.SearchQuery = SearchQuery;
         notifyDataSetChanged();
@@ -168,18 +180,23 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         if (holder instanceof GiftsAdapter.GiftViewHolder) {
-
             final GiftsAdapter.GiftViewHolder GiftViewHolder = (GiftsAdapter.GiftViewHolder) holder;
             final GiftsModel GiftsModel = this.mGifts.get(position);
 
             try {
-
                 String Name = GiftsModel.getName();
+                if(GiftsModel.getContributed() == GiftsModel.getPrice() && GiftsModel.getCashout_status() == null){
+                    GiftViewHolder.cashout.setVisibility(View.VISIBLE);
+                } else {
+                    GiftViewHolder.cashout.setVisibility(View.INVISIBLE);
+                }
+
+                GiftViewHolder.cashout.setOnClickListener(v -> {
+                    saveContributor(GiftsModel.getName(), GiftsModel.getId(), String.valueOf(GiftsModel.getContributed()));
+                });
 
                 GiftViewHolder.gift_name.setTextColor(mActivity.getResources().getColor(R.color.colorBlack));
-
                 SpannableString wishlistName = SpannableString.valueOf(Name);
                 if (SearchQuery == null) {
                     GiftViewHolder.gift_name.setText(wishlistName, TextView.BufferType.NORMAL);
@@ -194,11 +211,8 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
 
                 GiftViewHolder.setGiftDate(GiftsModel.getCreatedOn());
-
                 GiftViewHolder.setGiftImage(GiftsModel.getAvatar(), position);
-
                 GiftViewHolder.setOnClickListener(view -> {
-
                     Intent gift = new Intent();
                     gift.setClass(mActivity, GiftDetailsActivity.class);
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID, GiftsModel.getId());
@@ -207,20 +221,16 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_DESC, GiftsModel.getDescription());
                     gift.putExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_PRICE, GiftsModel.getPrice());
                     gift.putExtra(GiftDetailsActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, GiftsModel));
-
                     ActivityOptions options =
                             ActivityOptions.makeSceneTransitionAnimation(mActivity,
                                     Pair.create(view, mActivity.getString(R.string.transition_gift_avatar)),
                                     Pair.create(view, mActivity.getString(R.string.transition_gift_background)));
-
                     mActivity.startActivityForResult(gift, REQUEST_CODE_VIEW_GIFT, options.toBundle());
                 });
             } catch (Exception e) {
-                AppHelper.LogCat("Gifts Adapter  Exception" + e.getMessage());
+                AppHelper.LogCat("Gifts Adapter Exception " + e.getMessage());
             }
-
         }
-
     }
 
     @Override
@@ -285,6 +295,8 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         EmojiconTextView gift_name;
         @BindView(R.id.date_created)
         TextView GiftDate;
+        @BindView(R.id.cashout_button)
+        ImageButton cashout;
 
         @BindView(R.id.cardview)
         CardView GiftRow;
@@ -407,5 +419,40 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }
         };
+    }
+
+
+    private void saveContributor(String gift_name, String gift_id, String gift_amount) {
+
+        APIContributor mApiContributor = mApiService.RootService(APIContributor.class, PreferenceManager.getToken(mActivity), EndPoints.BASE_URL);
+//        mActivity.this.runOnUiThread(() -> showLoading());
+        Call<ContributorsResponse> statusResponseCall = mApiContributor.cashOut(gift_id, gift_name, gift_amount);
+        statusResponseCall.enqueue(new Callback<ContributorsResponse>() {
+            @Override
+            public void onResponse(Call<ContributorsResponse> call, Response<ContributorsResponse> response) {
+                if (response.isSuccessful()) {
+
+                } else {
+
+                    try {
+                        Gson gson = new Gson();
+                        StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
+//                        Snackbar.make(mActivity, res.getMessage(), Snackbar.LENGTH_SHORT).show();
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ContributorsResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 }

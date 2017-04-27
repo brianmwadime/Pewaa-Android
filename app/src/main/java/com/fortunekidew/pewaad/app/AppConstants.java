@@ -2,33 +2,24 @@ package com.fortunekidew.pewaad.app;
 
 import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.R;
-
 /**
  * Created by Brian Mwakima on 12/25/16.
  *
  * @Email : mwadime@fortunekidew.co.ke
  * @Author : https://twitter.com/brianmwadime
  */
-
 public class AppConstants {
-
     /* debugging constants  for developer */
     public static final String TAG = "pewaa";
     public static final boolean DEBUGGING_MODE = BuildConfig.DEBUG; // BuildConfig.DEBUG;
     public static final boolean CRASH_LYTICS = !BuildConfig.DEBUG;//this is crashlytics if you have an account on fabric.io but don't forget to change the key on manifests file
     static final boolean ENABLE_CRASH_HANDLER = !BuildConfig.DEBUG; // this for the crash activity  you can turn on this so when user get a crash this activity will appear instead of stop the app
-
-
     // Wishlist Permissions
     public static final String WISHLIST_ADMINISTRATOR = "ADMINISTRATOR";
     public static final String WISHLIST_CONTRIBUTOR = "CONTRIBUTOR";
-
     public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";//for this you have to set you package name here we use this add the app to account manager in user phone
-
     public static final String DATABASE_LOCAL_NAME = "Pewaa.realm";
     public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application ";
-
-
     // SMS provider identification
     // It should match with your SMS gateway origin
     // You can use  WatsClone, TESTER  as sender ID
@@ -36,7 +27,6 @@ public class AppConstants {
     public static final String SMS_SENDER_NAME = "Verify";
     // special character to prefix the code. Make sure this character appears only once in the sms
     public static final String CODE_DELIMITER = ":";
-
     /**
      * upload image or video constants
      */
@@ -47,27 +37,13 @@ public class AppConstants {
     public static final int PERMISSION_REQUEST_CODE = 0x009;
     public static final int CONTACTS_PERMISSION_REQUEST_CODE = 0x010;
     public static final int SELECT_COUNTRY = 0x011;
-
     /**
      * Contributor constants
      */
-
-    //contributor constants:
+    // contributor constants:
     public static final int STATUS_CONTRIBUTOR_ADDED = 0x011;
     public static final int STATUS_CONTRIBUTOR_ADDED_SUCCESS = 0x012;
     public static final int STATUS_SELECTED_CONTRIBUTORS_SUCCESS = 0x013;
-
-
-    //single user socket constants:
-
-    public static final String SOCKET_USER_PING = "user_ping";
-    public static final String SOCKET_IS_TYPING = "typing";
-    public static final String SOCKET_IS_STOP_TYPING = "stop_typing";
-    public static final String SOCKET_IS_ONLINE = "is_online";
-    public static final String SOCKET_IS_LAST_SEEN = "last_seen";
-    public static final String SOCKET_CONNECTED = "user_connect";
-    public static final String SOCKET_DISCONNECTED = "user_disconnect";
-
 
     /**
      * for cache
@@ -79,18 +55,11 @@ public class AppConstants {
     public static final String SETTINGS_PROFILE = "spr";
     public static final String EDIT_PROFILE = "epr";
     public static final String ROW_PROFILE = "rpr";
-    public static final String ROW_MESSAGES_BEFORE = "rmebe";
-    public static final String ROW_WALLPAPER = "rwppr";
-    public static final String ROW_MESSAGES_AFTER = "rmeaf";
     public static final String PENDING_STATUS = "PENDING";
     public static final String EVENT_BUS_COUNTRY_CODE = "countryCode";
     public static final String EVENT_BUS_COUNTRY_NAME = "countryName";
-
-
-    public static String EXPORT_REALM_FILE_NAME = "msgstore.realm";
-
+    public static final String SOCKET_CASHOUT = "cashout_request";
     public static final String DATA_CACHED = "DATA_CACHED";
-
     /**
      * images size
      */
@@ -102,20 +71,13 @@ public class AppConstants {
     public static final int SETTINGS_IMAGE_SIZE = 100;
     public static final int EDIT_PROFILE_IMAGE_SIZE = 500;
     public static final int EDIT_PROFILE_SMALL_IMAGE_SIZE = 234;
-    public static final int MESSAGE_IMAGE_SIZE = 300;
-    public static final int PRE_MESSAGE_IMAGE_SIZE = 40;
-    public static final int FULL_SCREEN_IMAGE_SIZE = 640;
     public static final int BLUR_RADIUS = 1;
-
     // Payments
     public static final String SOCKET_PAYMENT_COMPLETED = "payment_completed";
     public static final String SOCKET_IMAGE_PROFILE_UPDATED = "socket_profileImageUpdated";
     public static final String SOCKET_CONTRIBUTOR_ADDED = "added_contributor";
-
     public static final String SOCKET_GIFT_ADDED = "added_gift";
-
     public static final String APP_KEY_SECRET = "7d3d3b6c2d3683bf25bbb51533ec6dac";// make sure this one is the same that you put on your server side (for security reasons)
-
     /**
      * for toast and snackbar
      */
@@ -123,7 +85,6 @@ public class AppConstants {
     public static final int MESSAGE_COLOR_WARNING = R.color.colorOrange;
     public static final int MESSAGE_COLOR_SUCCESS = R.color.colorGreenDark;
     public static final int TEXT_COLOR = R.color.colorWhite;
-
     /**
      * those for EventBus tool
      */

@@ -3,6 +3,7 @@ package com.fortunekidew.pewaad.models.wishlists;
 import org.parceler.Parcel;
 
 import java.util.Date;
+import java.util.StringJoiner;
 
 import io.realm.GiftsModelRealmProxy;
 import io.realm.RealmObject;
@@ -21,9 +22,11 @@ public class GiftsModel extends RealmObject {
 
     public String name;
 
+    public String cashout_status;
+
     public double price;
 
-    public double contributed;
+    public double total_contribution;
 
     public String wishlist_id;
 
@@ -63,6 +66,14 @@ public class GiftsModel extends RealmObject {
         return wishlist_id;
     }
 
+    public String getCashout_status(){
+        return cashout_status;
+    }
+
+    public void setCashout_status(String cashout_status) {
+        this.cashout_status = cashout_status;
+    }
+
     public void setWishlistId(String wishlist_id) {
         this.wishlist_id = wishlist_id;
     }
@@ -76,11 +87,11 @@ public class GiftsModel extends RealmObject {
     }
 
     public double getContributed() {
-        return contributed;
+        return total_contribution;
     }
 
     public void setContributed(double contributed) {
-        this.contributed = contributed;
+        this.total_contribution = contributed;
     }
 
     public double getPrice() {

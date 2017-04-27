@@ -36,6 +36,7 @@ public class EndPoints {
      */
     public static final String GIFTS = "gifts";
     public static final String GIFT = "gifts/{giftId}";
+    public static final String GIFT_CASHOUT = "gifts/{id}/cashout";
     public static final String GIFT_CONTRIBUTORS = "gifts/{id}/contributors";
     public static final String Payments = "payments/create";
     public static final String Payment = "payments/update/{trx_id}";

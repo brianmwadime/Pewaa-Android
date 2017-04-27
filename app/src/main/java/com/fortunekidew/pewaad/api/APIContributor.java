@@ -33,6 +33,12 @@ public interface APIContributor {
     @GET(EndPoints.GIFT_CONTRIBUTORS)
     Call<List<ContributorsModel>> contributors(@Path("id") String giftId); // , @Path("page") int page, @Path("count") int giftCount
 
+    @FormUrlEncoded
+    @POST(EndPoints.GIFT_CASHOUT)
+    Call<ContributorsResponse> cashOut(@Path("id") String giftId,
+                                       @Field("gift_name") String giftName,
+                                        @Field("gift_amount") String giftAmount);
+
     /**
      * method to add contributor
      *

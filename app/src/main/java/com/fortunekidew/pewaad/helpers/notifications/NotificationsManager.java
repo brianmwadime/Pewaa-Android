@@ -105,6 +105,50 @@ public class NotificationsManager {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public static void showCashoutNotification(Context mContext, String text) {
+        final NotificationCompat.Builder mNotifyBuilder;
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotifyBuilder = new NotificationCompat.Builder(mContext)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setContentTitle("Pewaa!")
+                .setContentText(text)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setSmallIcon(R.drawable.ic_notification)
+                .setPriority(Notification.PRIORITY_HIGH);
+
+        if (PreferenceSettingsManager.conversation_tones(mContext)) {
+            Uri uri = PreferenceSettingsManager.getDefault_message_notifications_settings_tone(mContext);
+            if (uri != null)
+                mNotifyBuilder.setSound(uri);
+            else {
+                int defaults = 0;
+                defaults = defaults | Notification.DEFAULT_SOUND;
+                mNotifyBuilder.setDefaults(defaults);
+            }
+        }
+
+        if (PreferenceSettingsManager.getDefault_message_notifications_settings_vibrate(mContext)) {
+            long[] vibrate = new long[]{2000, 2000, 2000, 2000, 2000};
+            mNotifyBuilder.setVibrate(vibrate);
+        } else {
+            int defaults = 0;
+            defaults = defaults | Notification.DEFAULT_VIBRATE;
+            mNotifyBuilder.setDefaults(defaults);
+        }
+
+        String colorLight = PreferenceSettingsManager.getDefault_message_notifications_settings_light(mContext);
+        if (colorLight != null) {
+            mNotifyBuilder.setLights(Color.parseColor(colorLight), 1500, 1500);
+        } else {
+            int defaults = 0;
+            defaults = defaults | Notification.DEFAULT_LIGHTS;
+            mNotifyBuilder.setDefaults(defaults);
+        }
+        mNotifyBuilder.setAutoCancel(true);
+        mNotificationManager.notify(mGiftNotificationId, mNotifyBuilder.build());
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static void showWishlistNotification(Context mContext, Intent resultIntent, String text) {

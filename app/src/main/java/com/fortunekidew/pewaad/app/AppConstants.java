@@ -110,4 +110,5 @@ public class AppConstants {
     public static final String EVENT_BUS_UPDATE_NAME = "updateName";
     public static final String EVENT_BUS_UPDATE_PROFILE_IMAGE = "updateImageProfile";
     public static final String EVENT_BUS_IMAGE_PATH = "Path";
+    public static final String EVENT_BUS_UPDATE_GIFT = "update_gift";
 }

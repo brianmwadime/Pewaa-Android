@@ -1,9 +1,12 @@
-package com.fortunekidew.pewaad.models.wishlists;
+package com.fortunekidew.pewaad.models.gifts;
 
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class GiftResponse {
     private boolean success;
     private String message;
@@ -14,7 +17,24 @@ public class GiftResponse {
     private String avatar;
     private double price;
     private double contributed;
+    private String cashout_status;
+    private String creator_id;
 
+    public String getCashout_status() {
+        return cashout_status;
+    }
+
+    public void setCashout_status(String cashout_status) {
+        this.cashout_status = cashout_status;
+    }
+
+    public String getCreator_id() {
+        return creator_id;
+    }
+
+    public void setCreator_id(String creator_id) {
+        this.creator_id = creator_id;
+    }
 
     public double getContributed() {
         return contributed;

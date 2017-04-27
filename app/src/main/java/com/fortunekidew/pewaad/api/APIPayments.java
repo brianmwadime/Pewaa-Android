@@ -3,26 +3,16 @@ package com.fortunekidew.pewaad.api;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.models.payments.ConfirmPaymentResponse;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
-import com.fortunekidew.pewaad.models.payments.PaymentRequest;
 import com.fortunekidew.pewaad.models.payments.PaymentResponse;
 import com.fortunekidew.pewaad.models.payments.RequestPaymentResponse;
-import com.fortunekidew.pewaad.models.wishlists.GiftResponse;
-import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
-import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 
-import java.util.List;
-
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by Brian Mwakima on 12/25/16.

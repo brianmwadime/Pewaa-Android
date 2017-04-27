@@ -352,5 +352,6 @@
     <string name="tab_contacts_title">CONTACTS</string>
     <string name="please_select_country">Please Select Country</string>
     <string name="default_country_code">+254</string>
+    <string name="cashout_tile">CASH OUT</string>
 
 </resources>

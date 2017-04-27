@@ -8,13 +8,11 @@ import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
-import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 
 import java.util.List;
 
-import io.realm.Realm;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

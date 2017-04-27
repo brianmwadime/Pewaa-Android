@@ -1,15 +1,10 @@
 package com.fortunekidew.pewaad.activities.gifts;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -25,15 +20,14 @@ import com.fortunekidew.pewaad.api.APIGifts;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.fragments.BottomSheetEditGift;
 import com.fortunekidew.pewaad.helpers.AppHelper;
-import com.fortunekidew.pewaad.helpers.Files.MemoryCache;
-import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
-import com.fortunekidew.pewaad.models.wishlists.EditGift;
-import com.fortunekidew.pewaad.models.wishlists.GiftResponse;
+import com.fortunekidew.pewaad.models.gifts.EditGift;
+import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.presenters.EditGiftPresenter;
 import com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView;
 
@@ -277,7 +271,9 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
                     gift.setWishlistId(response.body().getWishlistId());
                     gift.setDescription(response.body().getDescription());
                     gift.setPrice(response.body().getPrice());
-                    gift.setContributed(response.body().getContributed());
+                    gift.setContributed(0);
+                    gift.setCashout_status(null);
+                    gift.setCreator_phone(PreferenceManager.getPhone(PewaaApplication.getAppContext()));
 
                     EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_NEW_GIFT, gift));
                     finish();

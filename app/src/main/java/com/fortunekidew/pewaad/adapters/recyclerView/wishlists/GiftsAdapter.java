@@ -41,18 +41,22 @@ import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity;
 import com.fortunekidew.pewaad.api.APIContributor;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
-import com.fortunekidew.pewaad.app.PewaaApplication;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
+import com.fortunekidew.pewaad.models.gifts.EditGift;
+import com.fortunekidew.pewaad.models.gifts.GiftResponse;
+import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
-import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView;
 import com.fortunekidew.pewaad.util.ObservableColorMatrix;
 import com.fortunekidew.pewaad.util.glide.PewaaTarget;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.parceler.Parcels;
 
 import java.io.IOException;
@@ -64,9 +68,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
-import io.realm.Realm;
 import io.realm.RealmList;
-import io.socket.client.Socket;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -193,7 +195,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
 
                 GiftViewHolder.cashout.setOnClickListener(v -> {
-                    saveContributor(GiftsModel.getName(), GiftsModel.getId(), String.valueOf(GiftsModel.getContributed()));
+                    saveContributor(GiftsModel);
                 });
 
                 GiftViewHolder.gift_name.setTextColor(mActivity.getResources().getColor(R.color.colorBlack));
@@ -282,6 +284,25 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (getItem(position).getId() == itemId) return position;
         }
         return RecyclerView.NO_POSITION;
+    }
+
+    public void updateGiftItem(String giftId, GiftsModel gift) {
+        int arraySize = mGifts.size();
+        for (int i = 0; i < arraySize; i++) {
+            GiftsModel model = mGifts.get(i);
+            if (giftId.equals(model.getId())) {
+                AppHelper.LogCat("Updating Gift: " + giftId + " " + model.getId());
+                changeItemAtPosition(i, gift);
+                break;
+            }
+        }
+
+    }
+
+    private void changeItemAtPosition(int position, GiftsModel giftModel) {
+        mGifts.set(position, giftModel);
+        notifyItemChanged(position);
+        notifyItemRangeChanged(position, mGifts.size());
     }
 
     class GiftViewHolder extends RecyclerView.ViewHolder {
@@ -422,35 +443,36 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-    private void saveContributor(String gift_name, String gift_id, String gift_amount) {
+    private void saveContributor(GiftsModel gift) {
 
         APIContributor mApiContributor = mApiService.RootService(APIContributor.class, PreferenceManager.getToken(mActivity), EndPoints.BASE_URL);
-//        mActivity.this.runOnUiThread(() -> showLoading());
-        Call<ContributorsResponse> statusResponseCall = mApiContributor.cashOut(gift_id, gift_name, gift_amount);
-        statusResponseCall.enqueue(new Callback<ContributorsResponse>() {
+        mActivity.runOnUiThread(() -> AppHelper.showDialog(mActivity, "Processing ..."));
+        Call<GiftResponse> statusResponseCall = mApiContributor.cashOut(gift.getId(), gift.getName(), String.valueOf(gift.getContributed()));
+        statusResponseCall.enqueue(new Callback<GiftResponse>() {
             @Override
-            public void onResponse(Call<ContributorsResponse> call, Response<ContributorsResponse> response) {
+            public void onResponse(Call<GiftResponse> call, Response<GiftResponse> response) {
                 if (response.isSuccessful()) {
-
+                    gift.setCashout_status(response.body().getCashout_status());
+                    EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_GIFT, gift));
+                    Snackbar.make(mActivity.findViewById(R.id.wishlist_activity), "Your cash out request has been received and is being processed.", Snackbar.LENGTH_SHORT).show();
                 } else {
 
                     try {
                         Gson gson = new Gson();
                         StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
-//                        Snackbar.make(mActivity, res.getMessage(), Snackbar.LENGTH_SHORT).show();
-
-
+                        Snackbar.make(mActivity.findViewById(R.id.wishlist_activity), res.getMessage(), Snackbar.LENGTH_SHORT).show();
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
 
+                AppHelper.hideDialog();
             }
 
             @Override
-            public void onFailure(Call<ContributorsResponse> call, Throwable t) {
-
+            public void onFailure(Call<GiftResponse> call, Throwable t) {
+                AppHelper.hideDialog();
             }
         });
 

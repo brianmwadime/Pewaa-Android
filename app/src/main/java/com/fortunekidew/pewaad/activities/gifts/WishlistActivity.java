@@ -8,15 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
@@ -39,7 +36,7 @@ import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
-import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.presenters.GiftsPresenter;
 import com.fortunekidew.pewaad.ui.recyclerview.DividerItemDecoration;
 import com.fortunekidew.pewaad.util.AnimUtils;
@@ -304,12 +301,34 @@ public class WishlistActivity extends Activity implements LoadingData {
                 newGift.setCreatedOn(pusher.getGiftObject().getCreatedOn());
                 newGift.setDescription(pusher.getGiftObject().getDescription());
                 newGift.setPrice(pusher.getGiftObject().getPrice());
+                newGift.setCashout_status(pusher.getGiftObject().getCashout_status());
+                newGift.setContributor_count(pusher.getGiftObject().getContributor_count());
+                newGift.setCreatorName(pusher.getGiftObject().getCreator_name());
+                newGift.setCreatorAvatar(pusher.getGiftObject().getCreator_avatar());
+                newGift.setCreatorPhone(pusher.getGiftObject().getCreator_phone());
 
                 mGiftsAdapter.addItem(0, newGift);
-
                 break;
-        case AppConstants.EVENT_BUS_EXIT_WISHLIST:
+            case AppConstants.EVENT_BUS_EXIT_WISHLIST:
                  finish();
+                break;
+            case AppConstants.EVENT_BUS_UPDATE_GIFT:
+                GiftsModel gift = new GiftsModel();
+                gift.setName(pusher.getUpdateGiftObject().getName());
+                gift.setDescription(pusher.getUpdateGiftObject().getDescription());
+                gift.setId(pusher.getUpdateGiftObject().getId());
+                gift.setAvatar(pusher.getUpdateGiftObject().getAvatar());
+                gift.setCreatedOn(pusher.getUpdateGiftObject().getCreatedOn());
+                gift.setDescription(pusher.getUpdateGiftObject().getDescription());
+                gift.setPrice(pusher.getUpdateGiftObject().getPrice());
+                gift.setContributed(pusher.getUpdateGiftObject().getContributed());
+                gift.setCashout_status(pusher.getUpdateGiftObject().getCashout_status());
+                gift.setContributor_count(pusher.getUpdateGiftObject().getContributor_count());
+                gift.setCreatorName(pusher.getUpdateGiftObject().getCreatorName());
+                gift.setCreatorPhone(pusher.getUpdateGiftObject().getCreatorPhone());
+                gift.setCreatorAvatar(pusher.getUpdateGiftObject().getCreatorAvatar());
+
+                mGiftsAdapter.updateGiftItem(pusher.getUpdateGiftObject().getId(), gift);
                 break;
         }
     }
@@ -321,11 +340,11 @@ public class WishlistActivity extends Activity implements LoadingData {
 
         // When reentering, if the shared element is no longer on screen (e.g. after an
         // orientation change) then scroll it into view.
-        final String sharedShotId = data.getStringExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID);
-        if (!sharedShotId.isEmpty()                                             // returning from a shot
+        final String sharedGiftId = data.getStringExtra(GiftDetailsActivity.RESULT_EXTRA_GIFT_ID);
+        if (!sharedGiftId.isEmpty()                                             // returning from a shot
                 && mGiftsAdapter.getItemCount() > 0                           // grid populated
                 ) {    // view not attached
-            final int position = mGiftsAdapter.getItemPosition(sharedShotId);
+            final int position = mGiftsAdapter.getItemPosition(sharedGiftId);
             if (position == RecyclerView.NO_POSITION) return;
 
             // delay the transition until our shared element is on-screen i.e. has been laid out

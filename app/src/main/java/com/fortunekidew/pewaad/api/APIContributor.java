@@ -1,6 +1,7 @@
 package com.fortunekidew.pewaad.api;
 
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
@@ -31,13 +32,13 @@ public interface APIContributor {
      * @return this is return value
      */
     @GET(EndPoints.GIFT_CONTRIBUTORS)
-    Call<List<ContributorsModel>> contributors(@Path("id") String giftId); // , @Path("page") int page, @Path("count") int giftCount
+    Call<List<ContributorsModel>> contributors(@Path("id") String giftId);
 
     @FormUrlEncoded
     @POST(EndPoints.GIFT_CASHOUT)
-    Call<ContributorsResponse> cashOut(@Path("id") String giftId,
-                                       @Field("gift_name") String giftName,
-                                        @Field("gift_amount") String giftAmount);
+    Call<GiftResponse> cashOut(@Path("id") String giftId,
+                               @Field("gift_name") String giftName,
+                               @Field("gift_amount") String giftAmount);
 
     /**
      * method to add contributor

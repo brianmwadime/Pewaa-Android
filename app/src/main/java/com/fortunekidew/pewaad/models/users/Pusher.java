@@ -2,9 +2,10 @@ package com.fortunekidew.pewaad.models.users;
 
 import android.view.View;
 
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.models.notifications.NotificationsModel;
 import com.fortunekidew.pewaad.models.users.contacts.ContactsModel;
-import com.fortunekidew.pewaad.models.wishlists.EditGift;
+import com.fortunekidew.pewaad.models.gifts.EditGift;
 import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
 
 import org.json.JSONObject;
@@ -25,6 +26,7 @@ public class Pusher {
     private JSONObject jsonObject;
     private EditWishlist wishlistObject;
     private EditGift giftObject;
+    private GiftsModel updateGiftObject;
     private NotificationsModel notificationsModel;
     private int messageId;
 
@@ -43,15 +45,15 @@ public class Pusher {
         this.bool = bool;
     }
 
-    public Pusher(String action, ContactsModel contactsModel) {
+    public Pusher(String action, ContactsModel contacts) {
         this.action = action;
-        this.contactsModel = contactsModel;
+        this.contactsModel = contacts;
     }
 
 
-    public Pusher(String action, NotificationsModel notificationsModel) {
+    public Pusher(String action, NotificationsModel notifications) {
         this.action = action;
-        this.notificationsModel = notificationsModel;
+        this.notificationsModel = notifications;
     }
 
     public Pusher(String action, JSONObject jsonObject) {
@@ -67,6 +69,11 @@ public class Pusher {
     public Pusher(String action, EditGift gift) {
         this.action = action;
         this.giftObject = gift;
+    }
+
+    public Pusher(String action, GiftsModel gift) {
+        this.action = action;
+        this.updateGiftObject = gift;
     }
 
     public Pusher(String itemIsActivated, View view) {
@@ -86,8 +93,8 @@ public class Pusher {
         return notificationsModel;
     }
 
-    public void setNotificationsModel(NotificationsModel notificationsModel) {
-        this.notificationsModel = notificationsModel;
+    public void setNotificationsModel(NotificationsModel notifications) {
+        this.notificationsModel = notifications;
     }
 
     public int getMessageId() {
@@ -142,24 +149,32 @@ public class Pusher {
         return contactsModel;
     }
 
-    public void setWishlistObject(EditWishlist wishlistObject) {
-        this.wishlistObject = wishlistObject;
+    public void setWishlistObject(EditWishlist wishlist) {
+        this.wishlistObject = wishlist;
     }
 
     public EditGift getGiftObject() {
         return giftObject;
     }
 
-    public void setGiftObject(EditGift giftObject) {
-        this.giftObject = giftObject;
+    public GiftsModel getUpdateGiftObject() {
+        return updateGiftObject;
+    }
+
+    public void setGiftObject(EditGift gift) {
+        this.giftObject = gift;
+    }
+
+    public void setUpdatedGiftObject(GiftsModel gift) {
+        this.updateGiftObject = gift;
     }
 
     public EditWishlist getWishlistObject() {
         return wishlistObject;
     }
 
-    public void setContactsModel(ContactsModel contactsModel) {
-        this.contactsModel = contactsModel;
+    public void setContactsModel(ContactsModel contacts) {
+        this.contactsModel = contacts;
     }
 
     public void setAction(String action) {

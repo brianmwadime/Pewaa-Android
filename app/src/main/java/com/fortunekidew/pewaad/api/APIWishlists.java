@@ -3,7 +3,7 @@ package com.fortunekidew.pewaad.api;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
-import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.models.wishlists.WishlistsModel;
 
 import java.util.List;

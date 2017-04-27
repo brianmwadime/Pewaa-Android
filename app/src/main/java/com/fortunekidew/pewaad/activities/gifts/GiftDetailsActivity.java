@@ -5,11 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +20,6 @@ import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,13 +38,18 @@ import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIContributor;
+import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
-import com.fortunekidew.pewaad.app.PewaaApplication;
+import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
+import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
+import com.fortunekidew.pewaad.models.users.Pusher;
+import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
-import com.fortunekidew.pewaad.models.wishlists.GiftsModel;
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.ui.recyclerview.InsetDividerDecoration;
 import com.fortunekidew.pewaad.ui.recyclerview.SlideInItemAnimator;
 import com.fortunekidew.pewaad.ui.widget.AuthorTextView;
@@ -57,9 +61,13 @@ import com.fortunekidew.pewaad.util.TransitionUtils;
 import com.fortunekidew.pewaad.util.ViewUtils;
 import com.fortunekidew.pewaad.util.glide.CircleTransform;
 import com.fortunekidew.pewaad.util.glide.GlideUtils;
+import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -116,6 +124,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     private View targetAmount;
     private LinearLayout shotActions;
     private Button contribute;
+    private Button cashout;
     private TextView ownerName;
     private ImageView ownerAvatar;
     private TextView giftTimeAgo;
@@ -123,19 +132,17 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     private APIContributor api;
     private ContributorsAdapter adapter;
     private GiftsModel gift;
-
     private CircleTransform circleTransform;
     private ElasticDragDismissFrameLayout.SystemChromeFader chromeFader;
-    private List<EditPayments> paymentList;
     private String giftID, giftTitle, giftImage, giftDesc;
     private double giftPrice;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gift);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         circleTransform = new CircleTransform(this);
 
         if (getIntent().getExtras() != null) {
@@ -180,12 +187,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
         giftTimeAgo = (TextView) giftDescription.findViewById(R.id.time_ago);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResultAndFinish();
-            }
-        });
+        back.setOnClickListener(v -> setResultAndFinish());
 
         chromeFader = new ElasticDragDismissFrameLayout.SystemChromeFader(this) {
             @Override
@@ -194,7 +196,16 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             }
         };
 
-        setupContributing();
+
+
+        if (gift.getContributed() == gift.getPrice() && gift.getCashout_status() == null) {
+            // Show cashout button
+            setupCashout();
+        } else {
+            // Show contribute button
+            setupContributing();
+        }
+
         contributorsList.addOnScrollListener(scrollListener);
         contributorsList.setOnFlingListener(flingListener);
         bindGift(false);
@@ -237,7 +248,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         // load the main image
         Glide.with(this)
                 .load(EndPoints.ASSETS_BASE_URL + giftImage)
-                .listener(shotLoadListener)
+                .listener(giftLoadListener)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .priority(Priority.IMMEDIATE)
                 .into(GiftCover);
@@ -266,8 +277,13 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             ((ProgressBar) giftProgress).setProgress((int)progress);
 
             // Hide contribute button once we hit the mark!
-            if (progress == 100) {
+            if (progress == 100 && contribute != null) {
                 contribute.setVisibility(View.INVISIBLE);
+            }
+
+
+            if (gift.getCashout_status() == "COMPLETED" && cashout != null) {
+                cashout.setVisibility(View.INVISIBLE);
             }
 
             ((TextView) targetAmount).setText(String.format(Locale.ENGLISH, "Target: %1$,.2f", gift.getPrice()));
@@ -278,9 +294,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                     .placeholder(R.drawable.avatar_placeholder)
                     .override(largeAvatarSize, largeAvatarSize)
                     .into(ownerAvatar);
-            View.OnClickListener playerClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            View.OnClickListener contributorClick = v -> {
 //                    Intent player = new Intent(GiftDetailsActivity.this, ProfileActivity.class);
 //                    if (shot.user.shots_count > 0) { // legit user object
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER, shot.user);
@@ -294,10 +308,9 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 //                            ActivityOptions.makeSceneTransitionAnimation(GiftDetailsActivity.this,
 //                                    playerAvatar, getString(R.string.transition_player_avatar));
 //                    startActivity(player, options.toBundle());
-                }
             };
-//            playerAvatar.setOnClickListener(playerClick);
-//            playerName.setOnClickListener(playerClick);
+//            playerAvatar.setOnClickListener(contributorClick);
+//            playerName.setOnClickListener(contributorClick);
             if (gift.getCreatedOn() != null) {
                 giftTimeAgo.setText(DateUtils.getRelativeTimeSpanString(gift.getCreatedOn().getTime(),
                         System.currentTimeMillis(),
@@ -311,7 +324,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
         contributorAnimator = new ContributorAnimator();
         contributorsList.setItemAnimator(contributorAnimator);
-        adapter = new ContributorsAdapter(giftDescription, contributorFooter, 0,
+        adapter = new ContributorsAdapter(giftDescription, contributorFooter, gift.getContributor_count(),
                 getResources().getInteger(R.integer.contributor_expand_collapse_duration));
         contributorsList.setAdapter(adapter);
         contributorsList.addItemDecoration(new InsetDividerDecoration(
@@ -353,7 +366,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             // Customize the request
             Request request = original.newBuilder()
                     .header("Accept", "application/json")
-                    .header("token", PreferenceManager.getToken(PewaaApplication.getInstance()))
+                    .header("token", PreferenceManager.getToken(this))
                     .method(original.method(), original.body())
                     .build();
             // Customize or return the response
@@ -391,6 +404,53 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         });
     }
 
+    private void setupCashout() {
+
+        contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_cashout,
+                contributorsList, false);
+        cashout = (Button) contributorFooter.findViewById(R.id.cashout);
+
+        cashout.setOnClickListener(view -> {
+            if (api == null) createApi(APIContributor.class);
+            this.runOnUiThread(() -> AppHelper.showDialog(this, "Processing ..."));
+            Call<GiftResponse> statusResponseCall = api.cashOut(giftID, giftTitle, String.valueOf(giftPrice));
+            statusResponseCall.enqueue(new Callback<GiftResponse>() {
+                @Override
+                public void onResponse(Call<GiftResponse> call, Response<GiftResponse> response) {
+                    if (response.isSuccessful()) {
+                        gift.setId(giftID);
+                        gift.setName(response.body().getName());
+                        gift.setCreatorAvatar(gift.getCreatorAvatar());
+                        gift.setCreatorName(gift.getCreatorName());
+                        gift.setCreatorPhone(gift.getCreatorPhone());
+                        gift.setCashout_status(response.body().getCashout_status());
+                        cashout.setVisibility(View.INVISIBLE);
+
+                        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_GIFT, gift));
+
+                        Snackbar.make(draggableFrame, "Your cash out request has been received and is being processed.", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        try {
+                            Gson gson = new Gson();
+                            StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
+                            Snackbar.make(draggableFrame, "Could not complete your cashout request. Please contact Pewaa! support <info@pewaa.com>", Snackbar.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    AppHelper.hideDialog();
+
+                }
+
+                @Override
+                public void onFailure(Call<GiftResponse> call, Throwable t) {
+                    AppHelper.hideDialog();
+                }
+            });
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -416,44 +476,6 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     @Override
     public void onErrorLoading(Throwable throwable) {
 
-    }
-
-    /**
-     * RecyclerView item decoration - give equal margin around grid item
-     */
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
-            }
-        }
     }
 
     /**
@@ -490,7 +512,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
      */
     private View.OnTouchListener touchEater = (view, motionEvent) -> true;
 
-    private RequestListener shotLoadListener = new RequestListener<String, GlideDrawable>() {
+    private RequestListener giftLoadListener = new RequestListener<String, GlideDrawable>() {
         @Override
         public boolean onResourceReady(GlideDrawable resource, String model,
                                        Target<GlideDrawable> target, boolean isFromMemoryCache,
@@ -584,9 +606,10 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
-    /* package */ private class ContributorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class ContributorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int EXPAND = 0x1;
         private static final int COLLAPSE = 0x2;
@@ -605,11 +628,11 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         ContributorsAdapter(
                 @NonNull View description,
                 @Nullable View footer,
-                long commentCount,
+                long contributorCount,
                 long expandDuration) {
             this.description = description;
             this.footer = footer;
-            noContributors = commentCount == 0L;
+            noContributors = contributorCount == 0L;
             loading = !noContributors;
             expandCollapse = new AutoTransition();
             expandCollapse.setDuration(expandDuration);
@@ -680,6 +703,8 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                     return new SimpleViewHolder(
                             getLayoutInflater().inflate(viewType, parent, false));
                 case R.layout.pewaa_contribute:
+                    return new SimpleViewHolder(footer);
+                case R.layout.pewaa_cashout:
                     return new SimpleViewHolder(footer);
             }
             throw new IllegalArgumentException();
@@ -925,14 +950,14 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         }
     }
 
-    /* package */ private static class SimpleViewHolder extends RecyclerView.ViewHolder {
+    private static class SimpleViewHolder extends RecyclerView.ViewHolder {
 
-        public SimpleViewHolder(View itemView) {
+        SimpleViewHolder(View itemView) {
             super(itemView);
         }
     }
 
-    /* package */ static class ContributorViewHolder extends RecyclerView.ViewHolder {
+    static class ContributorViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.contributor_avatar) ImageView avatar;
         @BindView(R.id.contributor_name) AuthorTextView author;
@@ -953,7 +978,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
      * custom item animator allows us to stop RecyclerView from trying to handle this for us while
      * the transition is running.
      */
-    /* package */ private static class ContributorAnimator extends SlideInItemAnimator {
+     static class ContributorAnimator extends SlideInItemAnimator {
 
         private boolean animateMoves = false;
 
@@ -974,5 +999,15 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             }
             return super.animateMove(holder, fromX, fromY, toX, toY);
         }
+    }
+
+    /**
+     * method of EventBus
+     *
+     * @param pusher this is parameter of onEventMainThread method
+     */
+    @Subscribe
+    public void onEventMainThread(Pusher pusher) {
+
     }
 }

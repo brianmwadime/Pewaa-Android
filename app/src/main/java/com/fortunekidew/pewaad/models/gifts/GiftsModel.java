@@ -1,16 +1,18 @@
-package com.fortunekidew.pewaad.models.wishlists;
+package com.fortunekidew.pewaad.models.gifts;
 
 import org.parceler.Parcel;
 
 import java.util.Date;
-import java.util.StringJoiner;
 
 import io.realm.GiftsModelRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Brian Mwakima on 10/6/16.
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 
 @Parcel(implementations = { GiftsModelRealmProxy.class },
@@ -23,6 +25,8 @@ public class GiftsModel extends RealmObject {
     public String name;
 
     public String cashout_status;
+
+    public long contributor_count;
 
     public double price;
 
@@ -88,6 +92,14 @@ public class GiftsModel extends RealmObject {
 
     public double getContributed() {
         return total_contribution;
+    }
+
+    public long getContributor_count() {
+        return contributor_count;
+    }
+
+    public void setContributor_count(long contributor_count) {
+        this.contributor_count = contributor_count;
     }
 
     public void setContributed(double contributed) {

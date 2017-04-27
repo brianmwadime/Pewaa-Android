@@ -1,11 +1,14 @@
-package com.fortunekidew.pewaad.models.wishlists;
+package com.fortunekidew.pewaad.models.gifts;
 
 import java.util.Date;
 
 /**
- * Created by Abderrahim El imame on 20/02/2016.
- * Email : abderrahim.elimame@gmail.com
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class EditGift {
     private String name;
     private String id;
@@ -15,6 +18,11 @@ public class EditGift {
     private Date created_on;
     private double price;
     private double contributed;
+    private String cashout_status;
+    private long contributor_count;
+    private String creator_name;
+    private String creator_avatar;
+    private String creator_phone;
 
     public Date getCreatedOn() {
         return created_on;
@@ -80,4 +88,43 @@ public class EditGift {
         this.description = description;
     }
 
+    public String getCashout_status() {
+        return cashout_status;
+    }
+
+    public void setCashout_status(String cashout_status) {
+        this.cashout_status = cashout_status;
+    }
+
+    public long getContributor_count() {
+        return contributor_count;
+    }
+
+    public void setContributor_count(long contributor_count) {
+        this.contributor_count = contributor_count;
+    }
+
+    public String getCreator_name() {
+        return creator_name;
+    }
+
+    public void setCreator_name(String creator_name) {
+        this.creator_name = creator_name;
+    }
+
+    public String getCreator_avatar() {
+        return creator_avatar;
+    }
+
+    public void setCreator_avatar(String creator_avatar) {
+        this.creator_avatar = creator_avatar;
+    }
+
+    public String getCreator_phone() {
+        return creator_phone;
+    }
+
+    public void setCreator_phone(String creator_phone) {
+        this.creator_phone = creator_phone;
+    }
 }

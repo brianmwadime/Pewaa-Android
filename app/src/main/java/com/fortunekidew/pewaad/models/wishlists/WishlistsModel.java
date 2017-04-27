@@ -1,5 +1,6 @@
 package com.fortunekidew.pewaad.models.wishlists;
 
+import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;

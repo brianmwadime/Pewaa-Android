@@ -103,8 +103,18 @@ public class PewaaFirebaseMessagingService extends FirebaseMessagingService {
                     NotificationsManager.showGiftNotification(PewaaApplication.getAppContext(), giftIntent, "Your contribution of Kes " + data.getString("amount") + " for gift item - " + data.getString("name") + " completed with status " + data.getString("status"));
 
                 } catch (Exception e) {
-                    AppHelper.LogCat("User received Payment complete Exception on Notifications " + e.getMessage());
+                    AppHelper.LogCat("User received Cash out request Exception on Notifications " + e.getMessage());
                 }
+                break;
+            case AppConstants.SOCKET_CASHOUT:
+                try {
+                    JSONObject data = new JSONObject(remoteMessage.getData());
+                    NotificationsManager.showCashoutNotification(PewaaApplication.getAppContext(), data.getString("message"));
+
+                } catch (Exception e) {
+                    AppHelper.LogCat("Cash out request Exception on Notifications " + e.getMessage());
+                }
+
                 break;
         }
 

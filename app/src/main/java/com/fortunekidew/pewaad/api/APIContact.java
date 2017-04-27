@@ -133,25 +133,4 @@ public interface APIContact {
     @FormUrlEncoded
     @POST(EndPoints.DELETE_ACCOUNT)
     Observable<StatusResponse> deleteAccount(@Field("phone") String phone);
-
-
-
-
-
-    /**
-     * method to get ads info
-     *
-     * @return this is return value
-     */
-    @GET(EndPoints.GET_ADS_INFORMATION)
-    Observable<StatusResponse> getAdsInformation();
-    /**
-     * method to get ads info
-     *
-     * @return this is return value
-     */
-    @GET(EndPoints.GET_INTERSTITIAL_INFORMATION)
-    Observable<StatusResponse> getInterstitialAdInformation();
-
-
 }

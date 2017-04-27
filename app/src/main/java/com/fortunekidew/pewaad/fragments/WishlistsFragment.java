@@ -292,11 +292,12 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
 
     @Override
     public void onShowLoading() {
-
+        EventBus.getDefault().post(new Pusher("startRefresh"));
     }
 
     @Override
     public void onHideLoading() {
+        EventBus.getDefault().post(new Pusher("stopRefresh"));
     }
 
 

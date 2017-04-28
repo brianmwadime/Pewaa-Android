@@ -22,6 +22,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -38,14 +39,12 @@ import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIContributor;
-import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.gifts.GiftResponse;
-import com.fortunekidew.pewaad.models.payments.EditPayments;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
@@ -199,16 +198,15 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
 
         if (gift.getContributed() == gift.getPrice() && gift.getCashout_status() == null) {
-            // Show cashout button
+            // Show cash out button
             setupCashout();
         } else {
-            // Show contribute button
             setupContributing();
         }
 
         contributorsList.addOnScrollListener(scrollListener);
         contributorsList.setOnFlingListener(flingListener);
-        bindGift(false);
+        bindGift(true);
 
     }
 
@@ -253,6 +251,18 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                 .priority(Priority.IMMEDIATE)
                 .into(GiftCover);
 
+        if (postponeEnterTransition) postponeEnterTransition();
+        GiftCover.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        GiftCover.getViewTreeObserver().removeOnPreDrawListener(this);
+//                        calculateFabPosition();
+                        if (postponeEnterTransition) startPostponedEnterTransition();
+                        return true;
+                    }
+                });
+
         if (!TextUtils.isEmpty(giftTitle)) {
             ((BaselineGridTextView) title).setText(giftTitle);
         }
@@ -275,16 +285,6 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             double progress =  ((gift.getContributed()/ gift.getPrice()) * 100);
             // Set contribution progress
             ((ProgressBar) giftProgress).setProgress((int)progress);
-
-            // Hide contribute button once we hit the mark!
-            if (progress == 100 && contribute != null) {
-                contribute.setVisibility(View.INVISIBLE);
-            }
-
-
-            if (gift.getCashout_status() == "COMPLETED" && cashout != null) {
-                cashout.setVisibility(View.INVISIBLE);
-            }
 
             ((TextView) targetAmount).setText(String.format(Locale.ENGLISH, "Target: %1$,.2f", gift.getPrice()));
 
@@ -391,64 +391,77 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
     private void setupContributing() {
 
-        contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_contribute,
-                contributorsList, false);
-        contribute = (Button) contributorFooter.findViewById(R.id.contribute);
+        if (gift.getContributed() != gift.getPrice()) {
+            contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_contribute,
+                    contributorsList, false);
+            contribute = (Button) contributorFooter.findViewById(R.id.contribute);
 
-        contribute.setOnClickListener(view -> {
-            Intent contribute1 = new Intent();
-            contribute1.setClass(GiftDetailsActivity.this, ContributeActivity.class);
-            contribute1.putExtra(ContributeActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, gift));
+            contribute.setOnClickListener(view -> {
+                Intent contribute1 = new Intent();
+                contribute1.setClass(GiftDetailsActivity.this, ContributeActivity.class);
+                contribute1.putExtra(ContributeActivity.EXTRA_GIFT, Parcels.wrap(GiftsModel.class, gift));
 
-            startActivity(contribute1);
-        });
+                startActivity(contribute1);
+            });
+        } else if (contributorFooter != null) {
+            adapter.removeContributorFooter();
+            contributorFooter = null;
+        }
     }
 
     private void setupCashout() {
 
-        contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_cashout,
-                contributorsList, false);
-        cashout = (Button) contributorFooter.findViewById(R.id.cashout);
+        if (gift.getContributed() == gift.getPrice() && gift.getCashout_status() == null ) {
 
-        cashout.setOnClickListener(view -> {
-            if (api == null) createApi(APIContributor.class);
-            this.runOnUiThread(() -> AppHelper.showDialog(this, "Processing ..."));
-            Call<GiftResponse> statusResponseCall = api.cashOut(giftID, giftTitle, String.valueOf(giftPrice));
-            statusResponseCall.enqueue(new Callback<GiftResponse>() {
-                @Override
-                public void onResponse(Call<GiftResponse> call, Response<GiftResponse> response) {
-                    if (response.isSuccessful()) {
-                        gift.setId(giftID);
-                        gift.setName(response.body().getName());
-                        gift.setCreatorAvatar(gift.getCreatorAvatar());
-                        gift.setCreatorName(gift.getCreatorName());
-                        gift.setCreatorPhone(gift.getCreatorPhone());
-                        gift.setCashout_status(response.body().getCashout_status());
-                        cashout.setVisibility(View.INVISIBLE);
+            contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_cashout,
+                    contributorsList, false);
+            cashout = (Button) contributorFooter.findViewById(R.id.cashout);
 
-                        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_GIFT, gift));
+            cashout.setOnClickListener(view -> {
+                if (api == null) createApi(APIContributor.class);
+                this.runOnUiThread(() -> AppHelper.showDialog(this, "Processing ..."));
+                Call<GiftResponse> statusResponseCall = api.cashOut(giftID, giftTitle, String.valueOf(giftPrice));
+                statusResponseCall.enqueue(new Callback<GiftResponse>() {
+                    @Override
+                    public void onResponse(Call<GiftResponse> call, Response<GiftResponse> response) {
+                        if (response.isSuccessful()) {
+                            gift.setId(giftID);
+                            gift.setName(response.body().getName());
+                            gift.setCreatorAvatar(gift.getCreatorAvatar());
+                            gift.setCreatorName(gift.getCreatorName());
+                            gift.setCreatorPhone(gift.getCreatorPhone());
+                            gift.setCashout_status(response.body().getCashout_status());
+                            cashout.setVisibility(View.INVISIBLE);
 
-                        Snackbar.make(draggableFrame, "Your cash out request has been received and is being processed.", Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        try {
-                            Gson gson = new Gson();
-                            StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
-                            Snackbar.make(draggableFrame, "Could not complete your cashout request. Please contact Pewaa! support <info@pewaa.com>", Snackbar.LENGTH_SHORT).show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_UPDATE_GIFT, gift));
+
+                            Snackbar.make(draggableFrame, "Your cash out request has been received and is being processed.", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                Gson gson = new Gson();
+                                StatusResponse res = gson.fromJson(response.errorBody().string(), StatusResponse.class);
+                                Snackbar.make(draggableFrame, "Could not complete your cash out request. Please contact Pewaa! support <info@pewaa.com>", Snackbar.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+
+                        AppHelper.hideDialog();
+
                     }
 
-                    AppHelper.hideDialog();
-
-                }
-
-                @Override
-                public void onFailure(Call<GiftResponse> call, Throwable t) {
-                    AppHelper.hideDialog();
-                }
+                    @Override
+                    public void onFailure(Call<GiftResponse> call, Throwable t) {
+                        AppHelper.hideDialog();
+                    }
+                });
             });
-        });
+
+        } else if (contributorFooter != null) {
+            adapter.removeContributorFooter();
+            contributorFooter = null;
+        }
+
     }
 
     @Override
@@ -658,7 +671,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             notifyItemRangeInserted(1, newContributors.size());
         }
 
-        void removeCommentingFooter() {
+        void removeContributorFooter() {
             if (footer == null) return;
             int footerPos = getItemCount() - 1;
             footer = null;

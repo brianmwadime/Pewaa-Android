@@ -30,7 +30,7 @@ public class GiftsModel extends RealmObject {
 
     public double price;
 
-    public double total_contribution;
+    public double contribution_total;
 
     public String wishlist_id;
 
@@ -91,7 +91,7 @@ public class GiftsModel extends RealmObject {
     }
 
     public double getContributed() {
-        return total_contribution;
+        return contribution_total;
     }
 
     public long getContributor_count() {
@@ -103,7 +103,7 @@ public class GiftsModel extends RealmObject {
     }
 
     public void setContributed(double contributed) {
-        this.total_contribution = contributed;
+        this.contribution_total = contributed;
     }
 
     public double getPrice() {

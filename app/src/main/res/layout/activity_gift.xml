@@ -32,11 +32,10 @@
         android:transitionName="@string/transition_gift"
         android:background="@color/light_grey"
         app:scrimColor="@color/scrim"
-        android:scaleType="fitCenter"
         android:adjustViewBounds = "true"
         app:scrimAlpha="0"
         app:maxScrimAlpha="0.4"
-        app:parallaxFactor="-0.5" />
+        app:parallaxFactor="-0.5" /> <!--android:scaleType="fitCenter"-->
     <FrameLayout
         android:id="@+id/back_wrapper"
         android:layout_width="wrap_content"
@@ -56,6 +55,13 @@
             android:background="@drawable/mid_grey_ripple" />
 
     </FrameLayout>
+
+    <!-- dummy view stopping the below RecyclerView from capturing focus which messes up layout -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusableInTouchMode="true"
+        android:importantForAccessibility="no" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gift_contributors"

@@ -291,7 +291,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         for (int i = 0; i < arraySize; i++) {
             GiftsModel model = mGifts.get(i);
             if (giftId.equals(model.getId())) {
-                AppHelper.LogCat("Updating Gift: " + giftId + " " + model.getId());
                 changeItemAtPosition(i, gift);
                 break;
             }

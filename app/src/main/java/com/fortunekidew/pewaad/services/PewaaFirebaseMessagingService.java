@@ -17,8 +17,12 @@ import com.fortunekidew.pewaad.helpers.notifications.NotificationsManager;
 import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.parceler.Parcels;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Brian Mwakima on 12/25/16.
@@ -94,6 +98,7 @@ public class PewaaFirebaseMessagingService extends FirebaseMessagingService {
                     giftModel.setDescription(data.getString("description"));
                     giftModel.setPrice(data.getDouble("price"));
                     giftModel.setName(data.getString("name"));
+                    giftModel.setCreatedOn(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.getString("created_on")));
                     giftModel.setCreatorAvatar(data.getString("creator_avatar"));
                     giftModel.setCreatorPhone(data.getString("creator_phone"));
                     giftModel.setCreatorName(data.getString("creator_name"));

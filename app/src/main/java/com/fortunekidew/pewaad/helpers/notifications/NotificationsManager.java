@@ -34,10 +34,12 @@ public class NotificationsManager {
     private static int numGiftMessages = 0;
     private static int numPaymentMessages = 0;
     private static int numWishlistMessages = 0;
+    private static int numCashouts = 0;
     // Sets an ID for the notification
     static int mGiftNotificationId = 0x51;
     static int mWishlistNotificationId = 0x52;
     static int mPaymentNotificationId = 0x53;
+    static int mCashoutNotificationId = 0x54;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static void showGiftNotification(Context mContext, Intent resultIntent, String text) {
@@ -113,6 +115,7 @@ public class NotificationsManager {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentTitle("Pewaa!")
                 .setContentText(text)
+                .setNumber(++numCashouts)
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setSmallIcon(R.drawable.ic_notification)
@@ -147,7 +150,7 @@ public class NotificationsManager {
             mNotifyBuilder.setDefaults(defaults);
         }
         mNotifyBuilder.setAutoCancel(true);
-        mNotificationManager.notify(mGiftNotificationId, mNotifyBuilder.build());
+        mNotificationManager.notify(mCashoutNotificationId, mNotifyBuilder.build());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

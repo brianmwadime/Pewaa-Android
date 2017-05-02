@@ -233,8 +233,8 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
         double price = Double.parseDouble(EditPrice.getText().toString().trim());
 
-        if(price < 2000){
-            price_wrapper.setError("The minimum gift price is Kes. 2000");
+        if(price < 10){
+            price_wrapper.setError("The minimum gift price is Kes. 10");
             return;
         }
 

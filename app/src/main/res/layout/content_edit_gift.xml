@@ -71,7 +71,7 @@
                 android:id="@+id/edit_gift_price"
                 android:imeOptions="actionNext"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:hint="@string/hintPrice"/>
         </android.support.design.widget.TextInputLayout>
 

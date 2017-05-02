@@ -70,7 +70,6 @@
 
         <TextView
             android:id="@+id/target_amount"
-            android:layout_columnSpan="3"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/spacing_normal"
@@ -78,7 +77,7 @@
             android:background="@color/colorWhiteLight"
             android:textSize="@dimen/backdrop_subtitle"
             android:layout_height="wrap_content"
-            android:text="Target 50000"
+            android:hint="@string/gift_target_placeholder"
             />
     </LinearLayout>
 

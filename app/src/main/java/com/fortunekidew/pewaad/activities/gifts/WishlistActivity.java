@@ -29,6 +29,7 @@ import android.widget.Toolbar;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.contributors.NewContributorActivity;
 import com.fortunekidew.pewaad.activities.contributors.AssignContributor;
+import com.fortunekidew.pewaad.activities.main.Report;
 import com.fortunekidew.pewaad.adapters.recyclerView.wishlists.GiftsAdapter;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.PewaaApplication;
@@ -54,6 +55,8 @@ import io.realm.RealmList;
 
 import static com.fortunekidew.pewaad.app.AppConstants.STATUS_CONTRIBUTOR_ADDED;
 import static com.fortunekidew.pewaad.app.AppConstants.STATUS_CONTRIBUTOR_ADDED_SUCCESS;
+import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_SUCCESS;
+import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_WISHLIST_SUCCESS;
 
 
 /**
@@ -163,9 +166,8 @@ public class WishlistActivity extends Activity implements LoadingData {
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-
+        Intent intent = null;
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 if (AppHelper.isAndroid5()) {
                     Transition enterTrans = new Fade();
@@ -178,9 +180,16 @@ public class WishlistActivity extends Activity implements LoadingData {
                 deleteContributor(wishlistID, PreferenceManager.getID(this));
                 break;
             case R.id.add_contributor:
-                Intent intent = new Intent(this, NewContributorActivity.class);
+                intent = new Intent(this, NewContributorActivity.class);
                 intent.putExtra(NewContributorActivity.RESULT_EXTRA_WISHLIST_ID, wishlistID);
                 startActivityForResult(intent, STATUS_CONTRIBUTOR_ADDED);
+                break;
+            case R.id.report:
+                intent = new Intent(this, Report.class);
+                intent.putExtra(Report.EXTRA_WISHLIST_ID, wishlistID);
+                intent.putExtra(Report.EXTRA_REPORT_TYPE, AppConstants.REPORT_TYPE.WISHLIST);
+                startActivityForResult(intent, STATUS_REPORT_WISHLIST_SUCCESS);
+
                 break;
         }
 
@@ -368,23 +377,35 @@ public class WishlistActivity extends Activity implements LoadingData {
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // check if the request code is same as what is passed  here it is 2
-        if(requestCode == STATUS_CONTRIBUTOR_ADDED)
-        {
-            if(null != data)
-            {
-                String contributorId = data.getStringExtra("EXTRA_CONTRIBUTOR_ID");
+        switch (requestCode) {
+            case STATUS_CONTRIBUTOR_ADDED:
+                if(null != data)
+                {
+                    String contributorId = data.getStringExtra("EXTRA_CONTRIBUTOR_ID");
 
-                Intent intent = new Intent(this, AssignContributor.class);
-                intent.putExtra(AssignContributor.EXTRA_WISHLIST_ID, wishlistID);
-                intent.putExtra(AssignContributor.EXTRA_CONTRIBUTOR_ID, contributorId);
+                    Intent intent = new Intent(this, AssignContributor.class);
+                    intent.putExtra(AssignContributor.EXTRA_WISHLIST_ID, wishlistID);
+                    intent.putExtra(AssignContributor.EXTRA_CONTRIBUTOR_ID, contributorId);
 //                FabTransform.addExtras(intent,
 //                        ContextCompat.getColor(this, R.color.accent), R.drawable.ic_add_dark);
 //                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, fab,
 //                        getString(R.string.transition_contributor_add));
-                startActivityForResult(intent, STATUS_CONTRIBUTOR_ADDED_SUCCESS);
-            }
+                    startActivityForResult(intent, STATUS_CONTRIBUTOR_ADDED_SUCCESS);
+                }
+
+                break;
+            case STATUS_REPORT_SUCCESS:
+                String giftId = data.getStringExtra("EXTRA_ID");
+
+                mGiftsAdapter.removeItem(mGiftsAdapter.getItemPosition(giftId));
+                break;
+
+            case STATUS_REPORT_WISHLIST_SUCCESS:
+                String wishlistId = data.getStringExtra("EXTRA_ID");
+
+                break;
         }
+
     }
 
     private void animateToolbar() {

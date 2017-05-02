@@ -47,7 +47,7 @@ import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
+import com.fortunekidew.pewaad.models.contribute.ContributorsModel;
 import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.ui.recyclerview.InsetDividerDecoration;
 import com.fortunekidew.pewaad.ui.recyclerview.SlideInItemAnimator;

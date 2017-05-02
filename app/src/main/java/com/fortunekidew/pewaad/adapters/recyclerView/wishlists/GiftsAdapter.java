@@ -17,6 +17,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -27,6 +28,7 @@ import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -39,17 +41,16 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.gifts.GiftDetailsActivity;
+import com.fortunekidew.pewaad.activities.main.Report;
 import com.fortunekidew.pewaad.api.APIContributor;
 import com.fortunekidew.pewaad.api.APIService;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
-import com.fortunekidew.pewaad.models.gifts.EditGift;
 import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
 import com.fortunekidew.pewaad.models.gifts.GiftsModel;
 import com.fortunekidew.pewaad.ui.widget.BadgedFourThreeImageView;
 import com.fortunekidew.pewaad.util.ObservableColorMatrix;
@@ -73,6 +74,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_SUCCESS;
 import static com.fortunekidew.pewaad.util.AnimUtils.getFastOutSlowInInterpolator;
 
 /**
@@ -156,7 +158,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private GiftsModel removeItem(int position) {
+    public GiftsModel removeItem(int position) {
         final GiftsModel model = mGifts.remove(position);
         notifyItemRemoved(position);
         return model;
@@ -188,15 +190,6 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             try {
                 String Name = GiftsModel.getName();
-                if(GiftsModel.getContributed() == GiftsModel.getPrice() && GiftsModel.getCashout_status() == null){
-                    GiftViewHolder.cashout.setVisibility(View.VISIBLE);
-                } else {
-                    GiftViewHolder.cashout.setVisibility(View.INVISIBLE);
-                }
-
-                GiftViewHolder.cashout.setOnClickListener(v -> {
-                    saveContributor(GiftsModel);
-                });
 
                 GiftViewHolder.gift_name.setTextColor(mActivity.getResources().getColor(R.color.colorBlack));
                 SpannableString wishlistName = SpannableString.valueOf(Name);
@@ -211,6 +204,44 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                     GiftViewHolder.gift_name.setText(wishlistName, TextView.BufferType.SPANNABLE);
                 }
+
+                GiftViewHolder.btnMore.setOnClickListener(view -> {
+
+                    //creating a popup menu
+                    PopupMenu popup = new PopupMenu(mActivity, GiftViewHolder.btnMore);
+                    //inflating menu from xml resource
+                    popup.inflate(R.menu.item_menu);
+                    MenuItem itemMenu = popup.getMenu().findItem(R.id.report);
+                    SpannableString s = new SpannableString(itemMenu.getTitle());
+                    s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
+                    itemMenu.setTitle(s);
+
+                    MenuItem cashoutMenu = popup.getMenu().findItem(R.id.cashout);
+                    if(GiftsModel.getContributed() == GiftsModel.getPrice() && GiftsModel.getCashout_status() == null){
+                        cashoutMenu.setVisible(true);
+                    } else {
+                        cashoutMenu.setVisible(false);
+                    }
+
+                    //adding click listener
+                    popup.setOnMenuItemClickListener(item -> {
+                        switch (item.getItemId()) {
+                            case R.id.report:
+                                Intent intent = new Intent(mActivity, Report.class);
+                                intent.putExtra(Report.EXTRA_GIFT_ID, GiftsModel.getId());
+                                intent.putExtra(Report.EXTRA_REPORT_TYPE, AppConstants.REPORT_TYPE.GIFT);
+                                mActivity.startActivityForResult(intent, STATUS_REPORT_SUCCESS);
+                                break;
+                            case R.id.cashout:
+                                cashout(GiftsModel);
+                                break;
+                        }
+                        return false;
+                    });
+                    //displaying the popup
+                    popup.show();
+
+                });
 
                 GiftViewHolder.setGiftDate(GiftsModel.getCreatedOn());
                 GiftViewHolder.setGiftImage(GiftsModel.getAvatar(), position);
@@ -281,7 +312,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public int getItemPosition(final String itemId) {
         for (int position = 0; position < mGifts.size(); position++) {
-            if (getItem(position).getId() == itemId) return position;
+            if (getItem(position).getId().equals(itemId)) return position;
         }
         return RecyclerView.NO_POSITION;
     }
@@ -315,8 +346,8 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         EmojiconTextView gift_name;
         @BindView(R.id.date_created)
         TextView GiftDate;
-        @BindView(R.id.cashout_button)
-        ImageButton cashout;
+        @BindView(R.id.btnMore)
+        ImageButton btnMore;
 
         @BindView(R.id.cardview)
         CardView GiftRow;
@@ -442,7 +473,7 @@ public class GiftsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-    private void saveContributor(GiftsModel gift) {
+    private void cashout(GiftsModel gift) {
 
         APIContributor mApiContributor = mApiService.RootService(APIContributor.class, PreferenceManager.getToken(mActivity), EndPoints.BASE_URL);
         mActivity.runOnUiThread(() -> AppHelper.showDialog(mActivity, "Processing ..."));

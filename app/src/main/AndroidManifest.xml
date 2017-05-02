@@ -97,6 +97,11 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".activities.main.Report"
+            android:theme="@style/Pewaa.Translucent.AssignContributor"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".activities.wishlists.ListContributors"
             android:theme="@style/Pewaa.Translucent.AssignContributor"
             android:windowSoftInputMode="adjustResize" />

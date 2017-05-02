@@ -302,6 +302,8 @@
     <string name="hintRecipients">Recipient(s)</string>
     <string name="fab_scrolling_behavior">com.fortunekidew.pewaad.ui.ScrollingFABBehavior</string>
 
+    <string name="transition_report" translatable="false">transition_report</string>
+
     <string-array name="contributor_dropdown_arrays">
         <item>CONTRIBUTOR</item>
         <item>ADMINISTRATOR</item>
@@ -353,5 +355,11 @@
     <string name="please_select_country">Please Select Country</string>
     <string name="default_country_code">+254</string>
     <string name="cashout_tile">CASH OUT</string>
+    <string name="report">Report</string>
+    <string name="report_description">Description</string>
+    <string name="gift_target_placeholder">Target 0.00</string>
+    <string name="gift_item_title_hint">Gift Item</string>
+    <string name="gift_item_date_hint">12-01-2016</string>
+    <string name="cashout">Cash out</string>
 
 </resources>

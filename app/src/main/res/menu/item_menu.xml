@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/add_contributor"
-        android:icon="@drawable/ic_person_add_24dp"
-        android:title="@string/add_contributor"
-        app:showAsAction="ifRoom"
-        android:showAsAction="ifRoom" />
-
+        android:id="@+id/cashout"
+        android:title="@string/cashout" />
     <item
         android:id="@+id/report"
         android:title="@string/report" />
-
 </menu>

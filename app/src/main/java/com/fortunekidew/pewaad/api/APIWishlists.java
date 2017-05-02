@@ -1,6 +1,7 @@
 package com.fortunekidew.pewaad.api;
 
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.models.DefaultResponse;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
 import com.fortunekidew.pewaad.models.gifts.GiftsModel;
@@ -13,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -34,12 +36,20 @@ public interface APIWishlists {
     Observable<List<WishlistsModel>> wishlists();
 
     /**
-     * method to get all wishlist gifts
+     * method to create a wishlist
      *
      * @return this is return value
      */
     @POST(EndPoints.WISHLISTS_LIST)
     Call<StatusResponse> editWishlist(@Body EditWishlist editWishlist);
+
+    /**
+     * method to report a wishlist
+     *
+     * @return this is return value
+     */
+    @PUT(EndPoints.WISHLISTS_REPORT)
+    Call<DefaultResponse> reportWishlist(@Path("id") String wishlistId, @Body EditWishlist editWishlist);
 
     /**
      * method to get group information
@@ -48,7 +58,7 @@ public interface APIWishlists {
      * @return this is return value
      */
     @GET(EndPoints.GET_WISHLIST)
-    Observable<WishlistsModel> getWishlist(@Path("wishlistId") String wishlistId);
+    Observable<WishlistsModel> getWishlist(@Path("id") String wishlistId);
 
     /**
      * method to get group information
@@ -57,7 +67,7 @@ public interface APIWishlists {
      * @return this is return value
      */
     @GET(EndPoints.WISHLIST_ITEMS)
-    Observable<List<GiftsModel>> getGifts(@Path("wishlistId") String wishlistId);
+    Observable<List<GiftsModel>> getGifts(@Path("id") String wishlistId);
 
     @DELETE(EndPoints.WISHLIST_DELETE_CONTRIBUTOR)
     Observable<StatusResponse> removeContributor(@Path("wishlist_id") String wishlist_id, @Path("contributor_id") String contributor_id);

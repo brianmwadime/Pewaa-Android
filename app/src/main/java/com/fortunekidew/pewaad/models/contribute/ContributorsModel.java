@@ -1,44 +1,73 @@
-package com.fortunekidew.pewaad.models.wishlists;
+package com.fortunekidew.pewaad.models.contribute;
 
 import java.util.Date;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
- * Created by Brian Mwakima on 12/25/16.
- *
- * @Email : mwadime@fortunekidew.co.ke
- * @Author : https://twitter.com/brianmwadime
+ * Created by Brian Mwakima on 10/6/16.
  */
 
-public class ContributorsResponse {
-
-    private boolean success;
-    private String message;
+public class ContributorsModel extends RealmObject {
+    @PrimaryKey
     private String id;
 
     private String wishlist_id;
 
     private String user_id;
-
+    private String name;
+    private String avatar;
     private  String permissions;
+
+    private  String status;
+
+    private  double amount;
+
+    private String reference;
 
     private Date created_on;
 
     private Date updated_on;
 
-    public boolean isSuccess() {
-        return success;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public String getMessage() {
-        return message;
+    public String getReference() {
+        return reference;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Date getUpdatedOn() {

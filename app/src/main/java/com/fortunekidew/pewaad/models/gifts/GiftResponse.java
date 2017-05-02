@@ -19,6 +19,24 @@ public class GiftResponse {
     private double contributed;
     private String cashout_status;
     private String creator_id;
+    private Boolean flagged;
+    private String flagged_description;
+
+    public void setFlagged_description(String flagged_description) {
+        this.flagged_description = flagged_description;
+    }
+
+    public void setFlagged(Boolean flagged) {
+        this.flagged = flagged;
+    }
+
+    public Boolean getFlagged() {
+        return flagged;
+    }
+
+    public String getFlagged_description() {
+        return flagged_description;
+    }
 
     public String getCashout_status() {
         return cashout_status;

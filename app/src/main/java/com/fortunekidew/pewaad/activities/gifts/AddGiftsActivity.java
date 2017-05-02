@@ -2,10 +2,13 @@ package com.fortunekidew.pewaad.activities.gifts;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -61,6 +64,9 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
     private final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
 
     public final static String RESULT_EXTRA_GIFT_ID = "RESULT_EXTRA_GIFT_ID";
+
+    @BindView(R.id.ParentLayoutAddGift)
+    CoordinatorLayout parent;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -279,15 +285,20 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
                     finish();
 
                 } else {
-                    AppHelper.CustomToast(AddGiftsActivity.this, response.message());
+                    Snackbar snackbar = Snackbar.make(parent, response.message(), Snackbar.LENGTH_SHORT);
+                    View snackbarView = snackbar.getView();
+                    snackbarView.setBackgroundColor(Color.RED);
                 }
+
             }
 
             @Override
             public void onFailure(Call<GiftResponse> call, Throwable t) {
                 AppHelper.hideDialog();
-                AppHelper.CustomToast(AddGiftsActivity.this, "Failed to save wishlist.");
-                AppHelper.LogCat("Failed to add gift " + t.getMessage());
+                Snackbar snackbar = Snackbar.make(parent, t.getMessage(), Snackbar.LENGTH_SHORT);
+                View snackbarView = snackbar.getView();
+                snackbarView.setBackgroundColor(Color.RED);
+                snackbar.show();
             }
         });
     }

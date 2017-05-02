@@ -1,9 +1,10 @@
 package com.fortunekidew.pewaad.models;
 
 /**
- * Created by Abderrahim El imame on 01/11/2015.
- * @Email : abderrahim.elimame@gmail.com
- * @Author : https://twitter.com/bencherif_el
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
 public class JoinModel {
     private boolean success;

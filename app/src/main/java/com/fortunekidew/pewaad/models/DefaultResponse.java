@@ -1,4 +1,4 @@
-package com.fortunekidew.pewaad.models.users.status;
+package com.fortunekidew.pewaad.models;
 
 /**
  * Created by Brian Mwadime on 09/04/2017.

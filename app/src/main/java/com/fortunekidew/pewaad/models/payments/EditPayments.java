@@ -1,8 +1,12 @@
 package com.fortunekidew.pewaad.models.payments;
 
 /**
- * Created by Lincoln on 18/05/16.
+ * Created by Brian Mwakima on 12/25/16.
+ *
+ * @Email : mwadime@fortunekidew.co.ke
+ * @Author : https://twitter.com/brianmwadime
  */
+
 public class EditPayments {
     public String phoneNumber;
     public String clientLocation;

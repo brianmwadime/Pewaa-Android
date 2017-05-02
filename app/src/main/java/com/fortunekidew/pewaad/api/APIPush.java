@@ -2,17 +2,11 @@ package com.fortunekidew.pewaad.api;
 
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by Brian Mwakima on 12/25/16.

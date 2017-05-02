@@ -1,9 +1,9 @@
 package com.fortunekidew.pewaad.api;
 
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.models.DefaultResponse;
 import com.fortunekidew.pewaad.models.payments.ConfirmPaymentResponse;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
-import com.fortunekidew.pewaad.models.payments.PaymentResponse;
 import com.fortunekidew.pewaad.models.payments.RequestPaymentResponse;
 
 import retrofit2.Call;
@@ -29,7 +29,7 @@ public interface APIPayments {
      */
     @FormUrlEncoded
     @POST(EndPoints.Payments)
-    Call<PaymentResponse> createPayment(@Field("amount") double amount,
+    Call<DefaultResponse> createPayment(@Field("amount") double amount,
                                         @Field("wishlist_item_id") String giftId,
                                         @Field("reference") String payment_reference,
                                         @Field("status") String status,

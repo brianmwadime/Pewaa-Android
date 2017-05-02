@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.fortunekidew.pewaad.activities.contributors;
+package com.fortunekidew.pewaad.activities.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,21 +27,23 @@ import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fortunekidew.pewaad.R;
-import com.fortunekidew.pewaad.api.APIContributor;
+import com.fortunekidew.pewaad.api.APIGifts;
 import com.fortunekidew.pewaad.api.APIService;
+import com.fortunekidew.pewaad.api.APIWishlists;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
+import com.fortunekidew.pewaad.models.DefaultResponse;
+import com.fortunekidew.pewaad.models.gifts.EditGift;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.contribute.ContributorsResponse;
+import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
 import com.fortunekidew.pewaad.ui.transitions.FabTransform;
 import com.fortunekidew.pewaad.ui.transitions.MorphTransform;
 import com.fortunekidew.pewaad.util.TransitionUtils;
@@ -54,6 +57,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_SUCCESS;
+import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_WISHLIST_SUCCESS;
+
 /**
  * Created by Brian Mwakima on 12/25/16.
  *
@@ -61,39 +67,46 @@ import retrofit2.Response;
  * @Author : https://twitter.com/brianmwadime
  */
 
-public class AssignContributor extends Activity {
+public class Report extends Activity {
 
     public static final String EXTRA_WISHLIST_ID = "EXTRA_WISHLIST_ID";
-    public static final String EXTRA_CONTRIBUTOR_ID = "EXTRA_CONTRIBUTOR_ID";
+    public static final String EXTRA_GIFT_ID = "EXTRA_GIFT_ID";
+    public static final String EXTRA_REPORT_TYPE = "EXTRA_REPORT_TYPE";
     boolean isDismissing = false;
     @BindView(R.id.container) ViewGroup container;
     @BindView(R.id.dialog_title) TextView title;
-    @BindView(R.id.spinner)
-    Spinner permissions;
     @BindView(R.id.actions_container)
     FrameLayout actionsContainer;
     @BindView(R.id.cancel) Button cancel;
-    @BindView(R.id.add) Button add;
+    @BindView(R.id.report) Button report;
     @BindView(R.id.loading) ProgressBar loading;
+    @BindView(R.id.description) EditText description;
 
     private APIService mApiService;
 
-    private String wishlistId, contributorId;
+    private String id;
+
+    private AppConstants.REPORT_TYPE type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assign_contributor);
+        setContentView(R.layout.activity_report);
         ButterKnife.bind(this);
 
         if (getIntent().getExtras() != null) {
             if (getIntent().hasExtra(EXTRA_WISHLIST_ID)) {
-                wishlistId = getIntent().getExtras().getString(EXTRA_WISHLIST_ID);
+                id = getIntent().getExtras().getString(EXTRA_WISHLIST_ID);
             }
 
-            if (getIntent().hasExtra(EXTRA_CONTRIBUTOR_ID)) {
-                contributorId = getIntent().getExtras().getString(EXTRA_CONTRIBUTOR_ID);
+            if (getIntent().hasExtra(EXTRA_GIFT_ID)) {
+                id = getIntent().getExtras().getString(EXTRA_GIFT_ID);
             }
+
+            if (getIntent().hasExtra(EXTRA_REPORT_TYPE)) {
+                type = (AppConstants.REPORT_TYPE) getIntent().getExtras().getSerializable(EXTRA_REPORT_TYPE);
+            }
+
         }
 
         if (!FabTransform.setup(this, container)) {
@@ -111,34 +124,9 @@ public class AssignContributor extends Activity {
             });
         }
 
-        permissions.setOnItemSelectedListener(new ItemSelectedListener());
-
         loading.setVisibility(View.GONE);
 
         mApiService = new APIService(this);
-
-    }
-
-    public class ItemSelectedListener implements AdapterView.OnItemSelectedListener {
-
-        //get strings of first item
-        String firstItem = String.valueOf(permissions.getSelectedItem());
-
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            if (firstItem.equals(String.valueOf(permissions.getSelectedItem()))) {
-                // ToDo when first item is selected
-            } else {
-//                Toast.makeText(parent.getContext(),
-//                        "You have selected : " + parent.getItemAtPosition(pos).toString(),
-//                        Toast.LENGTH_LONG).show();
-                // Todo when item is selected by the user
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg) {
-
-        }
 
     }
 
@@ -147,22 +135,53 @@ public class AssignContributor extends Activity {
         dismiss(null);
     }
 
-    public void doAdd(View view) {
+    public void doReport(View view) {
         showLoading();
-        saveContributor();
+        report();
     }
 
-    private void saveContributor() {
+    private void report() {
 
-        APIContributor mApiContributor = mApiService.RootService(APIContributor.class, PreferenceManager.getToken(AssignContributor.this), EndPoints.BASE_URL);
-        AssignContributor.this.runOnUiThread(() -> showLoading());
-        Call<ContributorsResponse> statusResponseCall = mApiContributor.editContributor(contributorId, wishlistId, String.valueOf(permissions.getSelectedItem()));
-        statusResponseCall.enqueue(new Callback<ContributorsResponse>() {
+        Call<DefaultResponse> reportCall = null;
+        Report.this.runOnUiThread(() -> showLoading());
+
+        switch (type) {
+            case GIFT:
+                APIGifts mGiftApi = mApiService.RootService(APIGifts.class, PreferenceManager.getToken(Report.this), EndPoints.BASE_URL);
+                EditGift gift = new EditGift();
+                gift.setFlagged(true);
+                if(!description.getText().toString().isEmpty()) gift.setFlagged_description(description.getText().toString().trim());
+                reportCall = mGiftApi.reportGift(id, gift);
+                break;
+            case WISHLIST:
+                EditWishlist wishlist = new EditWishlist();
+                wishlist.setFlagged(true);
+                if(!description.getText().toString().isEmpty()) wishlist.setFlagged_description(description.getText().toString().trim());
+                APIWishlists mWishlistApi = mApiService.RootService(APIWishlists.class, PreferenceManager.getToken(Report.this), EndPoints.BASE_URL);
+                reportCall = mWishlistApi.reportWishlist(id, wishlist);
+                break;
+        }
+
+        reportCall.enqueue(new Callback<DefaultResponse>() {
             @Override
-            public void onResponse(Call<ContributorsResponse> call, Response<ContributorsResponse> response) {
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 if (response.isSuccessful()) {
 
-                    setResult(Activity.RESULT_OK);
+                    Intent intentMessage = new Intent();
+
+                    intentMessage.putExtra("EXTRA_ID",id);
+
+
+                    switch (type) {
+                        case GIFT:
+                            setResult(STATUS_REPORT_SUCCESS, intentMessage);
+                            break;
+                        case WISHLIST:
+                            setResult(STATUS_REPORT_WISHLIST_SUCCESS, intentMessage);
+
+                            break;
+                    }
+
                     finish();
 
                 } else {
@@ -176,7 +195,6 @@ public class AssignContributor extends Activity {
                         snackbarView.setBackgroundColor(Color.RED);
                         snackbar.show();
 
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -186,12 +204,8 @@ public class AssignContributor extends Activity {
             }
 
             @Override
-            public void onFailure(Call<ContributorsResponse> call, Throwable t) {
-                Snackbar snackbar = Snackbar.make(container, "Failed to add contributor. Please try again later.", Snackbar.LENGTH_SHORT);
-                // get snackbar view
-                View snackbarView = snackbar.getView();
-                snackbarView.setBackgroundColor(Color.RED);
-                snackbar.show();
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Snackbar.make(container, "Failed to report " + type, Snackbar.LENGTH_SHORT).show();
                 showAddContributor();
             }
         });
@@ -210,14 +224,14 @@ public class AssignContributor extends Activity {
 
     private void showLoading() {
         TransitionManager.beginDelayedTransition(container);
-        title.setVisibility(View.GONE);
+        description.setVisibility(View.GONE);
         actionsContainer.setVisibility(View.GONE);
         loading.setVisibility(View.VISIBLE);
     }
 
     private void showAddContributor() {
         TransitionManager.beginDelayedTransition(container);
-        title.setVisibility(View.VISIBLE);
+        description.setVisibility(View.VISIBLE);
         actionsContainer.setVisibility(View.VISIBLE);
         loading.setVisibility(View.GONE);
     }

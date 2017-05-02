@@ -28,16 +28,18 @@ public class EndPoints {
      *  Wishlists
      */
     public static final String WISHLISTS_LIST = "wishlists";
-    public static final String WISHLIST_ITEMS = "wishlists/{wishlistId}/gifts";
-    public static final String GET_WISHLIST = "wishlists/{wishlistId}";
+    public static final String WISHLIST_ITEMS = "wishlists/{id}/gifts";
+    public static final String GET_WISHLIST = "wishlists/{id}";
+    public static final String WISHLISTS_REPORT = "wishlists/{id}/report";
     public static final String WISHLIST_DELETE_CONTRIBUTOR = "wishlists/{wishlist_id}/contributors/{contributor_id}";
     /**
      * Gifts
      */
     public static final String GIFTS = "gifts";
-    public static final String GIFT = "gifts/{giftId}";
+    public static final String GIFT = "gifts/{id}";
     public static final String GIFT_CASHOUT = "gifts/{id}/cashout";
     public static final String GIFT_CONTRIBUTORS = "gifts/{id}/contributors";
+    public static final String GIFTS_REPORT = "gifts/{id}/report";
     public static final String Payments = "payments/create";
     public static final String Payment = "payments/update/{trx_id}";
     public static final String PAYMENT_REQUEST = "payments/request";
@@ -53,7 +55,7 @@ public class EndPoints {
      */
     public static final String NOTIFICATIONS = "notifications";
     public static final String DEVICES = "devices";
-    public static final String DEVICE = "devices/{deviceId}";
+    public static final String DEVICE = "devices/{id}";
     /**
      * Groups
      */
@@ -67,9 +69,4 @@ public class EndPoints {
     public static final String UPDATE_STATUS = "UpdateStatus/{statusID}";
     public static final String EDIT_STATUS = "EditStatus";
 
-    /**
-     * Admob
-     */
-    public static final String GET_ADS_INFORMATION = "GetAdmobInformation";
-    public static final String GET_INTERSTITIAL_INFORMATION = "GetAdmobInterstitialInformation";
 }

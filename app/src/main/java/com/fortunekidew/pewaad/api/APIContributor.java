@@ -3,14 +3,13 @@ package com.fortunekidew.pewaad.api;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.wishlists.ContributorsModel;
-import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
+import com.fortunekidew.pewaad.models.contribute.ContributorsModel;
+import com.fortunekidew.pewaad.models.contribute.ContributorsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;

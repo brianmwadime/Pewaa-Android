@@ -20,35 +20,55 @@ import io.realm.annotations.PrimaryKey;
         analyze = { GiftsModel.class })
 public class GiftsModel extends RealmObject {
     @PrimaryKey
-    public String id;
+    private String id;
 
-    public String name;
+    private String name;
 
-    public String cashout_status;
+    private String cashout_status;
 
-    public long contributor_count;
+    private long contributor_count;
 
-    public double price;
+    private double price;
 
-    public double contribution_total;
+    private double contribution_total;
 
-    public String wishlist_id;
+    private String wishlist_id;
 
-    public  String description;
+    private  String description;
 
-    public  String avatar;
+    private  String avatar;
 
-    public String code;
+    private String code;
 
-    public Date created_on;
+    private Date created_on;
 
-    public Date updated_on;
+    private Date updated_on;
 
     private String creator_name;
 
     private String creator_avatar;
 
     private String creator_phone;
+
+    private Boolean flagged;
+
+    private String flagged_description;
+
+    public void setFlagged_description(String flagged_description) {
+        this.flagged_description = flagged_description;
+    }
+
+    public void setFlagged(Boolean flagged) {
+        this.flagged = flagged;
+    }
+
+    public Boolean getFlagged() {
+        return flagged;
+    }
+
+    public String getFlagged_description() {
+        return flagged_description;
+    }
 
     public Date getUpdatedOn() {
         return updated_on;

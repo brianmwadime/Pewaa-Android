@@ -19,8 +19,8 @@ import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
+import com.fortunekidew.pewaad.models.DefaultResponse;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
-import com.fortunekidew.pewaad.models.payments.PaymentResponse;
 import com.fortunekidew.pewaad.models.payments.RequestPaymentResponse;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.gifts.GiftsModel;
@@ -220,10 +220,10 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                 if(response.isSuccessful()) {
                     payment.trxId = response.body().response.trx_id;
                     ContributeActivity.this.runOnUiThread(() -> AppHelper.showDialog(ContributeActivity.this, response.body().response.cust_msg));
-                    Call<PaymentResponse> statusResponseCall = mAPIPayments.createPayment(newPrice, gift.getId(), referenceID, AppConstants.PENDING_STATUS, gift.getDescription(), payment.trxId);
-                    statusResponseCall.enqueue(new Callback<PaymentResponse>() {
+                    Call<DefaultResponse> statusResponseCall = mAPIPayments.createPayment(newPrice, gift.getId(), referenceID, AppConstants.PENDING_STATUS, gift.getDescription(), payment.trxId);
+                    statusResponseCall.enqueue(new Callback<DefaultResponse>() {
                         @Override
-                        public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
+                        public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                             AppHelper.hideDialog();
                             if (response.isSuccessful()) {
 
@@ -236,7 +236,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                         }
 
                         @Override
-                        public void onFailure(Call<PaymentResponse> call, Throwable t) {
+                        public void onFailure(Call<DefaultResponse> call, Throwable t) {
                             AppHelper.hideDialog();
                             AppHelper.CustomToast(ContributeActivity.this, "Failed to add contribution. Please try again later.");
                             AppHelper.LogCat("Failed to add gift " + t.getMessage());

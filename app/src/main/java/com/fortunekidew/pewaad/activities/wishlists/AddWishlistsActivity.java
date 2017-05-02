@@ -1,6 +1,5 @@
 package com.fortunekidew.pewaad.activities.wishlists;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.view.ActionMode;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -25,23 +23,18 @@ import com.fortunekidew.pewaad.api.APIWishlists;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
-import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.helpers.UtilsString;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
-import com.fortunekidew.pewaad.models.wishlists.ContributorsResponse;
 import com.fortunekidew.pewaad.models.wishlists.EditWishlist;
 import com.fortunekidew.pewaad.presenters.EditWishlistPresenter;
 import com.fortunekidew.pewaad.ui.LabelledSpinner;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -18,4 +18,8 @@
         android:showAsAction="always"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/report"
+        android:title="@string/report" />
+
 </menu>

@@ -37,13 +37,17 @@ public class AppConstants {
     public static final int PERMISSION_REQUEST_CODE = 0x009;
     public static final int CONTACTS_PERMISSION_REQUEST_CODE = 0x010;
     public static final int SELECT_COUNTRY = 0x011;
+
     /**
      * Contributor constants
      */
-    // contributor constants:
     public static final int STATUS_CONTRIBUTOR_ADDED = 0x011;
     public static final int STATUS_CONTRIBUTOR_ADDED_SUCCESS = 0x012;
     public static final int STATUS_SELECTED_CONTRIBUTORS_SUCCESS = 0x013;
+    public static final int STATUS_REPORT_SUCCESS = 0x014;
+    public static final int STATUS_REPORT_WISHLIST_SUCCESS = 0x015;
+
+    public enum REPORT_TYPE { WISHLIST, GIFT }
 
     /**
      * for cache

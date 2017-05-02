@@ -23,6 +23,24 @@ public class EditGift {
     private String creator_name;
     private String creator_avatar;
     private String creator_phone;
+    private Boolean flagged;
+    private String flagged_description;
+
+    public void setFlagged_description(String flagged_description) {
+        this.flagged_description = flagged_description;
+    }
+
+    public void setFlagged(Boolean flagged) {
+        this.flagged = flagged;
+    }
+
+    public Boolean getFlagged() {
+        return flagged;
+    }
+
+    public String getFlagged_description() {
+        return flagged_description;
+    }
 
     public Date getCreatedOn() {
         return created_on;

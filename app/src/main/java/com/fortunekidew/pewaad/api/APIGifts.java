@@ -1,6 +1,8 @@
 package com.fortunekidew.pewaad.api;
 
 import com.fortunekidew.pewaad.app.EndPoints;
+import com.fortunekidew.pewaad.models.DefaultResponse;
+import com.fortunekidew.pewaad.models.gifts.EditGift;
 import com.fortunekidew.pewaad.models.payments.ConfirmPaymentResponse;
 import com.fortunekidew.pewaad.models.gifts.GiftResponse;
 import com.fortunekidew.pewaad.models.gifts.GiftsModel;
@@ -10,9 +12,11 @@ import java.util.List;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -52,13 +56,20 @@ public interface APIGifts {
                                 @Part("price") double price);
 
     /**
+     * method to report a gift
+     *
+     * @return this is return value
+     */
+    @PUT(EndPoints.GIFTS_REPORT)
+    Call<DefaultResponse> reportGift(@Path("id") String id, @Body EditGift gift);
+    /**
      * method to get a gift's information
      *
      * @param giftId this is  parameter for  getGift method
      * @return this is return value
      */
     @GET(EndPoints.GIFT)
-    Observable<WishlistsModel> getGift(@Path("giftId") String giftId);
+    Observable<WishlistsModel> getGift(@Path("id") String giftId);
 
     @GET(EndPoints.GIFT_CONTRIBUTORS)
     Call<ConfirmPaymentResponse> getContributors(@Path("id") String giftId);

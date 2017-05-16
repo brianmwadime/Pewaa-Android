@@ -169,6 +169,9 @@ public class WishlistsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     case "Baby Shower":
                         wishlistViewHolder.setWishlistImage(R.drawable.baby_shower, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_green));
                     break;
+                    case "Bon Voyage":
+                        wishlistViewHolder.setWishlistImage(R.drawable.bon_voyage, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_bonvoyage));
+                        break;
                     case "Birthday":
                         wishlistViewHolder.setWishlistImage(R.drawable.birthday, ContextCompat.getDrawable(mActivity, R.drawable.bg_circle_image_orange));
                     break;

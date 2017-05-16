@@ -59,8 +59,20 @@
             android:name=".activities.main.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/Pewaa.SplashTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <!--  IntroActivity -->
+        <activity
+            android:name="com.fortunekidew.pewaad.activities.main.IntroActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Pewaa.SplashTheme"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -136,10 +148,6 @@
                     android:pathPrefix="/gifts/"/>
             </intent-filter>
         </activity>
-
-        <!--  IntroActivity -->
-        <activity
-            android:name="com.fortunekidew.pewaad.activities.main.IntroActivity" />
 
         <!--  NotificationsSettingsActivity -->
         <activity android:name=".activities.settings.NotificationsSettingsActivity" />

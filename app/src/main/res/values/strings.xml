@@ -311,13 +311,14 @@
 
     <string-array name="wishlist_categories_arrays">
         <item>Select Category</item>
-        <item>House Warming</item>
         <item>Baby Shower</item>
-        <item>Wedding</item>
         <item>Birthday</item>
-        <item>Graduation</item>
         <item>Bridal Shower</item>
+        <item>Bon Voyage</item>
+        <item>Graduation</item>
+        <item>House Warming</item>
         <item>Retirement</item>
+        <item>Wedding</item>
     </string-array>
 
     <string name="widget_labelled_spinner_errorText">You must choose an item.</string>

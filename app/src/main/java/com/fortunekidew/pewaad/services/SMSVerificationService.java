@@ -1,8 +1,8 @@
 package com.fortunekidew.pewaad.services;
-
+import android.accounts.AccountAuthenticatorActivity;
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
-
 import com.fortunekidew.pewaad.activities.main.MainActivity;
 import com.fortunekidew.pewaad.api.APIAuthentication;
 import com.fortunekidew.pewaad.api.APIService;
@@ -10,7 +10,6 @@ import com.fortunekidew.pewaad.app.EndPoints;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.models.JoinModel;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,8 +22,6 @@ import retrofit2.Response;
  */
 
 public class SMSVerificationService extends IntentService {
-
-
     public SMSVerificationService() {
         super(SMSVerificationService.class.getSimpleName());
     }
@@ -50,7 +47,7 @@ public class SMSVerificationService extends IntentService {
                         PreferenceManager.setToken(response.body().getToken(), SMSVerificationService.this);
                         PreferenceManager.setNumber(response.body().getMobile(), SMSVerificationService.this);
                         Intent intent = new Intent(SMSVerificationService.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
                     } else {
@@ -65,9 +62,7 @@ public class SMSVerificationService extends IntentService {
             public void onFailure(Call<JoinModel> call, Throwable t) {
                 AppHelper.LogCat("SMS verification failure  SMSVerificationService" + t.getMessage());
                 AppHelper.CustomToast(getApplicationContext(), t.getMessage());
-
             }
         });
-
     }
 }

@@ -362,5 +362,10 @@
     <string name="gift_item_title_hint">Gift Item</string>
     <string name="gift_item_date_hint">12-01-2016</string>
     <string name="cashout">Cash out</string>
+    <string name="gift_price_surcharge">A 3% service charge will be added to the gift price.</string>
+
+    <string name="terms_and_privacy">By signing up you agree to our <a href="terms:">Terms of Service</a>.</string><!--and <a href="privacy:">Privacy Policy.</a>-->
+    <string name="label_terms">terms</string>
+    <string name="label_privacy">privacy</string>
 
 </resources>

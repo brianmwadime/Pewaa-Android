@@ -1,5 +1,6 @@
 package com.fortunekidew.pewaad.activities.main;
 
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,12 +29,19 @@ public class IntroActivity extends AppIntro {
 
         // Note here that we DO NOT use setContentView();
         initializerView();
+
+        // Ask for CAMERA permission on the second slide
+        askForPermissions(new String[]{Manifest.permission.CAMERA}, 3); // OR
+
+        // This will ask for the camera permission AND the contacts permission on the same slide.
+        // Ensure your slide talks about both so as not to confuse the user.
+        askForPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 5);
         // Add your slide fragments here.
         // AppIntro will automatically generate the dots indicator and buttons.
-//        addSlide(firstFragment);
-//        addSlide(secondFragment);
-//        addSlide(thirdFragment);
-//        addSlide(fourthFragment);
+        // addSlide(firstFragment);
+        // addSlide(secondFragment);
+        // addSlide(thirdFragment);
+        // addSlide(fourthFragment);
 
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.

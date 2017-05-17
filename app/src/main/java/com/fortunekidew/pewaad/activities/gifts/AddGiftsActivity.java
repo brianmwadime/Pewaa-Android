@@ -214,10 +214,6 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
         }
     }
 
-    private int convertToDp(float value) {
-        return (int) Math.ceil(1 * value);
-    }
-
     @OnClick(R.id.action_save)
     public void saveGift(View view) {
 
@@ -233,8 +229,8 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
         double price = Double.parseDouble(EditPrice.getText().toString().trim());
 
-        if(price < 10){
-            price_wrapper.setError("The minimum gift price is Kes. 10");
+        if(price < 2000){
+            price_wrapper.setError("The minimum gift price is Kes. 2000");
             return;
         }
 
@@ -258,7 +254,9 @@ public class AddGiftsActivity extends AppCompatActivity implements LoadingData {
 
         RequestBody newName = RequestBody.create(MediaType.parse("multipart/form-data"), EditName.getText().toString().trim());
         RequestBody newDescription = RequestBody.create(MediaType.parse("multipart/form-data"), EditDescription.getText().toString().trim());
-        double newPrice = Double.parseDouble(EditPrice.getText().toString().trim());
+
+        // Add 3% Service Charge to Gift Price
+        double newPrice = Double.parseDouble(EditPrice.getText().toString().trim()) + Math.ceil(Double.parseDouble(EditPrice.getText().toString().trim()) * AppConstants.GIFT_SERVICE_CHARGE);
 
         APIGifts mApiGift = mApiService.RootService(APIGifts.class, PreferenceManager.getToken(AddGiftsActivity.this), EndPoints.BASE_URL);
         AddGiftsActivity.this.runOnUiThread(() -> AppHelper.showDialog(AddGiftsActivity.this, "Adding ... "));

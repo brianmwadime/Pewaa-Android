@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,6 +23,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -29,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import butterknife.OnClick;
 import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.helpers.PermissionHandler;
 import com.fortunekidew.pewaad.helpers.PhoneNumberWatcher;
@@ -90,6 +94,7 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
     @BindView(R.id.txtEditMobile) TextView txtEditMobile;
     @BindView(R.id.search_input) TextInputEditText searchInput;
     @BindView(R.id.clear_btn_search_view) ImageView clearBtn;
+    @BindView(R.id.terms_link) TextView termsLink;
 
     //for account manager
     private String mOldAccountType;
@@ -127,31 +132,57 @@ public class WelcomeActivity extends AccountAuthenticatorActivity implements Vie
         mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mIntentFilter);
     }
 
+    //@Override
+  //protected void onNewIntent(Intent intent)
+  //{
+  //    if (intent.getScheme().equalsIgnoreCase(getString(R.string.label_terms)))
+  //    {
+  //      Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.LABEL_TERMS_LINK));
+  //      startActivity(browserIntent);
+  //    }
+  //    else if (intent.getScheme().equalsIgnoreCase(getString(R.string.label_privacy)))
+  //    {
+  //        // handle privacy clicked
+  //    }
+  //    else
+  //    {
+  //        super.onNewIntent(intent);
+  //    }
+  //}
+
+    @OnClick(R.id.terms_link)
+    public void termsConditions() {
+      Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.LABEL_TERMS_LINK));
+      startActivity(browserIntent);
+    }
+
     /**
      * method to initialize the view
      */
     private void initializerView() {
-        /**
-         * Checking if user already connected
-         */
-        if (getIntent().hasExtra(AccountManager.KEY_ACCOUNT_TYPE)) {
-            mOldAccountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
-            AppHelper.LogCat("IntentData is not null WelcomeActivity " + mOldAccountType);
-            CreateSyncAccount();
-        } else {
-            AppHelper.LogCat("IntentData is null WelcomeActivity ");
-            /**
-             * Checking if user already connected
-             */
+      //termsLink.setMovementMethod(LinkMovementMethod.getInstance());
+      // termsLink.setText(Html.toHtml(getString(R.string.terms_and_privacy)));
+      /**
+       * Checking if user already connected
+       */
+      if (getIntent().hasExtra(AccountManager.KEY_ACCOUNT_TYPE)) {
+          mOldAccountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
+          AppHelper.LogCat("IntentData is not null WelcomeActivity " + mOldAccountType);
+          CreateSyncAccount();
+      } else {
+          AppHelper.LogCat("IntentData is null WelcomeActivity ");
+          /**
+           * Checking if user already connected
+           */
 
-            if (PreferenceManager.getToken(this) != null) {
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-            }
+          if (PreferenceManager.getToken(this) != null) {
+              Intent intent = new Intent(this, MainActivity.class);
+              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+              startActivity(intent);
+              finish();
+          }
 
-        }
+      }
 
 //        phoneNumberWrapper.setEnabled(false);
 //        phoneNumberWrapper.setOnClickListener(view -> {

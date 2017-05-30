@@ -150,7 +150,6 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
 
         List<PewaaContact> contacts1 = new ArrayList<>();
         for (ContactsModel item : contacts) {
-
             PewaaContact contact = new PewaaContact();
             contact.setId(item.getId());
             contact.setContactID(item.getContactID());
@@ -161,7 +160,6 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
             contact.setExist(item.isExist());
             contact.setImage(item.getImage());
             contact.setStatus(item.getStatus());
-
             contacts1.add(contact);
         }
 
@@ -210,7 +208,6 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
                 contact.setExist(item.isExist());
                 contact.setImage(item.getImage());
                 contact.setStatus(item.getStatus());
-
                 contacts1.add(contact);
             }
 

@@ -183,7 +183,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
                     }
                 });
 
-
                 builder.setNegativeButton(R.string.No, (dialog, whichButton) -> {
 
                 });
@@ -250,7 +249,6 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
                 wishlistsModels1.add(conversationsModel);
             }
             mWishlistsAdapter.setWishlists(wishlistsModels1);
-
         } else {
             wishlistList.setVisibility(View.GONE);
             emptyWishlists.setVisibility(View.VISIBLE);
@@ -292,12 +290,12 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
 
     @Override
     public void onShowLoading() {
-        EventBus.getDefault().post(new Pusher("startRefresh"));
+        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_START_REFRESH));
     }
 
     @Override
     public void onHideLoading() {
-        EventBus.getDefault().post(new Pusher("stopRefresh"));
+        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_STOP_REFRESH));
     }
 
 
@@ -340,6 +338,7 @@ public class WishlistsFragment extends Fragment implements LoadingData, Recycler
         SwipeToRefresh.setRefreshing(false);
         wishlistList.setVisibility(View.GONE);
         emptyWishlists.setVisibility(View.VISIBLE);
+        onHideLoading();
         AppHelper.LogCat("Wishlists Fragment " + throwable.getMessage());
     }
 

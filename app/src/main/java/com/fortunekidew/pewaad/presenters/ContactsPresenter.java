@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 import io.realm.Realm;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -75,6 +76,7 @@ public class ContactsPresenter implements Presenter {
 
     public void getContacts(boolean isRefresh) {
         try {
+            contactsFragmentView.onShowLoading();
             mContactsService.getAllContacts().subscribe(contactsModels -> {
                 contactsFragmentView.ShowContacts(contactsModels, isRefresh);
             }, contactsFragmentView::onErrorLoading, contactsFragmentView::onHideLoading);
@@ -115,17 +117,14 @@ public class ContactsPresenter implements Presenter {
         if (PermissionHandler.checkPermission(contactsFragmentView.getActivity(), Manifest.permission.READ_CONTACTS)) {
             AppHelper.LogCat("Read contact data permission already granted.");
             contactsFragmentView.onShowLoading();
-            rx.Observable.create(new rx.Observable.OnSubscribe<List<ContactsModel>>() {
-                @Override
-                public void call(Subscriber<? super List<ContactsModel>> subscriber) {
-                    try {
+            rx.Observable.create((Observable.OnSubscribe<List<ContactsModel>>) subscriber -> {
+                try {
 
-                        List<ContactsModel> contactsList = UtilsPhone.GetPhoneContacts(contactsFragmentView.getActivity());
-                        subscriber.onNext(contactsList);
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        subscriber.onError(e);
-                    }
+                    List<ContactsModel> contactsList = UtilsPhone.GetPhoneContacts(contactsFragmentView.getActivity());
+                    subscriber.onNext(contactsList);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(e);
                 }
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(contactsList -> {
                 SyncContacts syncContacts = new SyncContacts();

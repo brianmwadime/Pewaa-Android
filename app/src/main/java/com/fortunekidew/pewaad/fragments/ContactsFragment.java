@@ -1,5 +1,4 @@
 package com.fortunekidew.pewaad.fragments;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -17,10 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.adapters.recyclerView.contacts.ContactsAdapter;
-import com.fortunekidew.pewaad.app.PewaaApplication;
+import com.fortunekidew.pewaad.app.AppConstants;
 import com.fortunekidew.pewaad.helpers.AppHelper;
 import com.fortunekidew.pewaad.helpers.PreferenceManager;
 import com.fortunekidew.pewaad.interfaces.LoadingData;
@@ -31,16 +29,12 @@ import com.fortunekidew.pewaad.models.users.contacts.PusherContacts;
 import com.fortunekidew.pewaad.presenters.ContactsPresenter;
 import com.fortunekidew.pewaad.ui.RecyclerViewFastScroller;
 import com.squareup.picasso.Picasso;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL;
 
@@ -251,12 +245,12 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
 
     @Override
     public void onShowLoading() {
-        EventBus.getDefault().post(new Pusher("startRefresh"));
+        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_START_REFRESH));
     }
 
     @Override
     public void onHideLoading() {
-        EventBus.getDefault().post(new Pusher("stopRefresh"));
+        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_STOP_REFRESH));
     }
 
     @Override
@@ -264,6 +258,6 @@ public class ContactsFragment extends Fragment implements LoadingData, SearchVie
         AppHelper.LogCat(throwable.getMessage());
         ContactsList.setVisibility(View.GONE);
         emptyContacts.setVisibility(View.VISIBLE);
-        EventBus.getDefault().post(new Pusher("stopRefresh"));
+        EventBus.getDefault().post(new Pusher(AppConstants.EVENT_BUS_STOP_REFRESH));
     }
 }

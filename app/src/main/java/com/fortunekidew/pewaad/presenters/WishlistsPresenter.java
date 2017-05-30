@@ -42,6 +42,8 @@ public class WishlistsPresenter implements Presenter {
         if (!EventBus.getDefault().isRegistered(wishlistsFragmentView))
             EventBus.getDefault().register(wishlistsFragmentView);
 
+        wishlistsFragmentView.onShowLoading();
+
         mWishlistsService = new WishlistsService(wishlistsFragmentView.getActivity(), mApiService);
         mWishlistsService.getWishlists().subscribe(wishlistsFragmentView::ShowWishlist, wishlistsFragmentView::onErrorLoading, wishlistsFragmentView::onHideLoading);
     }
@@ -75,6 +77,7 @@ public class WishlistsPresenter implements Presenter {
 
     @Override
     public void onRefresh() {
+        wishlistsFragmentView.onShowLoading();
         APIService mApiService = APIService.with(wishlistsFragmentView.getActivity());
 
         if (!EventBus.getDefault().isRegistered(wishlistsFragmentView))

@@ -15,7 +15,7 @@ public class AppConstants {
     public static final boolean CRASH_LYTICS = !BuildConfig.DEBUG;//this is crashlytics if you have an account on fabric.io but don't forget to change the key on manifests file
     static final boolean ENABLE_CRASH_HANDLER = !BuildConfig.DEBUG; // this for the crash activity  you can turn on this so when user get a crash this activity will appear instead of stop the app
     // Wishlist Permissions
-    public static final double GIFT_SERVICE_CHARGE = 0.03;
+    public static final double GIFT_SERVICE_CHARGE = 0.035;
     public static final String WISHLIST_ADMINISTRATOR = "ADMINISTRATOR";
     public static final String WISHLIST_CONTRIBUTOR = "CONTRIBUTOR";
     public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";//for this you have to set you package name here we use this add the app to account manager in user phone

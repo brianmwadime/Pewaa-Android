@@ -19,4 +19,5 @@ public class PaymentRequest {
     public String amount_in_double_float;
     public String client_phone_number;
     public String callback_url;
+    public Boolean is_anonymous;
 }

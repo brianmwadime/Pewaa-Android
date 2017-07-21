@@ -58,7 +58,6 @@ import static com.fortunekidew.pewaad.app.AppConstants.STATUS_CONTRIBUTOR_ADDED_
 import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_SUCCESS;
 import static com.fortunekidew.pewaad.app.AppConstants.STATUS_REPORT_WISHLIST_SUCCESS;
 
-
 /**
  * Created by Brian Mwakima on 12/25/16.
  *

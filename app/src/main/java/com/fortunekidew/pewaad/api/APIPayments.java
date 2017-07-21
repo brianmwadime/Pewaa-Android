@@ -34,7 +34,8 @@ public interface APIPayments {
                                         @Field("reference") String payment_reference,
                                         @Field("status") String status,
                                         @Field("description") String description,
-                                        @Field("trx_id") String transaction_id);
+                                        @Field("trx_id") String transaction_id,
+                                        @Field("is_anonymous") Boolean is_anonymous);
 
 
     @POST(EndPoints.PAYMENT_REQUEST)

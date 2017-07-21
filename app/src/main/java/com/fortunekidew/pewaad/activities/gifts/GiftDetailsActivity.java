@@ -906,17 +906,15 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         private void bindContributor(ContributorViewHolder holder, ContributorsModel contributor) {
             final int position = holder.getAdapterPosition();
             final boolean isExpanded = position == expandedContributorPosition;
-            Glide.with(GiftDetailsActivity.this)
-                    .load(ASSETS_BASE_URL + contributor.getAvatar())
-                    .transform(circleTransform)
-                    .placeholder(R.drawable.avatar_placeholder)
-                    .override(largeAvatarSize, largeAvatarSize)
-                    .into(holder.avatar);
+            holder.avatar.setImageDrawable(getPackageManager().getApplicationIcon(getApplicationInfo()));
 
-            if (contributor.getName() != null)
+            if (contributor.getName() != null && !contributor.is_anonymous()) {
                 holder.author.setText(contributor.getName().toLowerCase());
+            } else {
+                holder.author.setText(R.string.label_anonymous);
+            }
 
-            holder.contributorBody.setText(String.format("Contributed %1$,.2f", contributor.getAmount()));
+            holder.contributorBody.setText(String.format(getString(R.string.label_contributed), contributor.getAmount()));
 
             holder.timeAgo.setText(contributor.getCreatedOn() == null ? "" :
                     DateUtils.getRelativeTimeSpanString(contributor.getCreatedOn().getTime(),

@@ -49,11 +49,11 @@ public class IntroActivity extends AppIntro {
 
         addSlide(AppIntroFragment.newInstance("Add contributors to wishlist", "Invite your family and friends to your wishlists.", R.drawable.intro_contributors, Color.parseColor("#5f003871")));
 
-        addSlide(AppIntroFragment.newInstance("Add gifts", "Identify gifts Add/upload them from your camera or gallery.", R.drawable.intro_gallery, Color.parseColor("#5f003871")));
+        addSlide(AppIntroFragment.newInstance("Add items & allow them to contribute", "Identify gifts Add/upload them from your camera or gallery.", R.drawable.intro_gallery, Color.parseColor("#5f003871")));
 
-        addSlide(AppIntroFragment.newInstance("Administrators", "Assign down to earth administrators and watch as buddies team up to changa.", R.drawable.intro_highfive, Color.parseColor("#5f003871")));
+        //addSlide(AppIntroFragment.newInstance("Administrators", "Assign down to earth administrators and watch as buddies team up to changa.", R.drawable.intro_highfive, Color.parseColor("#5f003871")));
 
-        addSlide(AppIntroFragment.newInstance("Let buddy’s contribute", "An amazing collaborative effort to your happiness.", R.drawable.intro_handshake, Color.parseColor("#5f003871")));
+        //addSlide(AppIntroFragment.newInstance("Let buddy’s contribute", "An amazing collaborative effort to your happiness.", R.drawable.intro_handshake, Color.parseColor("#5f003871")));
 
         addSlide(AppIntroFragment.newInstance("Check out!", "Check out and wait for money to be deposited into your M-Pesa account.", R.drawable.intro_checkout, Color.parseColor("#5f003871")));
 

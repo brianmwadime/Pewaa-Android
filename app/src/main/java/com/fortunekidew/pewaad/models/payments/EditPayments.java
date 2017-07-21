@@ -15,4 +15,5 @@ public class EditPayments {
     public String trxId;
     public String userId;
     public int totalAmount;
+    public Boolean isAnonymous;
 }

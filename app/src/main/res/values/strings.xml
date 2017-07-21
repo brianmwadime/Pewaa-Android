@@ -367,5 +367,8 @@
     <string name="terms_and_privacy">By signing up you agree to our <a href="terms:">Terms of Service</a>.</string><!--and <a href="privacy:">Privacy Policy.</a>-->
     <string name="label_terms">terms</string>
     <string name="label_privacy">privacy</string>
+  <string name="label_contribute_anonymously">Contribute anonymously</string>
+  <string name="label_anonymous">Anonymous</string>
+    <string name="label_contributed">Contributed %1$,.2f</string>
 
 </resources>

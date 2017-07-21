@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import butterknife.OnCheckedChanged;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.api.APIPayments;
 import com.fortunekidew.pewaad.api.APIService;
@@ -56,6 +59,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
     @BindView(R.id.edit_amount_wrapper)
     TextInputLayout amount_wrapper;
     private GiftsModel gift;
+    private Boolean is_anonymous = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,6 +175,11 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
         return (int) Math.ceil(1 * value);
     }
 
+    @OnCheckedChanged(R.id.is_anonymous)
+    public void isAnonymous(CompoundButton button, boolean checked) {
+        is_anonymous = checked;
+    }
+
     @OnClick(R.id.contribute)
     public void contribute(View view) {
 
@@ -220,7 +229,7 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
                 if(response.isSuccessful()) {
                     payment.trxId = response.body().response.trx_id;
                     ContributeActivity.this.runOnUiThread(() -> AppHelper.showDialog(ContributeActivity.this, response.body().response.cust_msg));
-                    Call<DefaultResponse> statusResponseCall = mAPIPayments.createPayment(newPrice, gift.getId(), referenceID, AppConstants.PENDING_STATUS, gift.getDescription(), payment.trxId);
+                    Call<DefaultResponse> statusResponseCall = mAPIPayments.createPayment(newPrice, gift.getId(), referenceID, AppConstants.PENDING_STATUS, gift.getDescription(), payment.trxId, is_anonymous);
                     statusResponseCall.enqueue(new Callback<DefaultResponse>() {
                         @Override
                         public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {

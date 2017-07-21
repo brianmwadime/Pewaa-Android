@@ -10,11 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.models.payments.EditPayments;
-
 import java.util.List;
 
 /**
@@ -62,12 +59,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.MyView
 //        // loading payment cover using Glide library
 //        Glide.with(mContext).load(payment.getThumbnail()).into(holder.thumbnail);
 
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(holder.overflow);
-            }
-        });
+        holder.overflow.setOnClickListener(view -> showPopupMenu(holder.overflow));
     }
 
     /**

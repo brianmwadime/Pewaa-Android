@@ -23,6 +23,15 @@ public class PaymentModel extends RealmObject {
     private double amount;
     private Date created_on;
     private Date updated_on;
+    private Boolean is_anonymous;
+
+    public Boolean getIs_anonymous() {
+        return is_anonymous;
+    }
+
+    public void setIs_anonymous(Boolean is_anonymous) {
+        this.is_anonymous = is_anonymous;
+    }
 
     public String getId() {
         return id;

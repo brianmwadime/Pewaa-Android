@@ -24,11 +24,21 @@ public class ContributorsModel extends RealmObject {
 
     private  double amount;
 
+    private  boolean is_anonymous;
+
     private String reference;
 
     private Date created_on;
 
     private Date updated_on;
+
+    public boolean is_anonymous() {
+        return is_anonymous;
+    }
+
+    public void setIsAnonymous(boolean is_anonymous) {
+        this.is_anonymous = is_anonymous;
+    }
 
     public double getAmount() {
         return amount;

@@ -906,12 +906,27 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
         private void bindContributor(ContributorViewHolder holder, ContributorsModel contributor) {
             final int position = holder.getAdapterPosition();
             final boolean isExpanded = position == expandedContributorPosition;
-            holder.avatar.setImageDrawable(getPackageManager().getApplicationIcon(getApplicationInfo()));
 
-            if (contributor.getName() != null && !contributor.is_anonymous()) {
-                holder.author.setText(contributor.getName().toLowerCase());
+
+
+            if (!contributor.is_anonymous()) {
+
+                if (contributor.getName() != null) {
+                    holder.author.setText(contributor.getName().toLowerCase());
+                } else {
+                    holder.author.setText("N/A");
+                }
+
+
+                Glide.with(GiftDetailsActivity.this)
+                    .load(ASSETS_BASE_URL + contributor.getAvatar())
+                    .transform(circleTransform)
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .override(largeAvatarSize, largeAvatarSize)
+                    .into(holder.avatar);
             } else {
                 holder.author.setText(R.string.label_anonymous);
+                holder.avatar.setImageDrawable(getPackageManager().getApplicationIcon(getApplicationInfo()));
             }
 
             holder.contributorBody.setText(String.format(getString(R.string.label_contributed), contributor.getAmount()));

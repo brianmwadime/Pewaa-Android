@@ -20,7 +20,7 @@ public class AppConstants {
     public static final String WISHLIST_CONTRIBUTOR = "CONTRIBUTOR";
     public static final String ACCOUNT_TYPE = "com.fortunekidew.pewaad";//for this you have to set you package name here we use this add the app to account manager in user phone
     public static final String DATABASE_LOCAL_NAME = "Pewaa.realm";
-    public static final String INVITE_MESSAGE_SMS = "Hello checkout the Pewaa application ";
+    public static final String INVITE_MESSAGE_SMS = "Hi help me win 500/= by downloading this cool app Pewaa ";
     // SMS provider identification
     // It should match with your SMS gateway origin
     // You can use  WatsClone, TESTER  as sender ID

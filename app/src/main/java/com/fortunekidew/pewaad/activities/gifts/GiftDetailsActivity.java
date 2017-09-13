@@ -195,13 +195,17 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             }
         };
 
-
-
-        if (gift.getContributed() == gift.getPrice() && gift.getCashout_status() == null) {
-            // Show cash out button
-            setupCashout();
-        } else {
-            setupContributing();
+        switch (gift.getCashout_status()) {
+            case "COMPLETED":
+            case "PENDING":
+                break;
+            default:
+                if (gift.getContributed() >= gift.getPrice()) {
+                    // Show cash out button
+                    setupCashout();
+                } else {
+                    setupContributing();
+                }
         }
 
         contributorsList.addOnScrollListener(scrollListener);
@@ -411,7 +415,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
 
     private void setupCashout() {
 
-        if (gift.getContributed() == gift.getPrice() && gift.getCashout_status() == null ) {
+        if (gift.getContributed() >= gift.getPrice() && gift.getCashout_status() == null ) {
 
             contributorFooter = getLayoutInflater().inflate(R.layout.pewaa_cashout,
                     contributorsList, false);
@@ -907,16 +911,12 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             final int position = holder.getAdapterPosition();
             final boolean isExpanded = position == expandedContributorPosition;
 
-
-
             if (!contributor.is_anonymous()) {
-
                 if (contributor.getName() != null) {
                     holder.author.setText(contributor.getName().toLowerCase());
                 } else {
                     holder.author.setText("N/A");
                 }
-
 
                 Glide.with(GiftDetailsActivity.this)
                     .load(ASSETS_BASE_URL + contributor.getAvatar())

@@ -128,6 +128,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:answers:1.3.12@aar') {
         transitive = true;
     }
+    compile 'com.github.faruktoptas:FancyShowCaseView:0.1.1'
 
     compile 'joda-time:joda-time:2.9.9'
     compile 'nl.littlerobots.rxlint:rxlint:1.0'

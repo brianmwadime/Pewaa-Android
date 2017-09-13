@@ -32,10 +32,9 @@
         android:transitionName="@string/transition_gift"
         android:background="@color/light_grey"
         app:scrimColor="@color/scrim"
-        android:adjustViewBounds = "true"
         app:scrimAlpha="0"
         app:maxScrimAlpha="0.4"
-        app:parallaxFactor="-0.5" /> <!--android:scaleType="fitCenter"-->
+        app:parallaxFactor="-0.5" /> <!--android:scaleType="fitCenter" android:adjustViewBounds = "true"-->
     <FrameLayout
         android:id="@+id/back_wrapper"
         android:layout_width="wrap_content"

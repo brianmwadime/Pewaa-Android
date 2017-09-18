@@ -108,11 +108,14 @@ public class ContributeActivity extends AppCompatActivity implements LoadingData
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
+        super.onOptionsItemSelected(item);
+
         if (item.getItemId() == android.R.id.home) {
-            setResultAndFinish();
+            //setResultAndFinish();
+            this.onBackPressed();
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

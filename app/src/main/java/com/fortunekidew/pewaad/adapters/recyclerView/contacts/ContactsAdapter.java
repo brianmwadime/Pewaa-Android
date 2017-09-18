@@ -317,8 +317,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void setShareApp(Activity mActivity, String subject, String message) {
-            Answers.getInstance().logInvite(new InviteEvent()
-                    .putMethod("SMS"));
+            //Answers.getInstance().logInvite(new InviteEvent()
+            //        .putMethod("SMS"));
 
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");

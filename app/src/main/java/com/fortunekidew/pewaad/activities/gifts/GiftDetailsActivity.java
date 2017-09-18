@@ -195,7 +195,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
             }
         };
 
-        switch (gift.getCashout_status()) {
+        switch (gift.getCashout_status() ) {
             case "COMPLETED":
             case "PENDING":
                 break;
@@ -207,6 +207,7 @@ public class GiftDetailsActivity extends Activity implements LoadingData {
                     setupContributing();
                 }
         }
+
 
         contributorsList.addOnScrollListener(scrollListener);
         contributorsList.setOnFlingListener(flingListener);

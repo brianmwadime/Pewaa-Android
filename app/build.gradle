@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.22.1'
+    }
+}
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.google.gms.google-services'
@@ -121,7 +130,7 @@ dependencies {
     compile ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
         transitive = true;
     }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
 
@@ -136,9 +145,6 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:8.5.1'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
-        transitive = true;
-    }
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     compile 'com.google.dagger:dagger:2.0'

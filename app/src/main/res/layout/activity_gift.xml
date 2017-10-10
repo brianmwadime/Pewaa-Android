@@ -34,7 +34,9 @@
         app:scrimColor="@color/scrim"
         app:scrimAlpha="0"
         app:maxScrimAlpha="0.4"
-        app:parallaxFactor="-0.5" /> <!--android:scaleType="fitCenter" android:adjustViewBounds = "true"-->
+        android:scaleType="fitCenter"
+        android:adjustViewBounds = "true"
+        app:parallaxFactor="-0.5" /> <!--android:scaleType="fitCenter" -->
     <FrameLayout
         android:id="@+id/back_wrapper"
         android:layout_width="wrap_content"
@@ -48,6 +50,7 @@
             android:id="@+id/back"
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
+            android:contentDescription="gift image"
             android:layout_marginEnd="@dimen/padding_normal"
             android:layout_marginBottom="@dimen/padding_normal"
             android:src="@drawable/ic_arrow_back"

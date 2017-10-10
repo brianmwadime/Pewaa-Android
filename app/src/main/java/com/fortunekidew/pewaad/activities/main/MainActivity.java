@@ -4,6 +4,7 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,6 +29,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.core.CrashlyticsCore;
+import com.fortunekidew.pewaad.BuildConfig;
 import com.fortunekidew.pewaad.R;
 import com.fortunekidew.pewaad.activities.search.SearchContactsActivity;
 import com.fortunekidew.pewaad.activities.settings.SettingsActivity;
@@ -47,6 +52,7 @@ import com.fortunekidew.pewaad.interfaces.NetworkListener;
 import com.fortunekidew.pewaad.models.users.Pusher;
 import com.fortunekidew.pewaad.models.users.status.StatusResponse;
 
+import io.fabric.sdk.android.Fabric;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;

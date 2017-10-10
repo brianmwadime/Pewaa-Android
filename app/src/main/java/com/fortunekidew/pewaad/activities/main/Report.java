@@ -143,7 +143,7 @@ public class Report extends Activity {
     private void report() {
 
         Call<DefaultResponse> reportCall = null;
-        Report.this.runOnUiThread(() -> showLoading());
+        Report.this.runOnUiThread(this::showLoading);
 
         switch (type) {
             case GIFT:
@@ -214,6 +214,7 @@ public class Report extends Activity {
 
     public void dismiss(View view) {
         isDismissing = true;
+
         setResult(Activity.RESULT_CANCELED);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAfterTransition();

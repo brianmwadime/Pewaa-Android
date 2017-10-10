@@ -165,7 +165,7 @@ public class WishlistActivity extends Activity implements LoadingData {
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        Intent intent = null;
+        Intent intent;
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (AppHelper.isAndroid5()) {
@@ -238,7 +238,7 @@ public class WishlistActivity extends Activity implements LoadingData {
     public void ShowGifts(List<GiftsModel> giftsModels) {
         SwipeToRefresh.setRefreshing(false);
         if (giftsModels.size() != 0) {
-            RealmList<GiftsModel> mGiftsList = new RealmList<GiftsModel>();
+            RealmList<GiftsModel> mGiftsList = new RealmList<>();
             for (GiftsModel giftsModel : giftsModels) {
                 mGiftsList.add(giftsModel);
             }
@@ -378,29 +378,34 @@ public class WishlistActivity extends Activity implements LoadingData {
 
         switch (requestCode) {
             case STATUS_CONTRIBUTOR_ADDED:
-                if(null != data)
-                {
-                    String contributorId = data.getStringExtra("EXTRA_CONTRIBUTOR_ID");
+                if (resultCode == RESULT_OK) {
+                    if (null != data) {
+                        String contributorId = data.getStringExtra("EXTRA_CONTRIBUTOR_ID");
 
-                    Intent intent = new Intent(this, AssignContributor.class);
-                    intent.putExtra(AssignContributor.EXTRA_WISHLIST_ID, wishlistID);
-                    intent.putExtra(AssignContributor.EXTRA_CONTRIBUTOR_ID, contributorId);
-//                FabTransform.addExtras(intent,
-//                        ContextCompat.getColor(this, R.color.accent), R.drawable.ic_add_dark);
-//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, fab,
-//                        getString(R.string.transition_contributor_add));
-                    startActivityForResult(intent, STATUS_CONTRIBUTOR_ADDED_SUCCESS);
+                        Intent intent = new Intent(this, AssignContributor.class);
+                        intent.putExtra(AssignContributor.EXTRA_WISHLIST_ID, wishlistID);
+                        intent.putExtra(AssignContributor.EXTRA_CONTRIBUTOR_ID, contributorId);
+                        //                FabTransform.addExtras(intent,
+                        //                        ContextCompat.getColor(this, R.color.accent), R.drawable.ic_add_dark);
+                        //                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, fab,
+                        //                        getString(R.string.transition_contributor_add));
+                        startActivityForResult(intent, STATUS_CONTRIBUTOR_ADDED_SUCCESS);
+                    }
                 }
 
                 break;
             case STATUS_REPORT_SUCCESS:
-                String giftId = data.getStringExtra("EXTRA_ID");
+                if (resultCode == RESULT_OK) {
+                    String giftId = data.getStringExtra("EXTRA_ID");
 
-                mGiftsAdapter.removeItem(mGiftsAdapter.getItemPosition(giftId));
+                    mGiftsAdapter.removeItem(mGiftsAdapter.getItemPosition(giftId));
+                }
                 break;
 
             case STATUS_REPORT_WISHLIST_SUCCESS:
-                String wishlistId = data.getStringExtra("EXTRA_ID");
+                if (resultCode == RESULT_OK) {
+                    String wishlistId = data.getStringExtra("EXTRA_ID");
+                }
 
                 break;
         }

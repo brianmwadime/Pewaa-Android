@@ -48,6 +48,7 @@ public class AppConstants {
     public static final int STATUS_SELECTED_CONTRIBUTORS_SUCCESS = 0x013;
     public static final int STATUS_REPORT_SUCCESS = 0x014;
     public static final int STATUS_REPORT_WISHLIST_SUCCESS = 0x015;
+    public static final int STATUS_REPORT_CANCELLED = 0x16;
 
     public enum REPORT_TYPE { WISHLIST, GIFT }
 
@@ -83,7 +84,7 @@ public class AppConstants {
     public static final String SOCKET_IMAGE_PROFILE_UPDATED = "socket_profileImageUpdated";
     public static final String SOCKET_CONTRIBUTOR_ADDED = "added_contributor";
     public static final String SOCKET_GIFT_ADDED = "added_gift";
-    public static final String APP_KEY_SECRET = "7d3d3b6c2d3683bf25bbb51533ec6dac";// make sure this one is the same that you put on your server side (for security reasons)
+    static final String APP_KEY_SECRET = "7d3d3b6c2d3683bf25bbb51533ec6dac";// make sure this one is the same that you put on your server side (for security reasons)
     /**
      * for toast and snackbar
      */

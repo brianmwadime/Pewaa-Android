@@ -36,6 +36,7 @@ public class IntroActivity extends AppIntro {
         // This will ask for the camera permission AND the contacts permission on the same slide.
         // Ensure your slide talks about both so as not to confuse the user.
         askForPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 2);
+        askForPermissions(new String[]{Manifest.permission.READ_SMS}, 4);
         // Add your slide fragments here.
         // AppIntro will automatically generate the dots indicator and buttons.
         // addSlide(firstFragment);

@@ -1,0 +1,1017 @@
+{
+	"variables": [],
+	"info": {
+		"name": "PEWAA",
+		"_postman_id": "5ad40dd8-6a3a-5029-e59f-b22c81fbf43a",
+		"description": "Endpoints for PEWAA api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Contributors",
+			"description": "",
+			"item": [
+				{
+					"name": "Assign Contributor to Wishlist",
+					"request": {
+						"url": "http://api.pewaa.com/v1/contributors",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"143d6ed3-5311-47f9-8873-f8f95679c330\",\n  \"wishlist_id\": \"276c3d57-a0a5-40b0-8307-6244cd7482fc\",\n  \"permissions\": \"CONTRIBUTOR\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Assign Contributor to Wishlist",
+					"request": {
+						"url": "http://localhost:8080/v1/contributors",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": \"62217a9b-d280-48f4-adc0-48639b434669\",\n  \"wishlist_id\": \"49b34241-cf0a-41ed-b04a-d88ea7bdd659\",\n  \"permissions\": \"CONTRIBUTOR\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Assign Contributors",
+					"request": {
+						"url": "http://localhost:3030/v1/contributors/addContributors",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "contributors[]",
+									"value": "62217a9b-d280-48f4-adc0-48639b434669",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "wishlist",
+									"value": "44343434",
+									"type": "text"
+								},
+								{
+									"key": "contributors[]",
+									"value": "62217a9b-d280-48f4-adc0-48639b434669",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gifts",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Gifts",
+					"request": {
+						"url": "http://api.pewaa.com/v1/wishlists/e7001d40-d8e7-4ecc-8aa5-1ac4e3e43c50/gifts",
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Weddings\",\n  \"description\": \"Wedding Gifts\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add gift localhost",
+					"request": {
+						"url": "http://localhost:3030/v1/gifts",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "test 1",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "wishlist_id",
+									"value": "ddacaac4-bdc9-4407-8699-c879e7ca2af0",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "price",
+									"value": "1000",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"warning": "",
+									"src": "SSL Server Test  sanlam.marinecargoinsurance.co.ke  Powered by Qualys SSL Labs .png"
+								},
+								{
+									"key": "user_id",
+									"value": "4095e104-2c42-4697-927b-2c01221d3810",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "description",
+									"value": "gfgfgf test description",
+									"type": "text",
+									"warning": ""
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Gifts localhost",
+					"request": {
+						"url": "http://localhost:3030/v1/wishlists/49b34241-cf0a-41ed-b04a-d88ea7bdd659/gifts",
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Weddings\",\n  \"description\": \"Wedding Gifts\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get gift contributors",
+					"request": {
+						"url": "http://api.pewaa.com/v1/gifts/a368ef10-7a88-44c6-ac0f-388d6ed388bc/contributors",
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "test 1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "test description",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "2000",
+									"type": "text"
+								},
+								{
+									"key": "wishlist_id",
+									"value": "49b34241-cf0a-41ed-b04a-d88ea7bdd659",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "Esther-Business-Card-Back.png"
+								},
+								{
+									"key": "user_id",
+									"value": "4095e104-2c42-4697-927b-2c01221d3810",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Get gift contributors",
+					"request": {
+						"url": "http://localhost:3030/v1/gifts/5d4abc9e-0bd1-44be-87ed-64459c3ffe69/contributors",
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "test 1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "test description",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "2000",
+									"type": "text"
+								},
+								{
+									"key": "wishlist_id",
+									"value": "49b34241-cf0a-41ed-b04a-d88ea7bdd659",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "Esther-Business-Card-Back.png"
+								},
+								{
+									"key": "user_id",
+									"value": "4095e104-2c42-4697-927b-2c01221d3810",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Get Gift",
+					"request": {
+						"url": "http://localhost:3030/v1/gifts/fde08fa1-da96-4f20-8992-4c03323b72ae",
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Weddings\",\n  \"description\": \"Wedding Gifts\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Cashout",
+					"request": {
+						"url": "http://localhost:3030/v1/gifts/5d4abc9e-0bd1-44be-87ed-64459c3ffe69/cashout",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "gift_name",
+									"value": "test 1",
+									"type": "text"
+								},
+								{
+									"key": "gift_amount",
+									"value": "2000",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Report Gift",
+					"request": {
+						"url": "http://localhost:3030/v1/gifts/fde08fa1-da96-4f20-8992-4c03323b72ae/report",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"flagged\": true,\n  \"flagged_description\": \"\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"description": "",
+			"item": [
+				{
+					"name": "Localhost: Add Devices",
+					"request": {
+						"url": "http://localhost:3030/v1/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "device_id",
+									"value": "dWv805-ib_4%3AAPA91bFwW96DGbkaNy0-fIpszVRB90w57FEsVGoCYCtCZYSDr7_UYWfIXygD6tNEczrWhKBqFl5a52hJIwoBraQuutc4qnUA7-8pgVBDvj9TVqYtrVcUGxyrGNWNKtvW7fkmMl-obSpn",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "platform",
+									"value": "ANDROID",
+									"type": "text",
+									"warning": ""
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Test Notification",
+					"request": {
+						"url": "http://localhost:3030/v1/users/testNotification",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add Devices",
+					"request": {
+						"url": "http://api.pewaa.com/v1/devices",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "device_id",
+									"value": "dWv805-ib_4%3AAPA91bFwW96DGbkaNy0-fIpszVRB90w57FEsVGoCYCtCZYSDr7_UYWfIXygD6tNEczrWhKBqFl5a52hJIwoBraQuutc4qnUA7-8pgVBDvj9TVqYtrVcUGxyrGNWNKtvW7fkmMl-obSpn",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "platform",
+									"value": "IOS",
+									"type": "text",
+									"warning": ""
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"description": "",
+			"item": [
+				{
+					"name": "Request Payment",
+					"request": {
+						"url": "https://api.pewaa.com/v1/payments/request",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$50P/XY3wY9cg.1DY7mAUJuR9Px7jXLhlpE7JF76WPlIjMuucoirkq",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"254728956895\",\n  \"totalAmount\": 45.0,\n  \"clientName\":  \"Brian Mwadime\",\n  \"clientLocation\": \"Kilimani\",\n  \"referenceID\": \"test\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Create Payment",
+					"request": {
+						"url": "http://localhost:3030/v1/payments/create",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 10,\n  \"wishlist_item_id\": \"9db59b2f-5f52-404a-b2e9-7d8543cd9987\",\n  \"reference\": \"sample\",\n  \"description\": \"sample\",\n  \"status\": \"PENDING\",\n  \"user_id\": \"4095e104-2c42-4697-927b-2c01221d3810\",\n  \"trx_id\": \"4095e104-2c42-4697-927b-2c01221d3810\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Payment",
+					"request": {
+						"url": "http://api.pewaa.com/v1/payments/complete",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"MSISDN\":\"254728956895\",\"AMOUNT\":\"10.0\",\"MPESA_TRX_ID\":\"KL86GDQ8OE\",\"MPESA_TRX_DATE\":\"2016-12-08 00:07:44\",\"TRX_STATUS\":\"The service request is processed successfully.\",\"RETURN_CODE\":\"00\",\"DESCRIPTION\":\"The service request is processed successfully.\",\"ENC_PARAMS\":\"eyJjbGllbnRMb2NhdGlvbiI6IiIsImNsaWVudE5hbWUiOiIrMjU0NzI4OTU2ODk1In0=\",\"REQUEST_ID\":\"ac7b53be5340a24561e8dbe4bed526f7\", \"TRX_REF_ID\": \"f4a45760-1dd5-11e7-ac5c-7b85243986cd\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Complete Payment",
+					"request": {
+						"url": "http://localhost:8080/v1/payments/complete",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"MSISDN\":\"254728956895\",\"AMOUNT\":\"10.0\",\"MPESA_TRX_ID\":\"KL86GDQ8OE\",\"MPESA_TRX_DATE\":\"2016-12-08 00:07:44\",\"TRX_STATUS\":\"Success\",\"RETURN_CODE\":\"00\",\"DESCRIPTION\":\"The service request is processed successfully.\",\"MERCHANT_TRANSACTION_ID\":\"20e07880-bd1a-11e6-b232-41748028282c\",\"ENC_PARAMS\":\"eyJjbGllbnRMb2NhdGlvbiI6IiIsImNsaWVudE5hbWUiOiIrMjU0NzI4OTU2ODk1In0=\",\"TRX_ID\":\"cefc2036ff54f1e48d55f1845cd9be35\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment",
+					"request": {
+						"url": "http://api.pewaa.com/v1/mpesa/payment",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"MSISDN\":\"254728956895\",\"AMOUNT\":\"10.0\",\"MPESA_TRX_ID\":\"KL86GDQ8OE\",\"MPESA_TRX_DATE\":\"2016-12-08 00:07:44\",\"TRX_STATUS\":\"The service request is processed successfully.\",\"RETURN_CODE\":\"00\",\"DESCRIPTION\":\"The service request is processed successfully.\",\"ENC_PARAMS\":\"eyJjbGllbnRMb2NhdGlvbiI6IiIsImNsaWVudE5hbWUiOiIrMjU0NzI4OTU2ODk1In0=\",\"REQUEST_ID\":\"ac7b53be5340a24561e8dbe4bed526f7\", \"TRX_REF_ID\": \"f4a45760-1dd5-11e7-ac5c-7b85243986cd\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Request Payment",
+					"request": {
+						"url": "http://localhost:3030/v1/payments/request",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"254728956895\",\n  \"totalAmount\": 10.0,\n  \"clientName\":  \"Brian Mwadime\",\n  \"clientLocation\": \"Kilimani\",\n  \"referenceID\": \"test\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check Payment Status",
+					"request": {
+						"url": "http://api.pewaa.com/v1/payments/status/82fe211754d09f8006f89f3ec39b45f3",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"MSISDN\":\"254728956895\",\"AMOUNT\":\"10.0\",\"MPESA_TRX_ID\":\"KL86GDQ8OE\",\"MPESA_TRX_DATE\":\"2016-12-08 00:07:44\",\"TRX_STATUS\":\"The service request is processed successfully.\",\"RETURN_CODE\":\"00\",\"DESCRIPTION\":\"The service request is processed successfully.\",\"ENC_PARAMS\":\"eyJjbGllbnRMb2NhdGlvbiI6IiIsImNsaWVudE5hbWUiOiIrMjU0NzI4OTU2ODk1In0=\",\"REQUEST_ID\":\"ac7b53be5340a24561e8dbe4bed526f7\", \"TRX_REF_ID\": \"f4a45760-1dd5-11e7-ac5c-7b85243986cd\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Payment",
+					"request": {
+						"url": "http://api.pewaa.com/v1/payments/confirm/82fe211754d09f8006f89f3ec39b45f3",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"MSISDN\":\"254728956895\",\"AMOUNT\":\"10.0\",\"MPESA_TRX_ID\":\"KL86GDQ8OE\",\"MPESA_TRX_DATE\":\"2016-12-08 00:07:44\",\"TRX_STATUS\":\"The service request is processed successfully.\",\"RETURN_CODE\":\"00\",\"DESCRIPTION\":\"The service request is processed successfully.\",\"ENC_PARAMS\":\"eyJjbGllbnRMb2NhdGlvbiI6IiIsImNsaWVudE5hbWUiOiIrMjU0NzI4OTU2ODk1In0=\",\"REQUEST_ID\":\"ac7b53be5340a24561e8dbe4bed526f7\", \"TRX_REF_ID\": \"f4a45760-1dd5-11e7-ac5c-7b85243986cd\"}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
+				{
+					"name": "Localhost: Change name",
+					"request": {
+						"url": "http://localhost:3030/v1/users/changeUsername",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Brian Mwadime",
+									"type": "text",
+									"warning": ""
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Register users on Pewaa",
+					"request": {
+						"url": "http://api.pewaa.com/v1/users/join",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\": \"+254728956895\",\n    \"country\": \"Kenya\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get User profile",
+					"request": {
+						"url": "http://api.pewaa.com/v1/users/d9be222a-707a-4392-b4e7-f94c55ee8fa1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \"phone\": \"+254728956895\",\n    \"country\": \"Kenya\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Upload profile image",
+					"request": {
+						"url": "http://api.pewaa.com/v1/users/avatar",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "token",
+								"value": "$2a$10$W76X9OjM2h.VajfqJ0W5w.bbs2WiSaZ8LY0XZmxh8jbXdXuuZPP4O",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost : Upload profile image",
+					"request": {
+						"url": "http://localhost:8080/v1/users/avatar",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$yOiUNyQLbxsh49zpHAAqtOBdUsVkkKNahG5YViSXYRBdlmVNPTjZW",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "Esther-Business-Card-Back.png"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Register users on Pewaa",
+					"request": {
+						"url": "http://localhost:8080/v1/users/join",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\": \"+254706511777\",\n    \"country\": \"Kenya\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Get User profile",
+					"request": {
+						"url": "http://localhost:8080/v1/users/cc66e1f8-187a-4b01-9933-71500e95f094",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "token",
+								"value": "$2a$10$W76X9OjM2h.VajfqJ0W5w.bbs2WiSaZ8LY0XZmxh8jbXdXuuZPP4O",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \"phone\": \"+254728956895\",\n    \"country\": \"Kenya\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Change Username",
+					"request": {
+						"url": "http://api.pewaa.com/v1/users/changeUsername",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$JKqs9XCb..EuNix7j2CMF.UXe747HwG9XAjQbuW59lkBkKLSIac6q",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Brian Mwadime",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wishlists",
+			"description": "",
+			"item": [
+				{
+					"name": "Create Wishlist",
+					"request": {
+						"url": "http://api.pewaa.com/v1/wishlists",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"category\":\"Baby Shower\",\n  \"description\":\"Modesta baby shower\",\n  \"name\":\"Modesta baby shower\",\n  \"recipient\":\"Modesta\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Wishlist localhost",
+					"request": {
+						"url": "http://localhost:3030/v1/wishlists",
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\":\"Modesta baby shower\",\n  \"category\":\"Baby Shower 5\",\n  \"description\":\"\",\n  \"recipient\":\"\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Localhost: Report Wishlist",
+					"request": {
+						"url": "http://localhost:3030/v1/wishlists/49b34241-cf0a-41ed-b04a-d88ea7bdd659/report",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "$2a$10$5DR9Az4V7WPgfSxrmp./KOmrXOOL8Cvj51dcz0ppcGtP5cWf53mmi",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "flagged",
+									"value": "true",
+									"type": "text",
+									"warning": ""
+								},
+								{
+									"key": "flagged_description",
+									"value": "test description",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kentrade",
+			"description": "",
+			"item": [
+				{
+					"name": "Validate UCR",
+					"request": {
+						"url": "https://api.sinbad.co.ke/api/v1/integrations/kentrade/8dd67fd0-bf9d-4f34-b858-79e9add274ce/validate_ucr_number/",
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
